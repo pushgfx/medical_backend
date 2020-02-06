@@ -11,12 +11,18 @@ CORS(app)
 def home():
 	return "Hello World"
 
-# Unprotected end-point
+# --- UNPROTECTED END-POINTS --- #
+# Login route
 @app.route('/authenticate', methods=['POST'])
-def profile():
+def login():
 	response, code = authenticate_route(request)
 	return jsonify(response), code
 
+# Registration route
+@app.route('/registration', methods=['POST'])
+def register():
+	response, code = registration_route(request)
+	return jsonify(response), code
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
