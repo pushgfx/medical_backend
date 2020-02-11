@@ -9,5 +9,7 @@ Jinja2==2.11.0
 MarkupSafe==1.1.1
 pycparser==2.19
 PyJWT==1.7.1
+PyMySQL==0.9.3
 six==1.14.0
 Werkzeug==0.16.1
+
