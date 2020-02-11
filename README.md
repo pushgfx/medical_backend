@@ -6,7 +6,7 @@ git clone https://github.com/pushgfx/medical-backend.git
 
 cd medical-backend
 
-virtualenv env
+virtualenv env -p python3
 
 LINUX
 source env/bin/activate
