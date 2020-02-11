@@ -4,7 +4,7 @@
 ```console
   $ git clone https://github.com/pushgfx/medical_backend.git
   $ cd medical_backend
-  $ virualenv env
+  $ virualenv env -p python3
 
   # OSX/LINUX
   $ source env/bin/activate
