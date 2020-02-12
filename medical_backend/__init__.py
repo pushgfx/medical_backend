@@ -64,19 +64,19 @@ def create_app(test_config=None):
 
     # --- UNPROTECTED END-POINTS --- #
     # Login route
-    @app.route('/authenticate', methods=['POST'])
+    @app.route('/clients/authenticate', methods=['POST'])
     def login():
         response, code = authenticate_route(request)
         return jsonify(response), code
 
     # Registration route
-    @app.route('/register', methods=['POST'])
+    @app.route('/clients/register', methods=['POST'])
     def register():
         response, code = registration_route(request)
         return jsonify(response), code
 
     #PROTECTED
-    @app.route('/client/profile', methods=['GET'])
+    @app.route('/clients/profile', methods=['GET'])
     @jwt_required
     def client_profile():
         response, code = get_client_route(request)
