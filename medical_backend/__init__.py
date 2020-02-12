@@ -47,19 +47,8 @@ def create_app(test_config=None):
     from medical_backend.controllers import (
         authenticate_route,
         registration_route,
+        get_client_route
     )
-
-    """
-        Adding the User ID to the Token
-        The ID Will Be Used for Queries
-        We Need to Modify the Front End
-        To Reflect Changes
-
-    """
-
-    @jwt.user_claims_loader
-    def add_claims_to_access_token(id):
-        return {"user_id": id}
 
     """
         THE FOLLOWING ROUTES ARE UNPROTECTED
@@ -87,6 +76,11 @@ def create_app(test_config=None):
         return jsonify(response), code
 
     #PROTECTED
+    @app.route('/client/profile', methods=['GET'])
+    @jwt_required
+    def client_profile():
+        response, code = get_client_route(request)
+        return jsonify(response), code
 
     return app
 
