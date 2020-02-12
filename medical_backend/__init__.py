@@ -69,7 +69,7 @@ def create_app(test_config=None):
     """
 
     # Simple route for basic testing
-    @app.route('/', methods=['GET'])
+    @app.route('/myhome', methods=['GET'])
     def home():
         return "Hello World"
 
@@ -81,9 +81,15 @@ def create_app(test_config=None):
         return jsonify(response), code
 
     # Registration route
-    @app.route('/registration', methods=['POST'])
+    @app.route('/register', methods=['POST'])
     def register():
         response, code = registration_route(request)
         return jsonify(response), code
 
+    #PROTECTED
+
     return app
+
+
+# 200 successful GET 400 bad POST
+# 201 Succesful POST 401 bad POST

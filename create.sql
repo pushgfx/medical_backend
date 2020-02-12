@@ -9,6 +9,7 @@ CREATE TABLE users (
 	username varchar(120) NOT NULL,
 	password varchar(128) NOT NULL,
 	role_id int NOT NULL,
+	user_role_id int NOT NULL,
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -34,6 +35,8 @@ CREATE TABLE offices (
 	street_1 varchar(120) NOT NULL,
 	city varchar(40) NOT NULL,
 	state varchar(2) NOT NULL,
+	zipcode int(9) NOT NULL,
+	phone varchar(20) NOT NULL,
 	PRIMARY KEY (office_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -65,7 +68,7 @@ CREATE TABLE clients (
 	city varchar(40) NOT NULL,
 	state varchar(2) NOT NULL,
 	zipcode int(9) NOT NULL,
-	phone int(11) NOT NULL,
+	phone varchar(20) NOT NULL,
 	date_of_birth date NOT NULL,
 	gender varchar(1) NOT NULL,
 	marital_status varchar(1) NOT NULL,
@@ -123,6 +126,7 @@ CREATE TABLE appointments (
 
 CREATE TABLE appointments_meta_data (
 	appt_id int NOT NULL,
+	client_id int NOT NULL,
 	height int NOT NULL,
 	weight int NOT NULL,
 	blood_pressure varchar(7) NOT NULL,
@@ -134,21 +138,20 @@ CREATE TABLE appointments_meta_data (
 	treatment varchar(500) NOT NULL,
 	new_prescriptions int(1) NOT NULL,
 	patient_notes varchar(500),
-	actual_end_time DATETIME NOT NULL,
-	PRIMARY KEY (appt_id)
+	actual_end_time DATETIME NOT NULL
+    -- primary key is also a foreign key. I don't think so
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-ALTER TABLE users ADD FOREIGN KEY (role_id) REFERENCES roles(role_id);
-ALTER TABLE clients ADD FOREIGN KEY (primary_doctor) REFERENCES doctors(doctor_id);
-ALTER TABLE doctors ADD FOREIGN KEY (specialist_id) REFERENCES specializations(specialist_id);
-ALTER TABLE doctor_office_affiliations ADD FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id);
-ALTER TABLE doctor_office_affiliations ADD FOREIGN KEY (office_id) REFERENCES offices(office_id);
-ALTER TABLE doctor_office_availability ADD FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id);
-ALTER TABLE doctor_office_availability ADD FOREIGN KEY (office_id) REFERENCES offices(office_id);
-ALTER TABLE appointments ADD FOREIGN KEY (client_id) REFERENCES clients(client_id);
-ALTER TABLE appointments ADD FOREIGN KEY (office_id) REFERENCES offices(office_id);
-ALTER TABLE appointments ADD FOREIGN KEY (appt_id) REFERENCES appointments_meta_data(appt_id);
-ALTER TABLE prescribed_medications ADD FOREIGN KEY (medication_id) REFERENCES medications(medication_id);
-ALTER TABLE prescribed_medications ADD FOREIGN KEY (form_id) REFERENCES medication_forms(form_id);
-
-ALTER TABLE appointments_meta_data ADD FOREIGN KEY (appt_id) REFERENCES prescribed_medications(appt_id);
+ALTER TABLE users ADD FOREIGN KEY (role_id) REFERENCES roles(role_id) ;
+ALTER TABLE clients ADD FOREIGN KEY (primary_doctor) REFERENCES doctors(doctor_id) ;
+ALTER TABLE doctors ADD FOREIGN KEY (specialist_id) REFERENCES specializations(specialist_id) ;
+ALTER TABLE doctor_office_affiliations ADD FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id) ;
+ALTER TABLE doctor_office_affiliations ADD FOREIGN KEY (office_id) REFERENCES offices(office_id) ;
+ALTER TABLE appointments ADD FOREIGN KEY (client_id) REFERENCES clients(client_id) ;
+ALTER TABLE appointments ADD FOREIGN KEY (office_id) REFERENCES offices(office_id) ;
+ALTER TABLE prescribed_medications ADD FOREIGN KEY (medication_id) REFERENCES medications(medication_id) ;
+ALTER TABLE prescribed_medications ADD FOREIGN KEY (form_id) REFERENCES medication_forms(form_id) ;
+ALTER TABLE appointments_meta_data ADD FOREIGN KEY (appt_id) REFERENCES appointments(appt_id);
+ALTER TABLE appointments_meta_data ADD FOREIGN KEY (client_id) REFERENCES clients(client_id);
+ALTER TABLE prescribed_medications ADD FOREIGN KEY (appt_id) REFERENCES appointments(appt_id);
+ALTER TABLE client_doctor_affiliation ADD FOREIGN KEY (client_id) REFERENCES clients(client_id);
+ALTER TABLE client_doctor_affiliation ADD FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id);
