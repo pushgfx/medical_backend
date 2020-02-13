@@ -3,15 +3,17 @@ from ..models import User
 
 def authenticate_route(request):
     user = User()
-    req_username = request.json.get("username", None)
+    req_email = request.json.get("email", None)
     req_password = request.json.get("password", None)
 
-    uuser = user.check_user(req_username)
+    uuser = user.check_user(req_email)
 
-    if not user.check_user(req_username):
-        response, code = {"msg": "Bad username or password"}, 401
-    elif not user.check_password(req_username, req_password):
-        response, code = {"msg": "Bad username or password"}, 401
+    if not user.check_user(req_email):
+        response, code = {"msg": "Bad email"}, 401
+        print("bad email")
+    elif not user.check_password(req_email, req_password):
+        response, code = {"msg": "Bad password"}, 401
+        print("bad password")
     else:
         user = {"uid":uuser['user_role_id'],"role":uuser['role_id']}
         response, code = {"access_token": create_access_token(user)}, 201

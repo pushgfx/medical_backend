@@ -5,8 +5,8 @@ client = Client()
 
 def registration_route(request):
 
-    if client.check_user(request.json.get("username")):
-        response, code = {"msg": "Username already exists!"}, 401
+    if client.check_user(request.json.get("email")):
+        response, code = {"msg": "Email already exists!"}, 401
     else:
         uid = client.add_client(request)
         user_id = {"uid":uid}

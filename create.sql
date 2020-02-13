@@ -6,7 +6,7 @@ CREATE TABLE roles (
 
 CREATE TABLE users (
 	id int NOT NULL AUTO_INCREMENT,
-	username varchar(120) NOT NULL,
+	email varchar(120) NOT NULL,
 	password varchar(128) NOT NULL,
 	role_id int NOT NULL,
 	user_role_id int NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE clients (
 	gender varchar(1) NOT NULL,
 	marital_status varchar(1) NOT NULL,
 	race varchar(20) NOT NULL,
-	email varchar(100) NOT NULL,
+	email varchar(120) NOT NULL,
 	primary_doctor int,
 	PRIMARY KEY (client_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
