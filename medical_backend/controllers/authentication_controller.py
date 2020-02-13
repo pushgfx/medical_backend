@@ -3,8 +3,8 @@ from ..models import User
 
 def authenticate_route(request):
     user = User()
-    req_username = request.form['username']
-    req_password = request.form['password']
+    req_username = request.json.get("username", None)
+    req_password = request.json.get("password", None)
 
     uuser = user.check_user(req_username)
 
