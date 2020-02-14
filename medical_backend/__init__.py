@@ -73,6 +73,7 @@ def create_app(test_config=None):
     @app.route('/clients/register', methods=['POST'])
     def register():
         response, code = registration_route(request)
+        print(response)
         return jsonify(response), code
 
     #PROTECTED
