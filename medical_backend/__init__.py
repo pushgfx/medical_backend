@@ -77,14 +77,12 @@ def create_app(test_config=None):
         return jsonify(response), code
 
     #PROTECTED
-    @app.route('/clients/profile', methods=['GET'])
+    @app.route('/clients/profile', methods=['GET','PUT'])
     @jwt_required
     def client_profile():
         response, code = get_client_route(request)
         return jsonify(response), code
 
+
+
     return app
-
-
-# 200 successful GET 400 bad POST
-# 201 Succesful POST 401 bad POST

@@ -27,8 +27,7 @@ class Client(User):
 		cur.execute("SELECT `client_id` FROM `clients` ORDER BY `client_id` DESC LIMIT 1")
 		result = cur.fetchone()
 		uid = result['client_id']
-		hashed = hashpw(str.encode(str(request.json.get("password", None))), gensalt(14))
-		self.add_user(req_email, hashed, 2, uid)
+		self.add_user(req_email, request.json.get("password", None), 2, uid)
 		return uid
 
 	def update_client(self, r, client_id):
