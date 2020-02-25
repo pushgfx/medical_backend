@@ -76,7 +76,9 @@ def create_app(test_config=None):
         print(response)
         return jsonify(response), code
 
-    #PROTECTED
+    """
+        PROTECTED
+    """
     @app.route('/clients/profile', methods=['GET','PUT'])
     @jwt_required
     def client_profile():
