@@ -76,8 +76,15 @@ def create_app(test_config=None):
         print(response)
         return jsonify(response), code
 
+<<<<<<< HEAD
     #PROTECTED
     @app.route('/patients/profile', methods=['GET','PUT'])
+=======
+    """
+        PROTECTED
+    """
+    @app.route('/clients/profile', methods=['GET','PUT'])
+>>>>>>> 6dfc81042b35c6980b3cc63e73c14da1df1bd4c1
     @jwt_required
     def patient_profile():
         response, code = get_patient_route(request)
