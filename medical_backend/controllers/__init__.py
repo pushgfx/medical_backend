@@ -1,3 +1,4 @@
 from .authentication_controller import *
 from .registration_controller import *
-from .client_controller import *
+from .patient_controller import *
+from .doctor_controller import *

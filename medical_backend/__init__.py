@@ -29,8 +29,7 @@ def create_app(test_config=None):
     if test_config is None:
         # Checks Environmnet Variable And Builds from Config Object
         app.config.from_object(os.environ["APP_SETTINGS"])
-        # Adding CORS to the App -- not neccesary in testing
-        # May be wrong, but we can look into it later
+
         CORS(app)
     else:
         # load the test config if passed in
@@ -47,7 +46,8 @@ def create_app(test_config=None):
     from medical_backend.controllers import (
         authenticate_route,
         registration_route,
-        get_client_route
+        get_patient_route,
+        get_doctor_dates
     )
 
     """
@@ -64,25 +64,29 @@ def create_app(test_config=None):
 
     # --- UNPROTECTED END-POINTS --- #
     # Login route
-    @app.route('/clients/authenticate', methods=['POST'])
+    @app.route('/patients/authenticate', methods=['POST'])
     def login():
         response, code = authenticate_route(request)
         return jsonify(response), code
 
     # Registration route
-    @app.route('/clients/register', methods=['POST'])
+    @app.route('/patients/register', methods=['POST'])
     def register():
         response, code = registration_route(request)
         print(response)
         return jsonify(response), code
 
     #PROTECTED
-    @app.route('/clients/profile', methods=['GET','PUT'])
+    @app.route('/patients/profile', methods=['GET','PUT'])
     @jwt_required
-    def client_profile():
-        response, code = get_client_route(request)
+    def patient_profile():
+        response, code = get_patient_route(request)
         return jsonify(response), code
 
-
+    @app.route('/doctors/dates', methods=['GET'])
+    @jwt_required
+    def doctor_dates():
+        response, code = get_doctor_dates(request)
+        return jsonify(response), code
 
     return app

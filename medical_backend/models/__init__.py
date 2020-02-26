@@ -1,2 +1,3 @@
 from .Users import *
-from .Clients import *
+from .Patients import *
+from .Doctors import *
