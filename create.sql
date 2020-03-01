@@ -48,15 +48,19 @@ CREATE TABLE doctor_office_affiliations (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE doctor_office_availability (
-	id int NOT NULL AUTO_INCREMENT,
-	doctor_id int NOT NULL,
-	office_id int NOT NULL,
-	day_of_week varchar(3) NOT NULL,
-	start_time TIME NOT NULL,
-	end_time TIME NOT NULL,
-	is_available varchar(1) NOT NULL,
-	reason_for_unavailability varchar(20),
-	PRIMARY KEY (id)
+    id int NOT NULL AUTO_INCREMENT,
+    doctor_id int NOT NULL,
+    office_id int NOT NULL,
+    day_of_week varchar(3) NOT NULL,
+    timeslot_1 varchar(1) NOT NULL,
+    timeslot_2 varchar(1) NOT NULL,
+    timeslot_3 varchar(1) NOT NULL,
+    timeslot_4 varchar(1) NOT NULL,
+    timeslot_5 varchar(1) NOT NULL,
+    timeslot_6 varchar(1) NOT NULL,
+    timeslot_7 varchar(1) NOT NULL,
+    timeslot_8 varchar(1) NOT NULL,
+    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE patients (

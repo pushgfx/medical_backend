@@ -22,10 +22,9 @@ class Doctor:
 		for d in range(1,31): # We don't allow same day booking online
 			future_date = current_date + timedelta(days=d)
 			if future_date.isoweekday() < 7:
-				timeslots = ["avail","avail","avail","avail","avail","avail","avail","avail"]
 				date_struct = {
-					"datetime": datetime.strftime(future_date, "%m/%d/%Y"),
-					"timeslots": timeslots,
+					"datetime": future_date,
+					"timeslots": [],
 					"office_id": 0
 				}
 				date_arr.append(date_struct)
@@ -44,26 +43,15 @@ class Doctor:
 		cur.execute(sql, params)
 		schedule = cur.fetchall()
 
-		# Gather unavailable timeslots from schedule dictionary
-		uTimes = []
-		for s in schedule:
-			if s['is_available'] == "N":
-				uTimes.append(s)
-
 		# Filter out the taken dates
 		for date in date_arr:
+			for day in schedule:
+				if str(date['datetime'].isoweekday()) == day['day_of_week']:
+					date['timeslots'] = [day['timeslot_1'],day['timeslot_2'],day['timeslot_3'],day['timeslot_4'],day['timeslot_5'],day['timeslot_6'],day['timeslot_7'],day['timeslot_8']]
+					date['office_id'] = day['office_id']
 			for appointment in appointments:
-				if appointment['appt_start_time'].day == date['datetime'].day:
+				if appointment['appt_start_time'].day == date['datetime'].isoweekday():
 					slot = appointment['appt_start_time'].hour - 8
-					date["timeslots"][slot - 1] = "na"
-			for uTime in uTimes:
-				if uTime['day_of_week'] == date.isoweekday():
-					sBeg = uTime['start_time'].hour - 8
-					sEnd = uTime['end_time'].hour - 8
-					n = sEnd - sBeg
-					for x in range(n):
-						sl = sBeg + x
-						date['timeslots'][sl] = "na"
-						date['office_id'] = 
+					date["timeslots"][slot - 1] = "N"
 
 		return date_arr
