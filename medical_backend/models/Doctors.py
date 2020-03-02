@@ -17,7 +17,7 @@ class Doctor:
 			remaining_hours = 16 - current_date.hour
 		# FOR SAME DAY BOOKING...
 
-
+		# Build up an array for the next 30 days excluding Sundays
 		date_arr = []
 		for d in range(1,31): # We don't allow same day booking online
 			future_date = current_date + timedelta(days=d)
@@ -51,7 +51,9 @@ class Doctor:
 					date['office_id'] = day['office_id']
 			for appointment in appointments:
 				if appointment['appt_start_time'].day == date['datetime'].isoweekday():
-					slot = appointment['appt_start_time'].hour - 8
-					date["timeslots"][slot - 1] = "N"
+					n = appointment['estimated_end_time'].hour - appointment['appt_start_time'].hour
+					for x in range(n):
+						slot = appointment['appt_start_time'].hour - 9
+						date["timeslots"][slot + x] = "N"
 
 		return date_arr
