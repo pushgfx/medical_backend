@@ -82,10 +82,10 @@ class Patient(User):
         return appointments
 
     def get_patient_prescriptions(self, patient_id):
-        sql = "SELECT D.first_name,D.last_name,MED.medication_name,MED_FORM.dose_form_name," \
+        sql = "SELECT PRESC.appt_id, D.first_name,D.last_name,MED.medication_name,MED_FORM.dose_form_name, " \
               "PRESC.dosage,PRESC.indication,PRESC.date_prescribed " \
-              "FROM doctors as D, medications as MED, medication_dose_forms as MED_FORM, prescribed_medications as PRESC" \
-              "WHERE PRESC.patient_id=%s" \
+              "FROM doctors as D, medications as MED, medication_dose_forms as MED_FORM, prescribed_medications as PRESC " \
+              "WHERE PRESC.patient_id=%s " \
               "AND PRESC.doctor_id=D.doctor_id " \
               "AND MED.medication_id=PRESC.medication_id " \
               "AND MED_FORM.dose_form_id=PRESC.dose_form_id"
@@ -93,3 +93,14 @@ class Patient(User):
         cur.execute(sql, params)
         prescriptions = cur.fetchall()
         return prescriptions
+
+    def get_patient_medical_records(self,patient_id):
+        sql = "SELECT MR.appt_id,D.first_name,D.last_name,MR.actual_start_time,MR.actual_end_time " \
+              "FROM medical_records as MR, doctors as D " \
+              "WHERE MR.patient_id=%s " \
+              "AND MR.doctor_id = D.doctor_id"
+        params = (patient_id)
+        cur.execute(sql, params)
+        medical_records = cur.fetchall()
+        return medical_records
+
