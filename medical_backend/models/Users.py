@@ -18,7 +18,7 @@ class User:
 		params = (email)
 		cur.execute(sql, params)
 		result = cur.fetchone()
-		password_hash = result['password']
+		password_hash = result['password'].encode('utf-8')
 		return checkpw(password.encode('utf-8'), password_hash)
 
 	def add_user(self, email, password, role_id, user_id):
