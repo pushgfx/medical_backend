@@ -83,7 +83,7 @@ def create_app(test_config=None):
         return jsonify(response), code
 
     @app.route('/doctors/dates', methods=['GET'])
-    @jwt_required
+    #@jwt_required
     def doctor_dates():
         response, code = get_doctor_dates(request)
         return jsonify(response), code
