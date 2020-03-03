@@ -1,0 +1,2 @@
+#get appointment history by patient_id
+SELECT appointments.appt_id,appointments.appt_start_time,appointments.appt_status,appointments.booking_date,appointments.booking_method,doctors.first_name,doctors.last_name,offices.office_name FROM appointments,doctors,offices WHERE appointments.patient_id=1 and appointments.doctor_id=doctors.doctor_id and appointments.office_id=offices.office_id;

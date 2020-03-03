@@ -7,9 +7,10 @@ def get_patient_route(request):
 	#Get the uid from token
 	patient_id = get_jwt_identity()['uid']
 	profile = patient.get_patient_dict(patient_id)
-	appointments=patient.get_patient_appt_hist(patient_id)
+	appointments = patient.get_patient_appt_hist(patient_id)
+	prescriptions = patient.get_patient_prescriptions(patient_id)
 	if profile:
-		response, code = {"profile": profile,"appointments":appointments}, 200
+		response, code = {"profile": profile, "appointments": appointments, "prescriptions": prescriptions}, 200
 	else:
 		reponse, code = {"msg":"Bad patient id"}, 400
 

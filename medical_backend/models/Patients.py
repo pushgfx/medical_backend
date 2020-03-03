@@ -67,8 +67,23 @@ class Patient(User):
         sql = "SELECT appointments.appt_id,appointments.appt_start_time,appointments.appt_status,appointments.booking_date," \
               "appointments.booking_method,doctors.first_name,doctors.last_name,offices.office_name " \
               "FROM appointments,doctors,offices " \
-              "WHERE appointments.patient_id=%s,appointments.doctor_id=doctors.doctor_id and appointments.office_id=offices.office_id"
+              "WHERE appointments.patient_id=%s " \
+              " AND appointments.doctor_id=doctors.doctor_id " \
+              " AND appointments.office_id=offices.office_id"
         params = (patient_id)
         cur.execute(sql, params)
         appointments = cur.fetchall()
         return appointments
+
+    def get_patient_prescriptions(self,patient_id):
+        sql = "SELECT D.first_name,D.last_name,MED.medication_name,MED_FORM.dose_form_name," \
+            "PRESC.dosage,PRESC.indication,PRESC.date_prescribed " \
+            "FROM doctors as D, medications as MED, medication_dose_forms as MED_FORM, prescribed_medications as PRESC" \
+            "WHERE PRESC.patient_id=%s" \
+            "AND PRESC.doctor_id=D.doctor_id " \
+            "AND MED.medication_id=PRESC.medication_id " \
+            "AND MED_FORM.dose_form_id=PRESC.dose_form_id"
+        params = (patient_id)
+        cur.execute(sql, params)
+        prescriptions = cur.fetchall()
+        return prescriptions
