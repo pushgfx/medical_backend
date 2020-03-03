@@ -6,6 +6,14 @@ cur = db.cur
 
 class Doctor:
 
+	def get_doctor_availability(self, doctor_id):
+		# Get a dictionary of all availability for this doctor
+		sql = "SELECT * FROM doctor_office_availability WHERE `doctor_id`=%s"
+		params = (doctor_id)
+		cur.execute(sql, params)
+		schedule = cur.fetchall()
+		return schedule
+
 	def get_dates_dict(self, doctor_id):
 		# get curent datetime
 		current_date = datetime.now()
@@ -37,11 +45,7 @@ class Doctor:
 		cur.execute(sql, params)
 		appointments = cur.fetchall()
 
-		# Get a dictionary of all availability for this doctor
-		sql = "SELECT * FROM doctor_office_availability WHERE `doctor_id`=%s"
-		params = (doctor_id)
-		cur.execute(sql, params)
-		schedule = cur.fetchall()
+		schedule = get_doctor_availability(doctor_id)
 
 		# Filter out the taken dates
 		for date in date_arr:
