@@ -5,7 +5,7 @@ def get_doctor_dates(request):
 	doctor = Doctor()
 	#Get the uid from token
 	doctor_id = request.args.get("doctor_id", None)
-	dates = doctor.get_dates_dict(doctor_id)
+	dates = doctor.get_dates_dict("1")
 	if dates:
 		response, code = {"dates": dates}, 200
 	else:

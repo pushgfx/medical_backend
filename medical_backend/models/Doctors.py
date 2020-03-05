@@ -45,7 +45,7 @@ class Doctor:
 		cur.execute(sql, params)
 		appointments = cur.fetchall()
 
-		schedule = get_doctor_availability(doctor_id)
+		schedule = self.get_doctor_availability(doctor_id)
 
 		# Filter out the taken dates
 		for date in date_arr:
