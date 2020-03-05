@@ -47,7 +47,8 @@ def create_app(test_config=None):
         authenticate_route,
         registration_route,
         get_patient_route,
-        get_doctor_dates
+        get_doctor_dates,
+        get_admin_route
     )
 
     """
@@ -74,6 +75,11 @@ def create_app(test_config=None):
     def register():
         response, code = registration_route(request)
         print(response)
+        return jsonify(response), code
+
+    @app.route('/admin', methods=['GET'])
+    def admin_profile():
+        response, code = get_admin_route(request)
         return jsonify(response), code
 
     @app.route('/patients/profile', methods=['GET','PUT'])
