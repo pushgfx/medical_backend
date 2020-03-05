@@ -69,7 +69,7 @@ class Patient(User):
         return profile
 
     def get_patient_appt_hist(self, patient_id):
-        sql = "SELECT appointments.appt_id,appointments.appt_start_time,appointments.appt_status," \
+        sql = "SELECT appointments.appt_id, appointments.appt_start_time, appointments.appt_status," \
               "appointments.booking_date," \
               "appointments.booking_method,doctors.first_name,doctors.last_name,offices.office_name " \
               "FROM appointments,doctors,offices " \
@@ -103,4 +103,3 @@ class Patient(User):
         cur.execute(sql, params)
         medical_records = cur.fetchall()
         return medical_records
-
