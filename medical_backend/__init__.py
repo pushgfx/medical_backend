@@ -51,13 +51,6 @@ def create_app(test_config=None):
         get_admin_route
     )
 
-    """
-        THE FOLLOWING ROUTES ARE UNPROTECTED
-        THEY ARE USED FOR:
-            1. Authenticating Users
-            2. Creating Users
-    """
-
     # Simple route for basic testing
     @app.route('/myhome', methods=['GET'])
     def home():
