@@ -6,6 +6,13 @@ cur = db.cur
 
 class Doctor:
 
+	def get_doctors(self):
+		# Get a dictionary of all the doctors (names, id's)
+		sql = "SELECT doctor_id, first_name, middle_initial, last_name"
+		cur.execute(sql)
+		doctors = cur.fetchall()
+		return doctors
+
 	def get_doctor_availability(self, doctor_id):
 		# Get a dictionary of all availability for this doctor
 		sql = "SELECT * FROM doctor_office_availability WHERE `doctor_id`=%s"
