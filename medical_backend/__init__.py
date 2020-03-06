@@ -47,7 +47,8 @@ def create_app(test_config=None):
         authenticate_route,
         registration_route,
         get_patient_route,
-        get_doctor_dates
+        get_doctor_dates,
+        set_appointment_route
     )
 
     """
@@ -88,4 +89,12 @@ def create_app(test_config=None):
         response, code = get_doctor_dates(request)
         return jsonify(response), code
 
+    @app.route('/patients/appointments', methods=['Post'])
+    #@jwt_requiried
+    def appointment():
+        response, code = set_appointment_route(request)
+        return jsonify(response), code
+
+    
+    
     return app

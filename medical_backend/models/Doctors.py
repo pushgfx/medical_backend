@@ -5,7 +5,33 @@ db = Database()
 cur = db.cur
 
 class Doctor:
+    
+	def get_doctor_patient(self,doctor_id):
+    		sql="SELECT * FROM patient_doctor_affiliation WHERE `doctor_id`=%s"
+			params=(doctor_id)
+			cur.execute(sql,params)
+			result=cur.fetchone()
+			myPatients = {
+				"Patient Name": result[]
+			}
+    		
+    		
+			
+			
 
+	def get_doctor_dict(self,doctor_id):	
+		sql = "SELECT * FROM doctors WHERE `doctor_id`=%s"
+		params=(doctor_id)
+        cur.execute(sql,params)      
+        result = cur.fetchone()
+        profile = {
+            "firstName": result['first_name'],
+            "middleInit": result['middle_initial'],
+            "lastName": result['last_name'],
+            "phone": result['phone']
+			}
+        return profile
+	
 	def get_doctor_availability(self, doctor_id):
 		# Get a dictionary of all availability for this doctor
 		sql = "SELECT * FROM doctor_office_availability WHERE `doctor_id`=%s"
