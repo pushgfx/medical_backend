@@ -48,7 +48,8 @@ def create_app(test_config=None):
         registration_route,
         get_patient_route,
         get_doctor_dates,
-        get_admin_route
+        get_admin_route,
+        set_appointment_route
     )
 
     # Simple route for basic testing
@@ -75,12 +76,12 @@ def create_app(test_config=None):
         response, code = get_admin_route(request)
         return jsonify(response), code
 
-    @app.route('/patients/appointments', methods=['Post'])
-    @jwt_requiried
+    @app.route('/patients/appointments', methods=['POST'])
+    @jwt_required
     def appointment():
         response, code = set_appointment_route(request)
         return jsonify(response), code
-        
+
     @app.route('/patients/profile', methods=['GET','PUT'])
     @jwt_required
     def patient_profile():
