@@ -69,3 +69,79 @@ class Doctor:
 						date["timeslots"][slot + x] = "N"
 
 		return date_arr
+
+	def get_doctor_patient(self,doctor_id):
+    
+		sql = """SELECT patients.first_name, patients.middle_initial, patients.last_name, patients.phone
+		FROM patients, patient_doctor_affiliation
+		WHERE patient_doctor_affiliation.doctor_id=%s
+		AND patient_doctor_affiliation.patient_id = patients.patient_id"""
+		params = (doctor_id)
+		cur.execute(sql,params)
+		results = cur.fetchall()
+		doctor_patient =[]
+		for result in results:
+			patient = {
+				"firstName": result['first_name'],
+				"middleInit": result['middle_initial'],
+				"lastName": result['last_name'],
+				"phone": result['phone']
+			}
+			doctor_patient.append(patient)
+		return doctor_patient
+
+	def get_doctor_dict(self,doctor_id):
+		sql = """SELECT doctors.*, specialization_name FROM doctors, specializations
+		WHERE doctor_id=%s
+		AND doctors.specialist_id = specializations.specialist_id"""
+		params=(doctor_id)
+		cur.execute(sql,params)
+		result = cur.fetchone()
+		profile = {
+		"firstName": result['first_name'],
+		"middleInit": result['middle_initial'],
+		"lastName": result['last_name'],
+		"phone": result['phone'],
+		"specialization_name": result['specialization_name']
+		}
+		return profile
+
+	def get_doctor_all_appointment(self,doctor_id):
+
+		# get curent datetime
+		sql="SELECT appt_start_time from appointments where doctor_id=%s";
+		params=(doctor_id)
+		cur.execute(sql,params)
+		today_appointment_start_time = cur.fetchall()
+
+		current_date = datetime.now().date()
+		appointments =[]
+
+		for date in today_appointment_start_time:
+			start_time = datetime.strptime(str(date['appt_start_time']), '%Y-%m-%d %X')
+			if ( start_time.date() == current_date):
+				sql="""SELECT appointments.appt_id,
+					CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
+					offices.office_name AS office,
+					appointments.was_referred, appointments.referring_doctor_id, appointments.appt_start_time,
+					appointments.estimated_end_time,
+					appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
+					FROM `appointments`,`offices`,`patients`
+					WHERE appointments.appt_start_time = %date"""
+
+				cur.execute(sql)
+				result = cur.fetchall()
+				appointment = {
+					"patient": result['patient'],
+					"office": result['office'],
+					"was_referred": result['was_referred'],
+					"referring_doctor_id": result['referring_doctor_id'],
+					"appt_start_time": result['appt_start_time'],
+					"estimated_end_time": result['estimated_end_time'],
+					"appt_status": result['appt_status'],
+					"booking_date": result['booking_date'],
+					"booking_method": result['booking_method'],
+					"reason_for_visit": result['reason_for_visit']
+					}
+				appointments.append(appointment)
+		return appointments
