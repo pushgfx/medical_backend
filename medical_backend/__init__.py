@@ -49,6 +49,7 @@ def create_app(test_config=None):
         get_patient_route,
         get_doctor_dates,
         get_doctor_route,
+        get_doctor_offices,
         get_all_doctors,
         get_offices_route,
         get_admin_route,
@@ -95,6 +96,12 @@ def create_app(test_config=None):
     @jwt_required
     def doctor_dates():
         response, code = get_doctor_dates(request)
+        return jsonify(response), code
+
+    @app.route('/doctors/offices', methods=['GET'])
+    @jwt_required
+    def doctor_offices():
+        response, code = get_doctor_offices(request)
         return jsonify(response), code
 
     @app.route('/doctors/list', methods=['GET'])

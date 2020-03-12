@@ -10,8 +10,17 @@ def get_doctor_dates(request):
 	if dates:
 		response, code = {"dates": dates}, 200
 	else:
-		reponse, code = {"msg":"Bad doctor id"}, 400
+		reponse, code = {"msg": "Bad doctor id"}, 400
+	return response, code
 
+def get_doctor_offices(request):
+	doctor = Doctor()
+	doctor_id = request.args.get("did", None)
+	offices = doctor.get_offices(str(doctor_id))
+	if offices:
+		response, code = {"offices": offices}, 200
+	else:
+		response, code = {"msg": "Bad doctor id"}, 400
 	return response, code
 
 def get_all_doctors():
