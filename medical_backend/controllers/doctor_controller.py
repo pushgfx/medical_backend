@@ -5,7 +5,7 @@ from flask_jwt_extended import get_jwt_claims, get_jwt_identity
 def get_doctor_dates(request):
 	doctor = Doctor()
 	#Get the uid from token
-	doctor_id = request.args.get("doctor_id", None)
+	doctor_id = request.args.get("did", None)
 	dates = doctor.get_dates_dict(str(doctor_id))
 	if dates:
 		response, code = {"dates": dates}, 200
