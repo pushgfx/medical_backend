@@ -45,25 +45,20 @@ class Doctor:
 	def get_dates_dict(self, office_id, doctor_id):
 		# get curent datetime
 		current_date = datetime.now()
-
-		# FOR SAME DAY BOOKING...
-		remaining_hours = 0
-		# if before 4pm, calculate remaining hours for current work day
-		if current_date.hour < 16:
-			remaining_hours = 16 - current_date.hour
-		# FOR SAME DAY BOOKING...
-
 		# Build up an array for the next 30 days excluding Sundays
 		date_arr = []
+		disabled_dates = []
 		for d in range(1,31): # We don't allow same day booking online
 			future_date = current_date + timedelta(days=d)
-			if future_date.isoweekday() < 7:
-				date_struct = {
-					"datetime": future_date,
-					"timeslots": [],
-					"office_id": 0
-				}
-				date_arr.append(date_struct)
+			timeslots  = ["Y","Y","Y","Y","Y","Y","Y","Y"]
+			if future_date.isoweekday() == 7:
+				timeslots = ["N","N","N","N","N","N","N","N"]
+			date_struct = {
+				"datetime": future_date,
+				"timeslots": timeslots,
+				"office_id": 0
+			}
+			date_arr.append(date_struct)
 
 		# MARK BOOKED DATES/TIMESLOTS
 
@@ -87,8 +82,22 @@ class Doctor:
 					for x in range(n):
 						slot = appointment['appt_start_time'].hour - 9
 						date["timeslots"][slot + x] = "N"
+		for d in range(0,30):
+			future_date = current_date + timedelta(days=d+1)
+			date_check = True
+			for timeslot in date_arr[d]['timeslots']:
+				if timeslot == "Y":
+					date_check = False
+					break
+			if date_check == True:
+				disabled_dates.append(future_date)
 
-		return date_arr
+		dates = {
+		    "available_dates": date_arr,
+		    "disabled_dates": disabled_dates
+		}
+
+		return dates
 
 	def get_doctor_patient(self,doctor_id):
     
