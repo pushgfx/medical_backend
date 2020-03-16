@@ -50,11 +50,12 @@ class Doctor:
 		disabled_dates = []
 		for d in range(1,31): # We don't allow same day booking online
 			future_date = current_date + timedelta(days=d)
+			weekday = future_date.isoweekday()
 			timeslots  = ["Y","Y","Y","Y","Y","Y","Y","Y"]
-			if future_date.isoweekday() == 7:
+			if weekday == 7:
 				timeslots = ["N","N","N","N","N","N","N","N"]
 			date_struct = {
-				"datetime": future_date,
+				"datetime": {"month":future_date.month,"day":future_date.day,"year":future_date.year,"weekday":weekday},
 				"timeslots": timeslots,
 				"office_id": 0
 			}
@@ -73,11 +74,11 @@ class Doctor:
 		# Filter out the taken dates
 		for date in date_arr:
 			for day in schedule:
-				if str(date['datetime'].isoweekday()) == day['day_of_week']:
+				if str(date['datetime']['weekday']) == day['day_of_week']:
 					date['timeslots'] = [day['timeslot_1'],day['timeslot_2'],day['timeslot_3'],day['timeslot_4'],day['timeslot_5'],day['timeslot_6'],day['timeslot_7'],day['timeslot_8']]
 					date['office_id'] = day['office_id']
 			for appointment in appointments:
-				if appointment['appt_start_time'].day == date['datetime'].isoweekday():
+				if appointment['appt_start_time'].day == date['datetime']['day']:
 					n = appointment['estimated_end_time'].hour - appointment['appt_start_time'].hour
 					for x in range(n):
 						slot = appointment['appt_start_time'].hour - 9
@@ -90,11 +91,11 @@ class Doctor:
 					date_check = False
 					break
 			if date_check == True:
-				disabled_dates.append(future_date)
+				disabled_dates.append({"month":future_date.month,"day":future_date.day,"year":future_date.year})
 
 		dates = {
-		    "available_dates": date_arr,
-		    "disabled_dates": disabled_dates
+		    "av_dates": date_arr,
+		    "dis_dates": disabled_dates
 		}
 
 		return dates
