@@ -80,7 +80,7 @@ def create_app(test_config=None):
         response, code = get_admin_route(request)
         return jsonify(response), code
 
-    @app.route('/patients/appointments', methods=['POST'])
+    @app.route('/patients/appointment', methods=['POST'])
     @jwt_required
     def appointment():
         response, code = set_appointment_route(request)
