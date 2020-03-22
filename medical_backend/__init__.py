@@ -51,7 +51,7 @@ def create_app(test_config=None):
         get_doctor_route,
         get_doctor_offices,
         get_all_doctors,
-        # get_offices_route,
+        get_offices_route,
         get_admin_route,
         set_appointment_route
     )
