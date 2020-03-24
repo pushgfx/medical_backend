@@ -1,9 +1,9 @@
-# Flask and Flask Extension Imports
-# from ..models import Offices
+#Flask and Flask Extension Imports
+from ..models import Doctors
 
 def get_offices_route(request):
-	offices = Offices()
-	offices = offices.get_offices()
+	offices = Doctors()
+	offices = offices.get_all_offices()
 	if offices:
 		response, code = {"offices": offices}, 200
 	else:
