@@ -13,34 +13,26 @@ class Doctor:
 		doctors = cur.fetchall()
 
 		return doctors
-	
-	def get_all_offices(self): 
-		sql = "SELECT * FROM offices" 
+
+	def get_doctors_by_office(self, office_id):
+		# Get a dictionary of all the doctors (names, id's)
+		sql = "SELECT doctor_id FROM doctor_office_affiliations WHERE `office_id`=%s"
 		cur.execute(sql)
-		offices = cur.fetchall()
-
-		return offices
-    		
-
-	def get_offices(self, doctor_id):
-		sql = "SELECT office_id FROM doctor_office_affiliations WHERE `doctor_id`=%s"
-		params = (doctor_id)
-		cur.execute(sql, params)
-		oids = cur.fetchall()
-		off_ids = []
-		for oid in oids:
-			off_ids.append(oid["office_id"])
-		print(off_ids)
+		dids = cur.fetchall()
+		doc_ids = []
+		for did in dids:
+			doc_ids.append(did["doctor_id"])
 		tuple_list = "("
-		for x in off_ids:
+		for x in doc_ids:
 			tuple_list += "%s"
 		tuple_list += ")"
 
-		sql = "SELECT * FROM offices WHERE `office_id` in " + tuple_list
-		params = tuple(off_ids)
+		sql = "SELECT * FROM doctors WHERE `doctor_id` in " + tuple_list
+		params = tuple(doc_ids)
 		cur.execute(sql, params)
-		offices = cur.fetchall()
-		return offices
+		doctors = cur.fetchall()
+
+		return doctors    		
 
 	def get_doctor_availability(self, office_id, doctor_id):
 		# Get a dictionary of all availability for this doctor

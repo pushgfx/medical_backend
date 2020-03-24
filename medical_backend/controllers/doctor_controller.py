@@ -14,16 +14,6 @@ def get_doctor_dates(request):
 		reponse, code = {"msg": "Bad doctor id"}, 400
 	return response, code
 
-def get_doctor_offices(request):
-	doctor = Doctor()
-	doctor_id = request.args.get("did", None)
-	offices = doctor.get_offices(str(doctor_id))
-	if offices:
-		response, code = {"offices": offices}, 200
-	else:
-		response, code = {"msg": "Bad doctor id"}, 400
-	return response, code
-
 def get_all_doctors():
 	doctor = Doctor()
 	doctors = doctor.get_doctors()
@@ -33,8 +23,17 @@ def get_all_doctors():
 		response, code = {"msg": "Error retreiving doctors"}
 	return response, code
 
-def get_doctor_route(doctor_id):
+def get_doctors_by_office_route(request):
+	doctor = Doctor()
+	office_id = request.args.get("oid", None)
+	doctors = doctor.get_doctors_by_office(office_id)
+	if doctors:
+		response, code = {"doctors": doctors}, 200
+	else:
+		response, code = {"msg": "Error retreiving doctors"}
+	return response, code
 
+def get_doctor_route():
 	doctor = Doctor()
 	doctor_id = get_jwt_identity()['uid']
 	profile = doctor.get_doctor_dict(doctor_id)

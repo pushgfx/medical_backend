@@ -20,7 +20,7 @@ class Appointments:
         booking_date = current_dt
         year = int(req_date[0:4])
         month = int(req_date[5:7])
-        day = int(req_date[8:10])
+        day = int(req_date[8:10]) - 1
         hour = req_timeslot + 8
         appt_start_time = datetime(year, month, day, hour, minute=0, second=0, microsecond=0, tzinfo=None)
         appt_end_time = datetime(year, month, day, hour+1, minute=0, second=0, microsecond=0, tzinfo=None)
