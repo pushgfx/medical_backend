@@ -1,7 +1,7 @@
 #Flask and Flask Extension Imports
 from ..models import Office
 
-def get_offices_route(request):
+def get_offices_route():
 	office = Office()
 	offices = office.get_all_offices()
 	if offices:
