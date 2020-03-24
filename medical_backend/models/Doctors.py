@@ -13,6 +13,14 @@ class Doctor:
 		doctors = cur.fetchall()
 
 		return doctors
+	
+	def get_all_offices(self): 
+		sql = "SELECT * FROM offices" 
+		cur.execute(sql)
+		offices = cur.fetchall()
+
+		return offices
+    		
 
 	def get_offices(self, doctor_id):
 		sql = "SELECT office_id FROM doctor_office_affiliations WHERE `doctor_id`=%s"
