@@ -15,20 +15,9 @@ class Doctor:
 		return doctors
 
 	def get_doctors_by_office(self, office_id):
-		# Get a dictionary of all the doctors (names, id's)
-		sql = "SELECT doctor_id FROM doctor_office_affiliations WHERE `office_id`=%s"
-		cur.execute(sql)
-		dids = cur.fetchall()
-		doc_ids = []
-		for did in dids:
-			doc_ids.append(did["doctor_id"])
-		tuple_list = "("
-		for x in doc_ids:
-			tuple_list += "%s"
-		tuple_list += ")"
-
-		sql = "SELECT * FROM doctors WHERE `doctor_id` in " + tuple_list
-		params = tuple(doc_ids)
+		# Get a dictionary of all doctors for a specific office
+		sql = "SELECT doctors.doctor_id, first_name, last_name FROM doctors, doctor_office_affiliations WHERE doctor_office_affiliations.office_id=%s AND doctor_office_affiliations.doctor_id=doctors.doctor_id"
+		params = (office_id)
 		cur.execute(sql, params)
 		doctors = cur.fetchall()
 

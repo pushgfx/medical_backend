@@ -27,10 +27,11 @@ def get_doctors_by_office_route(request):
 	doctor = Doctor()
 	office_id = request.args.get("oid", None)
 	doctors = doctor.get_doctors_by_office(office_id)
+	print(doctors)
 	if doctors:
 		response, code = {"doctors": doctors}, 200
 	else:
-		response, code = {"msg": "Error retreiving doctors"}
+		response, code = {"msg": "Error retreiving doctors"}, 400
 	return response, code
 
 def get_doctor_route():

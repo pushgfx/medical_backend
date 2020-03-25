@@ -13,20 +13,8 @@ class Office:
 		return offices
 
 	def get_offices_by_doctor(self, doctor_id):
-		sql = "SELECT office_id FROM doctor_office_affiliations WHERE `doctor_id`=%s"
+		sql = "SELECT * FROM offices, doctor_office_affiliations WHERE doctor_office_affiliations.doctor_id=%s AND doctor_office_affiliations.office_id=offices.office_id"
 		params = (doctor_id)
-		cur.execute(sql, params)
-		oids = cur.fetchall()
-		off_ids = []
-		for oid in oids:
-			off_ids.append(oid["office_id"])
-		tuple_list = "("
-		for x in off_ids:
-			tuple_list += "%s"
-		tuple_list += ")"
-
-		sql = "SELECT * FROM offices WHERE `office_id` in " + tuple_list
-		params = tuple(off_ids)
 		cur.execute(sql, params)
 		offices = cur.fetchall()
 		
