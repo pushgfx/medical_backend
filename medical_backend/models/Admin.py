@@ -3,7 +3,6 @@ from ..database import Database
 from ..models import User
 
 db = Database()
-cur = db.cur
 
 class Admin(User):
     def get_doctor_dict(self):
@@ -11,8 +10,7 @@ class Admin(User):
         specializations.specialization_name
         FROM `doctors`, `specializations`
         WHERE doctors.specialist_id = specializations.specialist_id"""
-        cur.execute(sql)
-        results = cur.fetchall()
+        results = db.run_query(sql, ())
         doctors =[]
         for result in results:
             doctor = {
@@ -27,8 +25,7 @@ class Admin(User):
 
     def get_patient_dict(self):
         sql = "SELECT * FROM `patients`"
-        cur.execute(sql)
-        results = cur.fetchall()
+        results = db.run_query(sql, ())
         patients =[]
         for result in results:
             patient = {
@@ -62,8 +59,7 @@ class Admin(User):
             WHERE appointments.patient_id = patients.patient_id AND
             	appointments.doctor_id = doctors.doctor_id AND
             	appointments.office_id = offices.office_id"""
-        cur.execute(sql)
-        results = cur.fetchall()
+        results = db.run_query(sql, params)
         appointments =[]
         for result in results:
             appointment = {
@@ -84,8 +80,7 @@ class Admin(User):
 
     def get_office_dict(self):
         sql = "SELECT * FROM `offices`"
-        cur.execute(sql)
-        results = cur.fetchall()
+        results = db.run_query(sql, params)
         offices =[]
         for result in results:
             office = {

@@ -2,24 +2,21 @@ from ..database import Database
 from datetime import datetime, timedelta
 
 db = Database()
-cur = db.cur
 
 class Doctor:
 
 	def get_doctors(self):
 		# Get a dictionary of all the doctors (names, id's)
 		sql = "SELECT doctor_id, first_name, last_name FROM doctors"
-		cur.execute(sql)
-		doctors = cur.fetchall()
+		doctors = db.run_query(sql, params)
 
 		return doctors
 
 	def get_doctors_by_office(self, office_id):
 		# Get a dictionary of all doctors for a specific office
-		sql = "SELECT doctors.doctor_id, first_name, last_name FROM doctors, doctor_office_affiliations WHERE doctor_office_affiliations.office_id=%s AND doctor_office_affiliations.doctor_id=doctors.doctor_id"
+		sql = "SELECT doctors.doctor_id, first_name, last_name, specialization_name FROM doctors, doctor_office_affiliations, specializations WHERE doctor_office_affiliations.office_id=%s AND doctor_office_affiliations.doctor_id=doctors.doctor_id AND specializations.specialist_id=doctors.specialist_id"
 		params = (office_id)
-		cur.execute(sql, params)
-		doctors = cur.fetchall()
+		doctors = db.run_query(sql, params)
 
 		return doctors    		
 
@@ -27,8 +24,7 @@ class Doctor:
 		# Get a dictionary of all availability for this doctor
 		sql = "SELECT * FROM doctor_office_availability WHERE `doctor_id`=%s AND `office_id`=%s"
 		params = (doctor_id, office_id)
-		cur.execute(sql, params)
-		schedule = cur.fetchall()
+		schedule = db.run_query(sql, params)
 		return schedule
 
 	def get_dates_dict(self, office_id, doctor_id):
@@ -55,8 +51,7 @@ class Doctor:
 		# Get a dictionary of all appointments for this doctor
 		sql = "SELECT appt_start_time, estimated_end_time FROM appointments WHERE `doctor_id`=%s AND `office_id`=%s"
 		params = (doctor_id, office_id)
-		cur.execute(sql, params)
-		appointments = cur.fetchall()
+		appointments = db.run_query(sql, params)
 
 		schedule = self.get_doctor_availability(office_id, doctor_id)
 
@@ -96,8 +91,7 @@ class Doctor:
 		WHERE patient_doctor_affiliation.doctor_id=%s
 		AND patient_doctor_affiliation.patient_id = patients.patient_id"""
 		params = (doctor_id)
-		cur.execute(sql,params)
-		results = cur.fetchall()
+		results = db.run_query(sql, params)
 		doctor_patient =[]
 		for result in results:
 			patient = {
@@ -114,14 +108,14 @@ class Doctor:
 		WHERE doctor_id=%s
 		AND doctors.specialist_id = specializations.specialist_id"""
 		params=(doctor_id)
-		cur.execute(sql,params)
-		result = cur.fetchone()
+		record = db.run_query(sql, params)
+		result = record[0]
 		profile = {
 		"firstName": result['first_name'],
 		"middleInit": result['middle_initial'],
 		"lastName": result['last_name'],
 		"phone": result['phone'],
-		"specialization_name": result['specialization_name']
+		"specializationName": result['specialization_name']
 		}
 		return profile
 
@@ -130,8 +124,7 @@ class Doctor:
 		# get curent datetime
 		sql="SELECT appt_start_time from appointments where doctor_id=%s";
 		params=(doctor_id)
-		cur.execute(sql,params)
-		today_appointment_start_time = cur.fetchall()
+		today_appointment_start_time = db.run_query(sql, params)
 
 		current_date = datetime.now().date()
 		appointments =[]
@@ -148,8 +141,7 @@ class Doctor:
 					FROM `appointments`,`offices`,`patients`
 					WHERE appointments.appt_start_time = %date"""
 
-				cur.execute(sql)
-				result = cur.fetchall()
+				result = db.run_query(sql, ())
 				appointment = {
 					"patient": result['patient'],
 					"office": result['office'],
@@ -163,4 +155,5 @@ class Doctor:
 					"reason_for_visit": result['reason_for_visit']
 					}
 				appointments.append(appointment)
+		print(appointments)
 		return appointments

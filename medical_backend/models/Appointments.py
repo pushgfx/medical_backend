@@ -2,7 +2,6 @@ from ..database import Database
 from datetime import datetime
 
 db = Database()
-cur = db.cur
 
 class Appointments:
 
@@ -40,4 +39,10 @@ class Appointments:
             params = (str(req_patient_id), str(req_office_id), str(req_doctor_id), "1", str(req_was_referred_by), str(appt_start_time), str(appt_end_time), str(appt_status), str(booking_date), str(req_appt_booking_method), str(req_reason_for_visit))
 
         sql = "INSERT into `appointments`(" + columns + ") VALUES (" + values + ")"
-        cur.execute(sql, params)
+        db.run_query(sql, params)
+
+    def get_patient_appt_hist(self, patient_id):
+        sql = "SELECT appointments.appt_status, appointments.appt_start_time, appointments.booking_date, doctors.first_name, doctors.last_name FROM appointments, doctors WHERE appointments.patient_id=%s AND doctors.doctor_id=appointments.doctor_id"
+        params = (patient_id)
+        appointments = db.run_query(sql, params)
+        return appointments
