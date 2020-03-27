@@ -47,15 +47,16 @@ def create_app(test_config=None):
         authenticate_route,
         registration_route,
         get_patient_route,
-        get_doctor_dates
+        get_all_doctors,
+        get_doctors_by_office_route,
+        get_doctor_dates,
+        get_doctor_route,
+        get_all_doctors,
+        get_offices_route,
+        get_offices_by_doctor_route,
+        get_admin_route,
+        set_appointment_route
     )
-
-    """
-        THE FOLLOWING ROUTES ARE UNPROTECTED
-        THEY ARE USED FOR:
-            1. Authenticating Users
-            2. Creating Users
-    """
 
     # Simple route for basic testing
     @app.route('/myhome', methods=['GET'])
@@ -76,6 +77,17 @@ def create_app(test_config=None):
         print(response)
         return jsonify(response), code
 
+    @app.route('/admin', methods=['GET'])
+    def admin_profile():
+        response, code = get_admin_route(request)
+        return jsonify(response), code
+
+    @app.route('/patients/appointment', methods=['POST'])
+    @jwt_required
+    def appointment():
+        response, code = set_appointment_route(request)
+        return jsonify(response), code
+
     @app.route('/patients/profile', methods=['GET','PUT'])
     @jwt_required
     def patient_profile():
@@ -83,9 +95,40 @@ def create_app(test_config=None):
         return jsonify(response), code
 
     @app.route('/doctors/dates', methods=['GET'])
-    #@jwt_required
+    @jwt_required
     def doctor_dates():
         response, code = get_doctor_dates(request)
+        return jsonify(response), code
+
+    @app.route('/offices/doctor', methods=['GET'])
+    @jwt_required
+    def offices_doctors():
+        response, code = get_offices_by_doctor_route(request)
+        return jsonify(response), code
+
+    @app.route('/doctors/list', methods=['GET'])
+    @jwt_required
+    def doctors():
+        response, code = get_all_doctors()
+        return jsonify(response), code
+
+    @app.route('/doctors/office', methods=['GET'])
+    @jwt_required
+    def doctors_offices():
+        response, code = get_doctors_by_office_route(request)
+        return jsonify(response), code
+
+    @app.route('/offices/list', methods=['GET'])
+    @jwt_required
+    def offices():
+        response, code = get_offices_route()
+        return jsonify(response), code
+
+
+    @app.route('/doctors/profile', methods = ['GET','PUT'])
+    @jwt_required
+    def doctor_profile():
+        response, code = get_doctor_route()
         return jsonify(response), code
 
     return app
