@@ -1,6 +1,7 @@
 from bcrypt import checkpw, gensalt, hashpw
 from ..database import Database
 from ..models import User
+import datetime
 
 db = Database()
 cur = db.cur
@@ -61,11 +62,12 @@ class Patient(User):
             "state": result['state'],
             "zipcode": result['zipcode'],
             "phone": result['phone'],
-            "dob": result['date_of_birth'],
+            "dob": str(datetime.datetime.strptime(str(result['date_of_birth']), '%Y-%m-%d').date()),
             "gender": result['gender'],
             "marital": result['marital_status'],
             "race": result['race']
         }
+        print(profile['dob'])
         return profile
 
     def get_patient_appt_hist(self, patient_id):

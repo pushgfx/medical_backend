@@ -16,5 +16,5 @@ def authenticate_route(request):
         print("bad password")
     else:
         user = {"uid":uuser['user_role_id'],"role":uuser['role_id']}
-        response, code = {"access_token": create_access_token(user)}, 201
+        response, code = {"access_token": create_access_token(user),"rold_id":user["role"]}, 201
     return response, code
