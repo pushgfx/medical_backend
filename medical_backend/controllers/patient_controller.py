@@ -37,10 +37,9 @@ def get_patient_records_route(request):
     # Get the uid from token
     patient_id = get_jwt_identity()['uid']
     records = patient.get_patient_records(patient_id)
-
     if records:
-        response, code = rx, 200
+        response, code = records, 200
     else:
         reponse, code = {"msg": "Bad patient id"}, 400
-
+    print(records)
     return response, code 

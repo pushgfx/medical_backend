@@ -93,12 +93,8 @@ class Patient(User):
 
 
     def get_patient_records(self,patient_id):
-        sql = "SELECT MR.appt_id,D.first_name,D.last_name,MR.actual_start_time,lt.test_results,lt.lab_test_units,ltt.lab_test_type " \
-              "FROM medical_records as MR, doctors as D, lab_tests as lt, lab_test_types as ltt " \
-              "WHERE MR.patient_id=%s " \
-              "AND MR.doctor_id = D.doctor_id" \
-              "AND lt.appt_id=MR.appt_id" \
-              "AND lt.lab_test_type_id=ltt.lab_test_type_id"
+        sql = "SELECT MR.appt_id,D.first_name,D.last_name,MR.actual_start_time FROM medical_records as MR, doctors as D WHERE MR.patient_id=%s AND MR.doctor_id = D.doctor_id"
         params = (patient_id)
         medical_records = db.run_query(sql, params)
+        print(medical_records)
         return medical_records
