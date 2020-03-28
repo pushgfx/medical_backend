@@ -39,10 +39,11 @@ def get_doctor_route():
 	doctor_id = get_jwt_identity()['uid']
 	profile = doctor.get_doctor_dict(doctor_id)
 	doctor_patient = doctor.get_doctor_patient(doctor_id)
-	patient_appointment = doctor.get_doctor_all_appointment(doctor_id)
+	patient_appointments = doctor.get_doctor_all_appointment(doctor_id)
 	if profile:
-		response, code = {"profile":profile, "patients":doctor_patient, "appointments today": patient_appointment}, 200
+		response, code = {"doctors": profile, "patients": doctor_patient, "appointments": patient_appointments}, 200
 	else:
 		response, code = {"msg": "Bad doctor id"}, 400
+	print(response)
 
 	return response, code

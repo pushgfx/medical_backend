@@ -4,7 +4,6 @@ from ..models import User
 import datetime
 
 db = Database()
-cur = db.cur
 
 
 class Patient(User):
@@ -46,13 +45,13 @@ class Patient(User):
             str(r.form['first_name']), str(r.form['middle_initial']), str(r.form['last_name']), str(r.form['street_1']),
             str(r.form['city']), str(r.form['state']), str(r.form['zipcode']), str(r.form['phone']), str(r.form['dob']),
             str(r.form['gender']), str(r.form['marital_status']), str(r.form['race']), str(r.form['email']), patient_id)
-        cur.execute(sql, params)
+        db.run_query(sql, params)
 
     def get_patient_dict(self, patient_id):
         sql = "SELECT * FROM `patients` WHERE patient_id=%s"
         params = (patient_id,)
-        cur.execute(sql, params)
-        result = cur.fetchone()
+        patient = db.run_query(sql, params)
+        result = patient[0]
         profile = {
             "firstName": result['first_name'],
             "middleInit": result['middle_initial'],
@@ -79,12 +78,11 @@ class Patient(User):
               " AND appointments.doctor_id=doctors.doctor_id " \
               " AND appointments.office_id=offices.office_id"
         params = (patient_id)
-        cur.execute(sql, params)
-        appointments = cur.fetchall()
+        appointments = db.run_query(sql, params)
         return appointments
 
     def get_patient_prescriptions(self, patient_id):
-        sql = "SELECT PRESC.appt_id, D.first_name,D.last_name,MED.medication_name,MED_FORM.dose_form_name, " \
+        sql = "SELECT PRESC.appt_id, D.first_name,D.last_name,MED.medication_name,PRESC.dosage,MED_FORM.dose_form_name, " \
               "PRESC.dosage,PRESC.indication,PRESC.date_prescribed " \
               "FROM doctors as D, medications as MED, medication_dose_forms as MED_FORM, prescribed_medications as PRESC " \
               "WHERE PRESC.patient_id=%s " \
@@ -92,16 +90,13 @@ class Patient(User):
               "AND MED.medication_id=PRESC.medication_id " \
               "AND MED_FORM.dose_form_id=PRESC.dose_form_id"
         params = (patient_id)
-        cur.execute(sql, params)
-        prescriptions = cur.fetchall()
+        prescriptions = db.run_query(sql, params)
         return prescriptions
 
-    def get_patient_medical_records(self,patient_id):
-        sql = "SELECT MR.appt_id,D.first_name,D.last_name,MR.actual_start_time,MR.actual_end_time " \
-              "FROM medical_records as MR, doctors as D " \
-              "WHERE MR.patient_id=%s " \
-              "AND MR.doctor_id = D.doctor_id"
+
+    def get_patient_records(self,patient_id):
+        sql = "SELECT MR.appt_id,D.first_name,D.last_name,MR.actual_start_time FROM medical_records as MR, doctors as D WHERE MR.patient_id=%s AND MR.doctor_id = D.doctor_id"
         params = (patient_id)
-        cur.execute(sql, params)
-        medical_records = cur.fetchall()
+        medical_records = db.run_query(sql, params)
+        print(medical_records)
         return medical_records

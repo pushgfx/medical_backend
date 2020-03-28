@@ -55,7 +55,10 @@ def create_app(test_config=None):
         get_offices_route,
         get_offices_by_doctor_route,
         get_admin_route,
-        set_appointment_route
+        set_appointment_route,
+        get_appointments_route,
+        get_patient_rx_route,
+        get_patient_records_route
     )
 
     # Simple route for basic testing
@@ -74,7 +77,6 @@ def create_app(test_config=None):
     @app.route('/patients/register', methods=['POST'])
     def register():
         response, code = registration_route(request)
-        print(response)
         return jsonify(response), code
 
     @app.route('/admin', methods=['GET'])
@@ -82,10 +84,25 @@ def create_app(test_config=None):
         response, code = get_admin_route(request)
         return jsonify(response), code
 
-    @app.route('/patients/appointment', methods=['POST'])
+    @app.route('/patients/appointment', methods=['GET','POST'])
     @jwt_required
     def appointment():
-        response, code = set_appointment_route(request)
+        if request.method == 'GET':
+            response, code = get_appointments_route(request)
+        if request.method == 'POST':
+            response, code = set_appointment_route(request)
+        return jsonify(response), code
+
+    @app.route('/patients/prescriptions', methods=['GET'])
+    @jwt_required
+    def patient_prescriptions():
+        response, code = get_patient_rx_route(request)
+        return jsonify(response), code
+
+    @app.route('/patients/records', methods=['GET'])
+    @jwt_required
+    def patient_records():
+        response, code = get_patient_records_route(request)
         return jsonify(response), code
 
     @app.route('/patients/profile', methods=['GET','PUT'])
@@ -125,7 +142,7 @@ def create_app(test_config=None):
         return jsonify(response), code
 
 
-    @app.route('/doctors/profile', methods = ['GET','PUT'])
+    @app.route('/doctor/profile', methods = ['GET','PUT'])
     @jwt_required
     def doctor_profile():
         response, code = get_doctor_route()
