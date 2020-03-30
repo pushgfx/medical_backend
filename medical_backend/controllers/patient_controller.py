@@ -15,7 +15,7 @@ def get_patient_route(request):
     if profile:
         response, code = {"profile": profile}, 200
     else:
-        reponse, code = {"msg": "Bad patient id"}, 400
+        response, code = {"msg": "Bad patient id"}, 400
 
     return response, code
 
@@ -28,7 +28,7 @@ def get_patient_rx_route(request):
     if rx:
         response, code = rx, 200
     else:
-        reponse, code = {"msg": "Bad patient id"}, 400
+        response, code = {"msg": "Bad patient id"}, 400
 
     return response, code 
 
@@ -36,10 +36,11 @@ def get_patient_records_route(request):
     patient = Patient()
     # Get the uid from token
     patient_id = get_jwt_identity()['uid']
+    print("GET INTO PATIENT RECORD PID= "+str(patient_id))
     records = patient.get_patient_records(patient_id)
     if records:
         response, code = records, 200
     else:
-        reponse, code = {"msg": "Bad patient id"}, 400
-    print(records)
-    return response, code 
+        response, code = {"msg": "Bad patient id"}, 400
+    print(response)
+    return response, code

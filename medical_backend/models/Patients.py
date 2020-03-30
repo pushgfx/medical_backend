@@ -91,12 +91,15 @@ class Patient(User):
               "AND MED_FORM.dose_form_id=PRESC.dose_form_id"
         params = (patient_id)
         prescriptions = db.run_query(sql, params)
+        print(prescriptions)
         return prescriptions
 
 
     def get_patient_records(self,patient_id):
-        sql = "SELECT MR.appt_id,D.first_name,D.last_name,MR.actual_start_time FROM medical_records as MR, doctors as D WHERE MR.patient_id=%s AND MR.doctor_id = D.doctor_id"
+        sql = "SELECT MR.*,D.first_name,D.last_name FROM medical_records as MR, doctors as D " \
+              "WHERE MR.patient_id=%s AND MR.doctor_id = D.doctor_id"
         params = (patient_id)
         medical_records = db.run_query(sql, params)
-        print(medical_records)
+        # print("LOOK FOR MEDICAL RECORD",medical_records)
+
         return medical_records
