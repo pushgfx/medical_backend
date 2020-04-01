@@ -96,5 +96,4 @@ class Patient(User):
         sql = "SELECT MR.appt_id,D.first_name,D.last_name,MR.actual_start_time FROM medical_records as MR, doctors as D WHERE MR.patient_id=%s AND MR.doctor_id = D.doctor_id"
         params = (patient_id)
         medical_records = db.run_query(sql, params)
-        print(medical_records)
         return medical_records

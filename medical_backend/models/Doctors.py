@@ -8,6 +8,7 @@ class Doctor:
 	def get_doctors(self):
 		# Get a dictionary of all the doctors (names, id's)
 		sql = "SELECT doctor_id, first_name, last_name FROM doctors"
+		params = ()
 		doctors = db.run_query(sql, params)
 
 		return doctors
@@ -155,5 +156,4 @@ class Doctor:
 					"reason_for_visit": result['reason_for_visit']
 					}
 				appointments.append(appointment)
-		print(appointments)
 		return appointments
