@@ -1,7 +1,6 @@
 from bcrypt import checkpw, gensalt, hashpw
 from ..database import Database
 from ..models import User
-import datetime
 
 db = Database()
 
@@ -61,12 +60,11 @@ class Patient(User):
             "state": result['state'],
             "zipcode": result['zipcode'],
             "phone": result['phone'],
-            "dob": str(datetime.datetime.strptime(str(result['date_of_birth']), '%Y-%m-%d').date()),
+            "dob": result['date_of_birth'],
             "gender": result['gender'],
             "marital": result['marital_status'],
             "race": result['race']
         }
-        print(profile['dob'])
         return profile
 
     def get_patient_appt_hist(self, patient_id):
@@ -91,7 +89,6 @@ class Patient(User):
               "AND MED_FORM.dose_form_id=PRESC.dose_form_id"
         params = (patient_id)
         prescriptions = db.run_query(sql, params)
-        print(prescriptions)
         return prescriptions
 
 
@@ -100,6 +97,4 @@ class Patient(User):
               "WHERE MR.patient_id=%s AND MR.doctor_id = D.doctor_id"
         params = (patient_id)
         medical_records = db.run_query(sql, params)
-        # print("LOOK FOR MEDICAL RECORD",medical_records)
-
         return medical_records
