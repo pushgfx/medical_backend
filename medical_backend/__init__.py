@@ -130,13 +130,11 @@ def create_app(test_config=None):
         return jsonify(response), code
 
     @app.route('/doctors/office', methods=['GET'])
-    @jwt_required
     def doctors_offices():
         response, code = get_doctors_by_office_route(request)
         return jsonify(response), code
 
     @app.route('/offices/list', methods=['GET'])
-    @jwt_required
     def offices():
         response, code = get_offices_route()
         return jsonify(response), code
