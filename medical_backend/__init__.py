@@ -51,6 +51,7 @@ def create_app(test_config=None):
         get_doctors_by_office_route,
         get_doctor_dates,
         get_doctor_route,
+        get_doctor_appointments_route,
         get_all_doctors,
         get_offices_route,
         get_offices_by_doctor_route,
@@ -146,6 +147,12 @@ def create_app(test_config=None):
     @jwt_required
     def doctor_profile():
         response, code = get_doctor_route()
+        return jsonify(response), code
+
+    @app.route('/doctor/appointments', methods=['GET', 'PUT'])
+    @jwt_required
+    def doctor_appointments():
+        response, code = get_doctor_appointments_route()
         return jsonify(response), code
 
     return app

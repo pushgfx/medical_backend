@@ -3,6 +3,10 @@ from datetime import datetime, timedelta
 
 db = Database()
 
+
+
+
+
 class Doctor:
 
 	def get_doctors(self):
@@ -116,7 +120,7 @@ class Doctor:
 		"middleInit": result['middle_initial'],
 		"lastName": result['last_name'],
 		"phone": result['phone'],
-		"specializationName": result['specialization_name']
+		"specializationName": result['specialization_name'],
 		}
 		return profile
 
@@ -157,3 +161,59 @@ class Doctor:
 					}
 				appointments.append(appointment)
 		return appointments
+
+
+	def get_today_appointments_by_doctor(self,doctor_id):
+		sql="""SELECT appointments.appt_id,
+			CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
+			offices.office_name AS office,
+			appointments.was_referred, appointments.referring_doctor_id, appointments.appt_start_time,
+			appointments.estimated_end_time,
+			appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
+			FROM `appointments`,`offices`,`patients`
+			WHERE DATE(appointments.appt_start_time) = CURRENT_DATE 
+			AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id 
+			AND appointments.patient_id=patients.patient_id
+			ORDER BY appointments.appt_start_time DESC"""
+		params=(doctor_id)
+		result = db.run_query(sql,params)
+		print("TODAY APPTS ",result)
+		return result
+
+
+	def get_past_appts_by_doctor(self,doctor_id):
+		limit=30
+		sql="""SELECT appointments.appt_id,
+			CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
+			offices.office_name AS office,
+			appointments.was_referred, appointments.referring_doctor_id, appointments.appt_start_time,
+			appointments.estimated_end_time,
+			appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
+			FROM `appointments`,`offices`,`patients`
+			WHERE DATE(appointments.appt_start_time) < CURRENT_DATE 
+			AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id 
+			AND appointments.patient_id=patients.patient_id
+			ORDER BY appointments.appt_start_time DESC
+            LIMIT %s"""
+		params=(doctor_id,limit)
+		result = db.run_query(sql,params)
+		print("APPTS HISTORY ",result)
+		return result
+
+	def get_future_appts_by_doctor(self,doctor_id):
+		sql="""SELECT appointments.appt_id,
+			CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
+			offices.office_name AS office,
+			appointments.was_referred, appointments.referring_doctor_id, appointments.appt_start_time,
+			appointments.estimated_end_time,
+			appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
+			FROM `appointments`,`offices`,`patients`
+			WHERE DATE(appointments.appt_start_time) > CURRENT_DATE 
+			AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id 
+			AND appointments.patient_id=patients.patient_id
+			ORDER BY appointments.appt_start_time ASC"""
+		params=(doctor_id)
+		result = db.run_query(sql,params)
+		print("FUTURE APPTS ",result)
+		return result
+
