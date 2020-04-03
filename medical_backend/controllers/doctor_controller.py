@@ -44,10 +44,9 @@ def get_doctor_route():
 	future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
 	past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
 	if profile:
-		response, code = {"doctors": profile, "patients": doctor_patient, "appointments": patient_appointments}, 200
-		response, code = {"doctors": profile, "patients": doctor_patient, "appointments": patient_appointments,
+		response, code = {"doctors": profile, "patients": doctor_patient, "appointments":{"appointments": patient_appointments,
 							"todayAppointments":today_appointments,"futureAppointments":future_appointments,
-						  	"pastAppointments":past_appointments}, 200
+						  	"pastAppointments":past_appointments}}, 200
 	else:
 		response, code = {"msg": "Bad doctor id"}, 400
 	# print(response)
@@ -61,10 +60,11 @@ def get_doctor_appointments_route():
 	today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
 	future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
 	past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
+
 	if patient_appointments or today_appointments or future_appointments or past_appointments:
-		response, code = {"appointments": patient_appointments,
+		response, code = {"appointments":{"appointments": patient_appointments,
 							"todayAppointments":today_appointments,"futureAppointments":future_appointments,
-						  	"pastAppointments":past_appointments}, 200
+						  	"pastAppointments":past_appointments}}, 200
 	else:
 		response, code = {"msg": "Error retrieving appointment by doctor"}, 400
 	print(response)

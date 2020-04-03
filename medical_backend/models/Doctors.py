@@ -164,6 +164,7 @@ class Doctor:
 
 
 	def get_today_appointments_by_doctor(self,doctor_id):
+		current_date = datetime.now().date()
 		sql="""SELECT appointments.appt_id,
 			CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
 			offices.office_name AS office,
@@ -171,11 +172,11 @@ class Doctor:
 			appointments.estimated_end_time,
 			appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
 			FROM `appointments`,`offices`,`patients`
-			WHERE DATE(appointments.appt_start_time) = CURRENT_DATE 
+			WHERE DATE(appointments.appt_start_time) = %s
 			AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id 
 			AND appointments.patient_id=patients.patient_id
 			ORDER BY appointments.appt_start_time DESC"""
-		params=(doctor_id)
+		params=(current_date,doctor_id)
 		result = db.run_query(sql,params)
 		print("TODAY APPTS ",result)
 		return result
@@ -183,6 +184,7 @@ class Doctor:
 
 	def get_past_appts_by_doctor(self,doctor_id):
 		limit=30
+		current_date = datetime.now().date()
 		sql="""SELECT appointments.appt_id,
 			CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
 			offices.office_name AS office,
@@ -190,17 +192,18 @@ class Doctor:
 			appointments.estimated_end_time,
 			appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
 			FROM `appointments`,`offices`,`patients`
-			WHERE DATE(appointments.appt_start_time) < CURRENT_DATE 
+			WHERE DATE(appointments.appt_start_time) < %s 
 			AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id 
 			AND appointments.patient_id=patients.patient_id
 			ORDER BY appointments.appt_start_time DESC
             LIMIT %s"""
-		params=(doctor_id,limit)
+		params=(current_date,doctor_id,limit)
 		result = db.run_query(sql,params)
 		print("APPTS HISTORY ",result)
 		return result
 
 	def get_future_appts_by_doctor(self,doctor_id):
+		current_date = datetime.now().date()
 		sql="""SELECT appointments.appt_id,
 			CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
 			offices.office_name AS office,
@@ -208,11 +211,11 @@ class Doctor:
 			appointments.estimated_end_time,
 			appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
 			FROM `appointments`,`offices`,`patients`
-			WHERE DATE(appointments.appt_start_time) > CURRENT_DATE 
+			WHERE DATE(appointments.appt_start_time) > %s
 			AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id 
 			AND appointments.patient_id=patients.patient_id
 			ORDER BY appointments.appt_start_time ASC"""
-		params=(doctor_id)
+		params=(current_date,doctor_id)
 		result = db.run_query(sql,params)
 		print("FUTURE APPTS ",result)
 		return result
