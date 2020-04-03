@@ -142,9 +142,8 @@ def create_app(test_config=None):
 
 
     @app.route('/doctor/profile', methods = ['GET','PUT'])
-    @jwt_required
     def doctor_profile():
-        response, code = get_doctor_route()
+        response, code = get_doctor_route(request)
         return jsonify(response), code
 
     @app.route('/doctor/appointments', methods=['GET', 'PUT'])

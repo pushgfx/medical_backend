@@ -178,7 +178,6 @@ class Doctor:
 			ORDER BY appointments.appt_start_time DESC"""
 		params=(current_date,doctor_id)
 		result = db.run_query(sql,params)
-		print("TODAY APPTS ",result)
 		return result
 
 
@@ -199,7 +198,6 @@ class Doctor:
             LIMIT %s"""
 		params=(current_date,doctor_id,limit)
 		result = db.run_query(sql,params)
-		print("APPTS HISTORY ",result)
 		return result
 
 	def get_future_appts_by_doctor(self,doctor_id):
@@ -217,6 +215,5 @@ class Doctor:
 			ORDER BY appointments.appt_start_time ASC"""
 		params=(current_date,doctor_id)
 		result = db.run_query(sql,params)
-		print("FUTURE APPTS ",result)
 		return result
 
