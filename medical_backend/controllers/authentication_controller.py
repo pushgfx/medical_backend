@@ -1,5 +1,5 @@
 from flask_jwt_extended import create_access_token
-from ..models import User, Patient, Appointments, Doctor
+from ..models import User, Patient, Appointments, Doctor, Admin
 
 def authenticate_route(request):
     user = User()
@@ -15,7 +15,17 @@ def authenticate_route(request):
     else:
         user = {"uid":uuser['user_role_id'],"role":uuser['role_id']}
         token = create_access_token(user)
-        if user['role'] == 2:
+        if user['role'] == 1:
+            admin = Admin()
+            admin_id = user['uid']
+            profile = admin.get_admin(admin_id)
+            all_patients = admin.get_patient_dict()
+            all_doctors = admin.get_doctor_dict()
+            all_appointments = admin.get_appointment_dict()
+            all_offices = admin.get_office_dict()
+            response, code = {"access_token": token, "role_id": uuser['role_id'], "profile": profile, "offices" : all_offices, "doctors" : all_doctors,  "appointments": all_appointments, "patients" : all_patients}, 201
+
+        elif user['role'] == 2:
             patient = Patient()
             patient_id = user['uid']
             profile = patient.get_patient_dict(patient_id)
@@ -25,7 +35,7 @@ def authenticate_route(request):
             appointments = appointment.get_patient_appt_hist(patient_id)
                 # get all the data
             response, code = {"access_token": token, "role_id": uuser['role_id'], "profile": profile, "records": records, "prescriptions": rx, "appointments": appointments}, 201
-        if user['role'] == 3:
+        elif user['role'] == 3:
             doctor = Doctor()
             doctor_id = user['uid']
             profile = doctor.get_doctor_dict(doctor_id)
@@ -33,8 +43,8 @@ def authenticate_route(request):
             patient_appointments = doctor.get_doctor_all_appointment(doctor_id)
             today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
             future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
-            past_appointments=doctor.get_past_appts_by_doctor(doctor_id)      
-            response, code = {"access_token": token, "role_id": uuser['role_id'], "profile": profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments}}, 200      
+            past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
+            response, code = {"access_token": token, "role_id": uuser['role_id'], "profile": profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments}}, 200
         else:
             response, code = {"access_token": token, "role_id": uuser['role_id']}, 201
     return response, code

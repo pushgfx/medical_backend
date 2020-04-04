@@ -5,6 +5,12 @@ from ..models import User
 db = Database()
 
 class Admin(User):
+    def get_admin(self, id):
+        sql = "SELECT * FROM admin where admin_id=%s"
+        params=(id)
+        admin = db.run_query(sql, params)
+        return admin
+
     def get_doctor_dict(self):
         sql = """SELECT doctors.first_name, doctors.middle_initial, doctors.last_name, doctors.phone,
         specializations.specialization_name
@@ -59,7 +65,7 @@ class Admin(User):
             WHERE appointments.patient_id = patients.patient_id AND
             	appointments.doctor_id = doctors.doctor_id AND
             	appointments.office_id = offices.office_id"""
-        results = db.run_query(sql, params)
+        results = db.run_query(sql, ())
         appointments =[]
         for result in results:
             appointment = {
@@ -80,7 +86,7 @@ class Admin(User):
 
     def get_office_dict(self):
         sql = "SELECT * FROM `offices`"
-        results = db.run_query(sql, params)
+        results = db.run_query(sql, ())
         offices =[]
         for result in results:
             office = {
