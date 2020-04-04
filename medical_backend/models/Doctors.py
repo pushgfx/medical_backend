@@ -91,7 +91,7 @@ class Doctor:
 
 	def get_doctor_patient(self,doctor_id):
     
-		sql = """SELECT patients.first_name, patients.middle_initial, patients.last_name, patients.phone
+		sql = """SELECT patients.patient_id,patients.first_name, patients.middle_initial, patients.last_name, patients.phone,patients.date_of_birth,patients.gender,patients.race
 		FROM patients, patient_doctor_affiliation
 		WHERE patient_doctor_affiliation.doctor_id=%s
 		AND patient_doctor_affiliation.patient_id = patients.patient_id"""
@@ -100,12 +100,17 @@ class Doctor:
 		doctor_patient =[]
 		for result in results:
 			patient = {
+				"patient_id":result['patient_id'],
 				"firstName": result['first_name'],
 				"middleInit": result['middle_initial'],
 				"lastName": result['last_name'],
-				"phone": result['phone']
+				"phone": result['phone'],
+				"dob":result['date_of_birth'],
+				"gender":result['gender'],
+				"race":result['race']
 			}
 			doctor_patient.append(patient)
+		print(doctor_patient)
 		return doctor_patient
 
 	def get_doctor_dict(self,doctor_id):
@@ -165,10 +170,11 @@ class Doctor:
 
 	def get_today_appointments_by_doctor(self,doctor_id):
 		current_date = datetime.now().date()
-		sql="""SELECT appointments.appt_id,
+		sql="""SELECT appointments.appt_id,appointments.patient_id,
 			CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
 			offices.office_name AS office,
 			appointments.was_referred, appointments.referring_doctor_id, appointments.appt_start_time,
+		
 			appointments.estimated_end_time,
 			appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
 			FROM `appointments`,`offices`,`patients`
@@ -184,10 +190,11 @@ class Doctor:
 	def get_past_appts_by_doctor(self,doctor_id):
 		limit=30
 		current_date = datetime.now().date()
-		sql="""SELECT appointments.appt_id,
+		sql="""SELECT appointments.appt_id,appointments.patient_id,
 			CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
 			offices.office_name AS office,
 			appointments.was_referred, appointments.referring_doctor_id, appointments.appt_start_time,
+		
 			appointments.estimated_end_time,
 			appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
 			FROM `appointments`,`offices`,`patients`
@@ -202,10 +209,11 @@ class Doctor:
 
 	def get_future_appts_by_doctor(self,doctor_id):
 		current_date = datetime.now().date()
-		sql="""SELECT appointments.appt_id,
+		sql="""SELECT appointments.appt_id,appointments.patient_id,
 			CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
 			offices.office_name AS office,
 			appointments.was_referred, appointments.referring_doctor_id, appointments.appt_start_time,
+		
 			appointments.estimated_end_time,
 			appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
 			FROM `appointments`,`offices`,`patients`
