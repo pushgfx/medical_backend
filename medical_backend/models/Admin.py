@@ -12,14 +12,16 @@ class Admin(User):
         return admin
 
     def get_doctor_dict(self):
-        sql = """SELECT doctors.first_name, doctors.middle_initial, doctors.last_name, doctors.phone,
+        sql = """SELECT doctors.*,
         specializations.specialization_name
         FROM `doctors`, `specializations`
-        WHERE doctors.specialist_id = specializations.specialist_id"""
+        WHERE doctors.specialist_id = specializations.specialist_id
+        ORDER BY doctors.first_name"""
         results = db.run_query(sql, ())
         doctors =[]
         for result in results:
             doctor = {
+                "doctorId": result['doctor_id'],
                 "firstName": result['first_name'],
                 "middleInit": result['middle_initial'],
                 "lastName": result['last_name'],
@@ -30,11 +32,12 @@ class Admin(User):
         return doctors
 
     def get_patient_dict(self):
-        sql = "SELECT * FROM `patients`"
+        sql = "SELECT * FROM `patients` ORDER BY first_name"
         results = db.run_query(sql, ())
         patients =[]
         for result in results:
             patient = {
+                "patientId": result['patient_id'],
                 "firstName": result['first_name'],
                 "middleInit": result['middle_initial'],
                 "lastName": result['last_name'],
@@ -69,6 +72,7 @@ class Admin(User):
         appointments =[]
         for result in results:
             appointment = {
+                "appointmentId": result['appt_id'],
                 "patient": result['patient'],
                 "doctor": result['doctor'],
                 "office": result['office'],
