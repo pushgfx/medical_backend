@@ -2,15 +2,15 @@
 from flask_jwt_extended import get_jwt_claims, get_jwt_identity
 from ..models import Patient, Appointments
 
-
 def get_patient_route(request):
     patient = Patient()
-    patient_id = get_jwt_identity()['uid']
-    profile = patient.get_patient_dict(patient_id)
-    records = patient.get_patient_records(patient_id)
-    rx = patient.get_patient_prescriptions(patient_id)
+    patient_id = request.args.get('pid', None)
+    profile = patient.get_patient_dict(str(patient_id))
+    records = patient.get_patient_records(str(patient_id))
+    rx = patient.get_patient_prescriptions(str(patient_id))
     appointment = Appointments()
     appointments = appointment.get_patient_appt_hist(patient_id)
+    print(profile)
 
     if profile:
         response, code = {"profile": profile, "records": records, "prescriptions": rx, "appointments": appointments}, 200
