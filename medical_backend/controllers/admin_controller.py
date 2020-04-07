@@ -12,3 +12,4 @@ def get_admin_route(request):
 		reponse, code = {"msg":"Bad admini request"}, 400
 
 	return response, code
+
