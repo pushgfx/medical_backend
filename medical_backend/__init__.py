@@ -67,6 +67,16 @@ def create_app(test_config=None):
     def home():
         return "Hello World"
 
+    @jwt.unauthorized_loader
+    def my_expired_token_callback(expired_token):
+        token_type = expired_token['type']
+        print("bad token")
+        return jsonify({
+            'status': 401,
+            'sub_status': 42,
+            'msg': 'session expired'
+        }), 401
+
     # --- UNPROTECTED END-POINTS --- #
     # Login route
     @app.route('/patients/authenticate', methods=['POST'])
