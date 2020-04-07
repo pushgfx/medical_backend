@@ -133,7 +133,8 @@ class Doctor:
          "race": result['race'],
          "email": result['email'],
          "dob": result['date_of_birth'],
-         "gender": result['gender']
+         "gender": result['gender'],
+         "image": result['image']
 		}
 		return profile
 
