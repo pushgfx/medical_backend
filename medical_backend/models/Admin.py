@@ -21,12 +21,19 @@ class Admin(User):
         doctors =[]
         for result in results:
             doctor = {
-                "doctorId": result['doctor_id'],
-                "firstName": result['first_name'],
-                "middleInit": result['middle_initial'],
-                "lastName": result['last_name'],
-                "phone": result['phone'],
-                "specialization_name": result['specialization_name'],
+                	"firstName": result['first_name'],
+                    "middleInit": result['middle_initial'],
+                    "lastName": result['last_name'],
+                    "phone": result['phone'],
+                    "specializationName": result['specialization_name'],
+                    "street": result['street_1'],
+                    "city": result['city'],
+                    "state": result['state'],
+                    "zipcode": result['zipcode'],
+                    "race": result['race'],
+                    "email": result['email'],
+                    "dob": result['date_of_birth'],
+                    "gender": result['gender']
                 }
             doctors.append(doctor)
         return doctors
