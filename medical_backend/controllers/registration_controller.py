@@ -8,7 +8,8 @@ def registration_route(request):
 	if user.check_user(req_email):
 		response, code = {"msg": "Email already exists!"}, 401
 	else:
-		uid = patient.add_patient(request)
-		user_id = {"uid":uid,"role":2}
-		response, code = {"access_token": create_access_token(user_id)}, 201
+		patient_id = patient.add_patient(request)
+		user_id = {"uid":patient_id,"role":2}
+		token = create_access_token(user_id)
+		response, code = {"access_token": token, "role_id": 2, "patient_id": patient_id}, 201
 	return response, code

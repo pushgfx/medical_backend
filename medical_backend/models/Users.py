@@ -9,7 +9,7 @@ class User:
 		sql = "SELECT * FROM `users` WHERE email=%s"
 		params = (email)
 		result = db.run_query(sql, params)
-		return result[0]
+		return result
 
 	def check_password(self, email, password):
 		sql = "SELECT * FROM `users` WHERE email=%s"

@@ -29,10 +29,9 @@ class Patient(User):
             str(req_state),
             str(req_zipcode), str(req_phone), str(req_dob), str(req_gender), str(req_marital), str(req_race),
             str(req_email))
-        cur.execute(sql, params)
-        cur.execute("SELECT `patient_id` FROM `patients` ORDER BY `patient_id` DESC LIMIT 1")
-        result = cur.fetchone()
-        uid = result['patient_id']
+        db.run_query(sql, params)
+        result = db.run_query("SELECT `patient_id` FROM `patients` ORDER BY `patient_id` DESC LIMIT 1", ())
+        uid = result[0]['patient_id']
         self.add_user(req_email, request.json.get("password", None), 2, uid)
         return uid
 
