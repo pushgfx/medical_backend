@@ -113,7 +113,7 @@ class Doctor:
 		print(doctor_patient)
 		return doctor_patient
 
-	def get_doctor_dict(self,doctor_id):
+	def get_doctor_dict(self, doctor_id):
 		sql = """SELECT doctors.*, specialization_name FROM doctors, specializations
 		WHERE doctor_id=%s
 		AND doctors.specialist_id = specializations.specialist_id"""

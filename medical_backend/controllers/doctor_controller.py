@@ -33,9 +33,9 @@ def get_doctors_by_office_route(request):
         response, code = {"msg": "Error retreiving doctors"}, 400
     return response, code
 
-def get_doctor_data_route(request):
+def get_doctor_data_route():
     doctor = Doctor()
-    doctor_id = request.args.get('did')
+    doctor_id = get_jwt_identity()['uid']
     profile = doctor.get_doctor_dict(doctor_id)
     doctor_patient = doctor.get_doctor_patient(doctor_id)
     patient_appointments = doctor.get_doctor_all_appointment(doctor_id)
@@ -47,7 +47,7 @@ def get_doctor_data_route(request):
     else:
         response, code = {"msg": "Bad doctor id"}, 400
 
-    return response, 
+    return response, code
 
 def get_doctor_profile_route(request):
     doctor = Doctor()
