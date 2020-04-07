@@ -158,5 +158,5 @@ def create_app(test_config=None):
     def doctor_appointments():
         response, code = get_doctor_appointments_route()
         return jsonify(response), code
-
+    
     return app
