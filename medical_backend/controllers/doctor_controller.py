@@ -33,7 +33,7 @@ def get_doctors_by_office_route(request):
         response, code = {"msg": "Error retreiving doctors"}, 400
     return response, code
 
-def get_doctor_route(request):
+def get_doctor_data_route(request):
     doctor = Doctor()
     doctor_id = request.args.get('did')
     profile = doctor.get_doctor_dict(doctor_id)
@@ -44,6 +44,17 @@ def get_doctor_route(request):
     past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
     if profile:
         response, code = {"profile": profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments}}, 200
+    else:
+        response, code = {"msg": "Bad doctor id"}, 400
+
+    return response, 
+
+def get_doctor_profile_route(request):
+    doctor = Doctor()
+    doctor_id = request.args.get('did')
+    profile = doctor.get_doctor_dict(doctor_id)
+    if profile:
+        response, code = {"profile": profile}, 200
     else:
         response, code = {"msg": "Bad doctor id"}, 400
 
