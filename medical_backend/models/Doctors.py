@@ -19,7 +19,7 @@ class Doctor:
 
 	def get_doctors_by_office(self, office_id):
 		# Get a dictionary of all doctors for a specific office
-		sql = "SELECT doctors.doctor_id, first_name, last_name, specialization_name FROM doctors, doctor_office_affiliations, specializations WHERE doctor_office_affiliations.office_id=%s AND doctor_office_affiliations.doctor_id=doctors.doctor_id AND specializations.specialist_id=doctors.specialist_id"
+		sql = "SELECT doctors.doctor_id, first_name, last_name, specialization_name, image FROM doctors, doctor_office_affiliations, specializations WHERE doctor_office_affiliations.office_id=%s AND doctor_office_affiliations.doctor_id=doctors.doctor_id AND specializations.specialist_id=doctors.specialist_id"
 		params = (office_id)
 		doctors = db.run_query(sql, params)
 
