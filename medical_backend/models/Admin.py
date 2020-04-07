@@ -57,27 +57,47 @@ class Admin(User):
         return patients
 
     def get_appointment_dict(self):
-        sql = """SELECT
-            	appointments.appt_id,
-            	CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
-            	CONCAT(doctors.first_name," ",doctors.middle_initial, " ", doctors.last_name) AS doctor,
-            	offices.office_name AS office,
-            	appointments.was_referred, appointments.referring_doctor_id, appointments.appt_start_time, appointments.estimated_end_time,
-            	appointments.appt_status, appointments.booking_date, appointments.booking_method, appointments.reason_for_visit
-            FROM `appointments`, `doctors`,`offices`,`patients`
-            WHERE appointments.patient_id = patients.patient_id AND
-            	appointments.doctor_id = doctors.doctor_id AND
-            	appointments.office_id = offices.office_id"""
+        sql = """(SELECT
+                appointments.appt_id,
+                CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
+                CONCAT(d1.first_name," ",d1.middle_initial, " ", d1.last_name) AS doctor,
+                offices.office_name AS office,
+                appointments.was_referred,appointments.referring_doctor_id as referring_doctor, appointments.appt_start_time, appointments.estimated_end_time,
+                appointments.appt_status, appointments.booking_date, appointments.booking_method, appointments.reason_for_visit
+                FROM `appointments`, `doctors` as d1,  `offices`,`patients`
+                WHERE appointments.patient_id = patients.patient_id AND
+                appointments.doctor_id = d1.doctor_id AND
+                appointments.office_id = offices.office_id AND
+                appointments.referring_doctor_id is null)
+                UNION
+                (SELECT
+                appointments.appt_id,
+                CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
+                CONCAT(d1.first_name," ",d1.middle_initial, " ", d1.last_name) AS doctor,
+                offices.office_name AS office,
+                appointments.was_referred,CONCAT(d2.first_name," ",d2.middle_initial, " ", d2.last_name) AS referring_doctor,
+                 appointments.appt_start_time, appointments.estimated_end_time,
+                appointments.appt_status, appointments.booking_date, appointments.booking_method, appointments.reason_for_visit
+                FROM `appointments`, `doctors` as d1, `doctors` as d2, `offices`,`patients`
+                WHERE appointments.patient_id = patients.patient_id AND
+                appointments.doctor_id = d1.doctor_id AND
+                appointments.office_id = offices.office_id AND
+                appointments.referring_doctor_id = d2.doctor_id);"""
+
         results = db.run_query(sql, ())
-        appointments =[]
+        appointments=[]
         for result in results:
-            appointment = {
+            if result['was_referred']==0:
+                result['was_referred']="NO"
+            else:
+                result['was_referred']="YES"
+            appt = {
                 "appointmentId": result['appt_id'],
                 "patient": result['patient'],
                 "doctor": result['doctor'],
                 "office": result['office'],
                 "was_referred": result['was_referred'],
-                "referring_doctor_id": result['referring_doctor_id'],
+                "referring_doctor": result['referring_doctor'],
                 "appt_start_time": result['appt_start_time'],
                 "estimated_end_time": result['estimated_end_time'],
                 "appt_status": result['appt_status'],
@@ -85,7 +105,7 @@ class Admin(User):
                 "booking_method": result['booking_method'],
                 "reason_for_visit": result['reason_for_visit']
                 }
-            appointments.append(appointment)
+            appointments.append(appt)
         return appointments
 
     def get_office_dict(self):
@@ -103,3 +123,31 @@ class Admin(User):
                 }
             offices.append(office)
         return offices
+
+    def add_doctor(self):
+        req_first_name = request.json.get("firstName", None)
+        req_middle_i = request.json.get("middleInit", None)
+        req_last_name = request.json.get("lastName", None)
+        req_phone = request.json.get("phone", None)
+        req_spec = request.json.get("specialization_name", None)
+        req_email = request.json.get("email", None)
+
+        sql = """ INSERT INTO `doctors` (`doctor_id`, `first_name`, `middle_initial`, `last_name`, `phone`,
+        specialist_id) VALUES (NULL, %s, %s, %s, %s, %s) """
+        params = (
+            str(req_first_name), str(req_middle_i), str(req_last_name), str(req_phone), str(req_spec))
+
+        cur.execute(sql, params)
+        cur.execute("SELECT `doctor_id` FROM `doctors` ORDER BY `doctor_id` DESC LIMIT 1")
+        result = cur.fetchone()
+        uid = result['doctor_id']
+        self.add_user(req_email, str(uid) +req_last_name, 3, uid)
+        return uid
+
+    def update_doctor(self, r, doctor_id):
+        sql = """UPDATE doctors SET first_name=%s, middle_initial=%s, last_name=%s, phone=%s, specialist_id=%s, email=%s
+                    WHERE doctors=%s """
+        params = (
+            str(r.form['first_name']), str(r.form['middle_initial']), str(r.form['last_name']), str(r.form['phone']),
+             str(r.form['specialization_id']),str(r.form['email']), doctor_id)
+        db.run_query(sql, params)
