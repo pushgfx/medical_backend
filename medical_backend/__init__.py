@@ -80,7 +80,8 @@ def create_app(test_config=None):
         response, code = registration_route(request)
         return jsonify(response), code
 
-    @app.route('/admin', methods=['GET'])
+    @app.route('/admin/profile', methods=['GET'])
+    @jwt_required
     def admin_profile():
         response, code = get_admin_route(request)
         return jsonify(response), code
