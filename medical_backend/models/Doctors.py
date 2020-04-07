@@ -126,6 +126,14 @@ class Doctor:
 		"lastName": result['last_name'],
 		"phone": result['phone'],
 		"specializationName": result['specialization_name'],
+		"street": result['street_1'],
+        "city": result['city'],
+         "state": result['state'],
+         "zipcode": result['zipcode'],
+         "race": result['race'],
+         "email": result['email'],
+         "dob": result['date_of_birth'],
+         "gender": result['gender']
 		}
 		return profile
 
