@@ -34,17 +34,10 @@ def authenticate_route(request):
             appointment = Appointments()
             appointments = appointment.get_patient_appt_hist(patient_id)
                 # get all the data
-            response, code = {"access_token": token, "role_id": uuser['role_id'], "profile": profile, "records": records, "prescriptions": rx, "appointments": appointments}, 201
+            response, code = {"access_token": token, "role_id": uuser['role_id'], "patient_id": patient_id}, 201
         elif user['role'] == 3:
-            doctor = Doctor()
             doctor_id = user['uid']
-            profile = doctor.get_doctor_dict(doctor_id)
-            doctor_patient = doctor.get_doctor_patient(doctor_id)
-            patient_appointments = doctor.get_doctor_all_appointment(doctor_id)
-            today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
-            future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
-            past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
-            response, code = {"access_token": token, "role_id": uuser['role_id'], "profile": profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments}}, 200
+            response, code = {"access_token": token, "role_id": uuser['role_id'], "doctor_id": doctor_id}, 200
         else:
             response, code = {"access_token": token, "role_id": uuser['role_id']}, 201
     return response, code

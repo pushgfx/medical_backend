@@ -10,7 +10,6 @@ def get_patient_route(request):
     rx = patient.get_patient_prescriptions(str(patient_id))
     appointment = Appointments()
     appointments = appointment.get_patient_appt_hist(patient_id)
-    print(profile)
 
     if profile:
         response, code = {"profile": profile, "records": records, "prescriptions": rx, "appointments": appointments}, 200

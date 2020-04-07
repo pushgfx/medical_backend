@@ -18,8 +18,14 @@ class Appointments:
         current_dt = datetime.now()
         booking_date = current_dt
         year = int(req_date[0:4])
-        month = int(req_date[5:7])
-        day = int(req_date[8:10]) - 1
+        month = req_date[5:7]
+        if month[0] == "0":
+            month = month[1]
+        month = int(month)
+        day = req_date[8:10]
+        if day[0] == "0":
+            day = day[1]
+        day = int(day)
         hour = req_timeslot + 8
         appt_start_time = datetime(year, month, day, hour, minute=0, second=0, microsecond=0, tzinfo=None)
         appt_end_time = datetime(year, month, day, hour+1, minute=0, second=0, microsecond=0, tzinfo=None)
