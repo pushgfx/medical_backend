@@ -141,7 +141,7 @@ def create_app(test_config=None):
         return jsonify(response), code
 
 
-    @app.route('/doctor/profile', methods = ['GET','PUT'])
+    @app.route('/doctor/profile', methods=['GET','PUT'])
     def doctor_profile():
         response, code = get_doctor_route(request)
         return jsonify(response), code

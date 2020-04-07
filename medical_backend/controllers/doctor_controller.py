@@ -27,7 +27,6 @@ def get_doctors_by_office_route(request):
 	doctor = Doctor()
 	office_id = request.args.get("oid", None)
 	doctors = doctor.get_doctors_by_office(office_id)
-	print(doctors)
 	if doctors:
 		response, code = {"doctors": doctors}, 200
 	else:
@@ -42,7 +41,6 @@ def get_doctor_route(request):
 		response, code = {"profile": profile}, 200
 	else:
 		response, code = {"msg": "Bad doctor id"}, 400
-	print(response)
 
 	return response, code
 
