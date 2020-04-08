@@ -52,3 +52,4 @@ def delete_appt_route(request):
     else:
         response, code = {"msg": "Bad Request"}, 400
     return response, code
+
