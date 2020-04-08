@@ -59,7 +59,8 @@ def create_app(test_config=None):
         set_appointment_route,
         get_appointments_route,
         get_patient_rx_route,
-        get_patient_records_route
+        get_patient_records_route,
+        delete_appt_route
     )
 
     # Simple route for basic testing
@@ -159,4 +160,8 @@ def create_app(test_config=None):
         response, code = get_doctor_appointments_route()
         return jsonify(response), code
     
+    @app.route('/patient/deleteappointment', methods=['DELETE'])
+    def delete_patient_appointments():
+        response, code = delete_appt_route(request)
+        return jsonify(response), code
     return app

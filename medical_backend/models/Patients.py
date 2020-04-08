@@ -99,7 +99,7 @@ class Patient(User):
         return medical_records
     
     def delete_appointment(self,appointment_id):
-        sql = "DELETE FROM `appointments` WHERE (`appt_id` = '%s') AND (appt_status = `pending`)"
+        sql = "DELETE FROM `appointments` WHERE (`appt_id` = %s) AND (appt_status = 'pending')"
         params = (appointment_id)
         db.run_query(sql, params)
-        return
+        return True
