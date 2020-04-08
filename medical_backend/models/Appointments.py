@@ -48,7 +48,7 @@ class Appointments:
         db.run_query(sql, params)
 
     def get_patient_appt_hist(self, patient_id):
-        sql = "SELECT appointments.appt_status, appointments.appt_start_time, appointments.booking_date, doctors.first_name, doctors.last_name FROM appointments, doctors WHERE appointments.patient_id=%s AND doctors.doctor_id=appointments.doctor_id"
+        sql = "SELECT appointments.appt_id, appointments.appt_status, appointments.appt_start_time, appointments.booking_date, doctors.first_name, doctors.last_name FROM appointments, doctors WHERE appointments.patient_id=%s AND doctors.doctor_id=appointments.doctor_id"
         params = (patient_id)
         appointments = db.run_query(sql, params)
         return appointments
