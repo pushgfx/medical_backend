@@ -121,6 +121,7 @@ class Doctor:
 		record = db.run_query(sql, params)
 		result = record[0]
 		profile = {
+		"doctorId":doctor_id,
 		"firstName": result['first_name'],
 		"middleInit": result['middle_initial'],
 		"lastName": result['last_name'],
@@ -214,6 +215,7 @@ class Doctor:
             LIMIT %s"""
 		params=(current_date,doctor_id,limit)
 		result = db.run_query(sql,params)
+		print("PASS APPOINTMENTS ",result)
 		return result
 
 	def get_future_appts_by_doctor(self,doctor_id):

@@ -51,6 +51,7 @@ class Patient(User):
         patient = db.run_query(sql, params)
         result = patient[0]
         profile = {
+            "patientId":patient_id,
             "firstName": result['first_name'],
             "middleInit": result['middle_initial'],
             "lastName": result['last_name'],
