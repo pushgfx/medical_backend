@@ -17,3 +17,16 @@ class Office:
 		offices = db.run_query(sql, params)
 		
 		return offices
+
+	def update_office(self, office_id, office_name, street_1, city, state, zipcode, phone):
+		sql = """UPDATE offices SET office_name=%s, street_1=%s, city=%s, state=%s, zipcode=%s, phone=%s WHERE office_id=%s """
+		params = (str(office_name), str(street_1), str(city), str(state),str(zipcode), str(phone),office_id)
+		db.run_query(sql, params)
+		return True
+	
+	def get_office_by_officeId(self, office_id):
+		sql = "SELECT * FROM offices WHERE office_id=%s" 
+		params = (office_id)
+		office = db.run_query(sql, params)
+
+		return office

@@ -121,6 +121,7 @@ class Admin(User):
         offices =[]
         for result in results:
             office = {
+                "office_id": result ['office_id'],
                 "office_name": result['office_name'],
                 "street_1": result['street_1'],
                 "city": result['city'],
