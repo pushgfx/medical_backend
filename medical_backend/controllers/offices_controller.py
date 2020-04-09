@@ -41,12 +41,3 @@ def update_offices_by_admin_route(request):
 
 	return response, code
 
-def get_Office_By_Id_route (request):
-	office = Office ()
-	office_id = request.args.get("oid", None)
-	office = office.get_office_by_officeId(office_id)
-	if office:
-		response, code = {"office": office}, 200
-	else:
-		response, code = {"msg": "Bad doctor id"}, 400
-	return response, code

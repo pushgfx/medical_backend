@@ -62,7 +62,6 @@ def create_app(test_config=None):
         get_patient_records_route,
         delete_appt_route,
         update_offices_by_admin_route,
-        get_Office_By_Id_route 
     )
 
     # Simple route for basic testing
@@ -172,9 +171,5 @@ def create_app(test_config=None):
         response, code = update_offices_by_admin_route(request)
         return jsonify(response), code
     
-    @app.route('/offices/office' , methods = ['GET'])
-    def get_Office_route ():
-        response, code = get_Office_By_Id_route(request)
-        return jsonify(response), code
     
     return app

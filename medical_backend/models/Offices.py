@@ -24,9 +24,3 @@ class Office:
 		db.run_query(sql, params)
 		return True
 	
-	def get_office_by_officeId(self, office_id):
-		sql = "SELECT * FROM offices WHERE office_id=%s" 
-		params = (office_id)
-		office = db.run_query(sql, params)
-
-		return office
