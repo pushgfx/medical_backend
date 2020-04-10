@@ -78,3 +78,19 @@ def get_doctor_appointments_route():
 
     return response, code
 
+def insert_new_prescription_route(request):
+    doctor = Doctor()
+    new_prescription=doctor.add_patient_prescription(request)
+    if new_prescription:
+        response, code ={"addedPrescription": new_prescription}, 200
+    print(response)
+    return response, code
+
+
+
+
+
+
+
+
+

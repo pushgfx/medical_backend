@@ -74,7 +74,8 @@ class Patient(User):
               "FROM appointments,doctors,offices " \
               "WHERE appointments.patient_id=%s " \
               " AND appointments.doctor_id=doctors.doctor_id " \
-              " AND appointments.office_id=offices.office_id"
+              " AND appointments.office_id=offices.office_id" \
+              "ORDER BY appointments.appt_start_time DESC"
         params = (patient_id)
         appointments = db.run_query(sql, params)
         return appointments

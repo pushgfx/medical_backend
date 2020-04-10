@@ -215,7 +215,6 @@ class Doctor:
             LIMIT %s"""
 		params=(current_date,doctor_id,limit)
 		result = db.run_query(sql,params)
-		print("PASS APPOINTMENTS ",result)
 		return result
 
 	def get_future_appts_by_doctor(self,doctor_id):
@@ -245,6 +244,31 @@ class Doctor:
 		sql = """SELECT * FROM medication_dose_forms"""
 		result = db.run_query(sql, ())
 		return result
+
+	def add_patient_prescription(self, request):
+		appt_id = request.json.get("apptId", None)
+		doctor_id = request.json.get("doctorId", None)
+		patient_id = request.json.get("patientId", None)
+		medication_id = request.json.get("medicationId", None)
+		dose_form_id = request.json.get("doseFormId", None)
+		dosage = request.json.get("dosage", None)
+		indication = request.json.get("indication", None)
+		date_prescribed = request.json.get("datePrescribed", None)
+		sql = "INSERT INTO `prescribed_medications` (appt_id,doctor_id,patient_id,medication_id,dose_form_id,dosage,indication,date_prescribed) " \
+			  "VALUES (%s,%s,%s,%s,%s,%s,%s,%s);"
+		params = (str(appt_id), str(doctor_id), str(patient_id), str(medication_id), str(dose_form_id), str(dosage),
+				  str(indication), str(date_prescribed), str(date_prescribed))
+		db.run_query(sql, params)
+
+		# TODO:will add date_prescribed to the confirmed_sql
+		confirmed_sql = "SELECT * FROM `prescribed_medications` WHERE appt_id=%s AND doctor_id=%s AND patient_id=%s"
+		confirmed_params=(str(appt_id),str(doctor_id),str(patient_id))
+		confirmed_insertion=db.run_query(confirmed_sql,confirmed_params)
+		print("Insert Prescription ",confirmed_insertion)
+		return confirmed_insertion
+
+
+
 
 
 
