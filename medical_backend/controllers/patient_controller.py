@@ -43,7 +43,7 @@ def get_patient_records_route(request):
     return response, code 
 
 def delete_appt_route(request):
-    patient = Patient ()
+    patient = Patient()
     appt_id = request.args.get("aid", None)
     answer = patient.delete_appointment(appt_id)
 	
