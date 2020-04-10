@@ -257,17 +257,14 @@ class Doctor:
 
 	def add_patient_prescription(self, request):
 		appt_id = request.json.get("apptId", None)
-		doctor_id = request.json.get("doctorId", None)
 		patient_id = request.json.get("patientId", None)
 		medication_id = request.json.get("medicationId", None)
 		dose_form_id = request.json.get("doseFormId", None)
 		dosage = request.json.get("dosage", None)
-		indication = request.json.get("indication", None)
 		date_prescribed = request.json.get("datePrescribed", None)
-		sql = "INSERT INTO `prescribed_medications` (appt_id,doctor_id,patient_id,medication_id,dose_form_id,dosage,indication,date_prescribed) " \
-			  "VALUES (%s,%s,%s,%s,%s,%s,%s,%s);"
-		params = (str(appt_id), str(doctor_id), str(patient_id), str(medication_id), str(dose_form_id), str(dosage),
-				  str(indication), str(date_prescribed), str(date_prescribed))
+		sql = "INSERT INTO `prescribed_medications` (appt_id,doctor_id,patient_id,medication_id,dose_form_id,dosage,date_prescribed) " \
+			  "VALUES (%s,%s,%s,%s,%s,%s,%s);"
+		params = (str(appt_id), str(doctor_id), str(patient_id), str(medication_id), str(dose_form_id), str(dosage), str(date_prescribed))
 		db.run_query(sql, params)
-    
+
 		return True

@@ -172,7 +172,6 @@ def create_app(test_config=None):
     def update_office():
         response, code = update_offices_by_admin_route(request)
         return jsonify(response), code
-    
 
     @app.route('/doctor/updatedoctor', methods = ['PUT'])
     def update_doctor():
@@ -180,6 +179,7 @@ def create_app(test_config=None):
         return jsonify(response), code
         
     @app.route('/doctor/addprescription', methods=['POST'])
+    @jwt_required
     def doctor_add_new_prescription():
         response, code = insert_new_prescription_route(request)
         return jsonify(response), code

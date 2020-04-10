@@ -107,7 +107,8 @@ def update_doctorprofile_route(request):
 
 def insert_new_prescription_route(request):
     doctor = Doctor()
-    new_prescription=doctor.add_patient_prescription(request)
+    doctor_id = get_jwt_identity()['uid']
+    new_prescription = doctor.add_patient_prescription(request, doctor_id)
     if new_prescription:
         response, code ={"addedPrescription": new_prescription}, 200
     print(response)
