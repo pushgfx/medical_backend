@@ -62,7 +62,8 @@ def create_app(test_config=None):
         get_patient_records_route,
         delete_appt_route,
         update_offices_by_admin_route,
-        update_doctorprofile_route
+        update_doctorprofile_route,
+        insert_new_prescription_route,
     )
 
     # Simple route for basic testing
@@ -172,9 +173,17 @@ def create_app(test_config=None):
         response, code = update_offices_by_admin_route(request)
         return jsonify(response), code
     
+
     @app.route('/doctor/updatedoctor', methods = ['PUT'])
     def update_doctor():
         response, code = update_doctorprofile_route(request)
         return jsonify(response), code
+        
+    @app.route('/doctor/addprescription', methods=['POST'])
+    def doctor_add_new_prescription():
+        response, code = insert_new_prescription_route(request)
+        return jsonify(response), code
     
     return app
+
+

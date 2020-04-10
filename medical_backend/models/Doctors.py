@@ -215,7 +215,6 @@ class Doctor:
             LIMIT %s"""
 		params=(current_date,doctor_id,limit)
 		result = db.run_query(sql,params)
-		print("PASS APPOINTMENTS ",result)
 		return result
 
 	def get_future_appts_by_doctor(self,doctor_id):
@@ -237,14 +236,14 @@ class Doctor:
 		return result
 
 	def get_all_medications(self):
-    		sql="""SELECT * FROM medications"""
-		result = db.run_query(sql,())
-		return result
-	def get_all_medication_forms(self):
-		sql="""SELECT * FROM medication_dose_forms"""
-		result=db.run_query(sql,())
+		sql = """SELECT * FROM medications"""
+		result = db.run_query(sql, ())
 		return result
 
+	def get_all_medication_forms(self):
+		sql = """SELECT * FROM medication_dose_forms"""
+		result = db.run_query(sql, ())
+		return result
 
 	def update_doctor(self, doctor_id, first_name, middle_initial,last_name, phone, specialist_id, email, street_1, city, state, zipcode, race, date_of_birth,gender ):
 		sql = """UPDATE doctors SET first_name=%s, middle_initial=%s, last_name=%s, phone=%s, specialist_id=%s, email=%s, street_1=%s, city=%s, state=%s,zipcode=%s, race=%s, date_of_birth=%s, gender=%s
@@ -254,4 +253,21 @@ class Doctor:
 		str('specializaton_id'),str('email'),str('street_1'),str('city'),str('state'),str('zipcode'),str('race'),str('date_of_birh'),str('gender'), doctor_id)
 		db.run_query(sql, params)	
 
+		return True
+
+	def add_patient_prescription(self, request):
+		appt_id = request.json.get("apptId", None)
+		doctor_id = request.json.get("doctorId", None)
+		patient_id = request.json.get("patientId", None)
+		medication_id = request.json.get("medicationId", None)
+		dose_form_id = request.json.get("doseFormId", None)
+		dosage = request.json.get("dosage", None)
+		indication = request.json.get("indication", None)
+		date_prescribed = request.json.get("datePrescribed", None)
+		sql = "INSERT INTO `prescribed_medications` (appt_id,doctor_id,patient_id,medication_id,dose_form_id,dosage,indication,date_prescribed) " \
+			  "VALUES (%s,%s,%s,%s,%s,%s,%s,%s);"
+		params = (str(appt_id), str(doctor_id), str(patient_id), str(medication_id), str(dose_form_id), str(dosage),
+				  str(indication), str(date_prescribed), str(date_prescribed))
+		db.run_query(sql, params)
+    
 		return True
