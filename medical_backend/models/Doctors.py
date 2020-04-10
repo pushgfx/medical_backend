@@ -245,3 +245,13 @@ class Doctor:
 		result=db.run_query(sql,())
 		return result
 
+
+	def update_doctor(self, doctor_id, first_name, middle_initial,last_name, phone, specialist_id, email, street_1, city, state, zipcode, race, date_of_birth,gender ):
+		sql = """UPDATE doctors SET first_name=%s, middle_initial=%s, last_name=%s, phone=%s, specialist_id=%s, email=%s, street_1=%s, city=%s, state=%s,zipcode=%s, race=%s, date_of_birth=%s, gender=%s
+		WHERE doctors=%s """
+		params = (
+		str('first_name'), str('middle_inital'), str('last_name'), str('phone'),
+		str('specializaton_id'),str('email'),str('street_1'),str('city'),str('state'),str('zipcode'),str('race'),str('date_of_birh'),str('gender'), doctor_id)
+		db.run_query(sql, params)	
+
+		return True
