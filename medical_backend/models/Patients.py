@@ -70,7 +70,7 @@ class Patient(User):
     def get_patient_appt_hist(self, patient_id):
         sql = "SELECT appointments.appt_id, appointments.appt_start_time, appointments.appt_status," \
               "appointments.booking_date," \
-              "appointments.booking_method,doctors.first_name,doctors.last_name,offices.office_name " \
+              "appointments.booking_method,appointments.doctor_id,doctors.first_name,doctors.last_name,offices.office_name " \
               "FROM appointments,doctors,offices " \
               "WHERE appointments.patient_id=%s " \
               " AND appointments.doctor_id=doctors.doctor_id " \

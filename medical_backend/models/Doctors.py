@@ -237,11 +237,14 @@ class Doctor:
 		return result
 
 	def get_all_medications(self):
-    		sql="""SELECT * FROM medications"""
-		result = db.run_query(sql,())
+		sql = """SELECT * FROM medications"""
+		result = db.run_query(sql, ())
 		return result
+
 	def get_all_medication_forms(self):
-		sql="""SELECT * FROM medication_dose_forms"""
-		result=db.run_query(sql,())
+		sql = """SELECT * FROM medication_dose_forms"""
+		result = db.run_query(sql, ())
 		return result
+
+
 
