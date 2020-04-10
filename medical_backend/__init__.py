@@ -178,7 +178,7 @@ def create_app(test_config=None):
         response, code = get_Office_By_Id_route(request)
         return jsonify(response), code
 
-    @app.route('/doctor/addprescription', methods=['PUT'])
+    @app.route('/doctor/addprescription', methods=['POST'])
     def doctor_add_new_prescription():
         response, code = insert_new_prescription_route(request)
         return jsonify(response), code
