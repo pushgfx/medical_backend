@@ -24,17 +24,7 @@ def get_offices_by_doctor_route(request):
 
 def update_offices_by_admin_route(request):
 	office = Office()
-	payload = request.get_json()['payload']
-	office_id = payload['oid']
-	office_name = payload['oname']
-	office_street = payload['address']
-	office_city = payload['city']
-	office_state = payload['state']
-	office_zipcode = payload['zipcode']
-	office_phone = payload['phone']
-	answer = office.update_office(office_id,office_name,office_street,office_city,office_state,office_zipcode,office_phone)
-
-	if answer:
+	if office.update_office(request):
 		response, code = {"msg" : "Office Updated"}, 200
 	else:
 		response, code = {"msg": "Bad Request "}, 400

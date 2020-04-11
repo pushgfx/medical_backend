@@ -97,3 +97,12 @@ def insert_new_prescription_route(request):
         response, code ={"addedPrescription": new_prescription}, 200
     print(response)
     return response, code
+
+def get_all_specializations():
+    doctor = Doctor()
+    specializations = doctor.get_specializations()
+    if specializations:
+        response, code = {"specializations": specializations}, 200
+    else:
+        response, code = {"msg": "Error retreiving specializations"}, 400
+    return response, code
