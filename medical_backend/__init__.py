@@ -64,6 +64,8 @@ def create_app(test_config=None):
         update_offices_by_admin_route,
         update_doctorprofile_route,
         insert_new_prescription_route,
+        registration_doctor_route,
+        get_all_specializations
     )
 
     # Simple route for basic testing
@@ -82,6 +84,12 @@ def create_app(test_config=None):
     @app.route('/patients/register', methods=['POST'])
     def register():
         response, code = registration_route(request)
+        return jsonify(response), code
+    
+    # Registration route for doctor
+    @app.route('/doctors/register', methods=['POST'])
+    def doctor_register():
+        response, code = registration_doctor_route(request)
         return jsonify(response), code
 
     @app.route('/admin/profile', methods=['GET'])
@@ -182,6 +190,12 @@ def create_app(test_config=None):
     @jwt_required
     def doctor_add_new_prescription():
         response, code = insert_new_prescription_route(request)
+        return jsonify(response), code
+    
+    @app.route('/doctor/specialization', methods=['GET'])
+    @jwt_required
+    def get_specialization():
+        response, code = get_all_specializations()
         return jsonify(response), code
     
     return app
