@@ -80,25 +80,8 @@ def get_doctor_appointments_route():
 
 def update_doctorprofile_route(request):
     doctor = Doctor()
-    payload = request.get_json()['payload']
-    doctor_id = payload['did']
-    doctor_firstName = payload['dfname']
-    doctor_middleInit = payload['middleInit']
-    doctor_lastName = payload['dlname']
-    doctor_phone = payload['phone']
-    doctor_specialist = payload['specialistID']
-    doctor_email = payload['email'] 
-    doctor_street = payload['address']
-    doctor_city = payload['city']
-    doctor_state = payload['state']
-    doctor_zipcode = payload['zipcode']
-    doctor_race = payload['race']
-    doctor_dob = payload['dob']
-    doctor_gender = payload['gender']
-    
-    answer = doctor.update_doctor(doctor_id,doctor_firstName,doctor_middleInit, doctor_lastName,doctor_phone,doctor_specialist,doctor_email,doctor_street,doctor_city,doctor_state,doctor_zipcode,doctor_race,doctor_dob,doctor_gender)
-    
-    if answer:
+    doctor_id = get_jwt_identity()['uid']
+    if doctor.update_doctor(request, doctor_id):
         response, code = {"msg" : "Doctor Updated"}, 200
     else:
         response, code = {"msg": "Bad Request "}, 400
@@ -112,4 +95,13 @@ def insert_new_prescription_route(request):
     if new_prescription:
         response, code ={"addedPrescription": new_prescription}, 200
     print(response)
+    return response, code
+
+def get_all_specializations():
+    doctor = Doctor()
+    specializations = doctor.get_specializations()
+    if specializations:
+        response, code = {"specializations": specializations}, 200
+    else:
+        response, code = {"msg": "Error retreiving specializations"}, 400
     return response, code
