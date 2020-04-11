@@ -79,9 +79,10 @@ def get_doctor_appointments_route():
     return response, code
 
 def update_doctorprofile_route(request):
-    doctor = Doctor()
-    doctor_id = get_jwt_identity()['uid']
-    if doctor.update_doctor(request, doctor_id):
+    doctor = Doctor()    
+    answer = doctor.update_doctor(request)
+    
+    if answer:
         response, code = {"msg" : "Doctor Updated"}, 200
     else:
         response, code = {"msg": "Bad Request "}, 400
