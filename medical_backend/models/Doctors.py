@@ -1,6 +1,7 @@
 from ..database import Database
 from datetime import datetime, timedelta
 import re
+from ..models import User
 
 db = Database()
 
@@ -317,7 +318,7 @@ class Doctor:
 		return uid
 	
 	def get_specializations(self):
-		# Get a dictionary of all the doctors (names, id's)
+    	# Get a dictionary of all the doctors (names, id's)
 		sql = "SELECT * FROM specializations"
 		params = ()
 		specialization = db.run_query(sql, params)
