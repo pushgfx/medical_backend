@@ -53,3 +53,13 @@ def delete_appt_route(request):
         response, code = {"msg": "Bad Request"}, 400
     return response, code
 
+def update_patientprofile_route(request):
+    patient = Patient()   
+    answer = patient.update_patient(request)
+    
+    if answer:
+        response, code = {"msg" : "Patient Updated"}, 200
+    else:
+        response, code = {"msg": "Bad Request "}, 400
+
+    return response, code

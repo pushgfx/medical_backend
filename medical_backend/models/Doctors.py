@@ -262,7 +262,7 @@ class Doctor:
 
         return True
 
-    def add_patient_prescription(self, request):
+    def add_patient_prescription(self, request,doctor_id):
         appt_id = request.json.get("apptId", None)
         patient_id = request.json.get("patientId", None)
         medication_id = request.json.get("medicationId", None)
