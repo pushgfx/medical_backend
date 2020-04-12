@@ -120,7 +120,25 @@ class Patient(User):
                 str(indication),str(date_prescribed),str(date_prescribed))
         db.run_query(sql, params)
 
+    def update_patient(self, request):
+        patient_id = request.json.get('patientId')
+        firstName = request.json.get('firstName')
+        middleInit = request.json.get('middleInit')
+        lastName = request.json.get('lastName')
+        phone = request.json.get('phone')
+        email = request.json.get('email')
+        street = request.json.get('address')
+        city = request.json.get('city')
+        state = request.json.get('state')
+        zipcode = request.json.get('zipcode')
+        race = request.json.get('race')
+        dob = request.json.get('dob')
+        gender = request.json.get('gender')
+        sql = """UPDATE patients SET first_name=%s, middle_initial=%s, last_name=%s, phone=%s, email=%s, street_1=%s, city=%s, state=%s,zipcode=%s, race=%s, gender=%s WHERE patient_id=%s"""
+        params = (str(firstName), str(middleInit), str(lastName), str(phone), str(email),str(street),str(city),str(state),str(zipcode),str(race),str(gender), str(patient_id))
+        db.run_query(sql, params)
 
+        return True
 
 
 
