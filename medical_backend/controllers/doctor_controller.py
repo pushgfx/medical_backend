@@ -106,3 +106,14 @@ def get_all_specializations():
     else:
         response, code = {"msg": "Error retreiving specializations"}, 400
     return response, code
+
+def insert_new_record_route(request):
+    doctor = Doctor()
+    doctor_id = get_jwt_identity()['uid']
+    print("insert record")
+    new_record = doctor.add_patient_record(request, doctor_id)
+    print("after execute", new_record)
+    if new_record:
+        response, code ={"record": new_record}, 200
+    print(response)
+    return response, code

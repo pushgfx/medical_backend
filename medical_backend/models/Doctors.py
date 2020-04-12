@@ -314,3 +314,20 @@ class Doctor:
 
         return specialization
 
+    def add_patient_record(self, request, doctor_id):
+        appt_id = request.json.get("apptId", None)
+        patient_id = request.json.get("patientId", None)
+        height = request.json.get("height", None)
+        weight = request.json.get("weight", None)
+        diagnoses = request.json.get("diagnoses", None)
+        lab_testing = request.json.get("labTesting", None)
+        treatment = request.json.get("treatment", None)
+        new_prescriptions = request.json.get("newPrescriptions", None),
+        actual_start_time= request.json.get("actualStartTime", None),
+        actual_end_time = request.json.get("actualEndTime", None),
+        sql = "INSERT INTO `medical_records` (appt_id,patient_id,doctor_id,height,weight,lab_testing,diagnoses,treatment,new_prescriptions,actual_start_time,actual_end_time) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+        params = (str(appt_id),str(patient_id),str(doctor_id),str(height),str(weight),str(lab_testing),str(diagnoses),str(treatment),str(new_prescriptions),str(actual_start_time),str(actual_end_time))
+        db.run_query(sql, params)
+
+        return True
+
