@@ -24,8 +24,10 @@ def get_offices_by_doctor_route(request):
 
 def update_offices_by_admin_route(request):
 	office = Office()
-	if office.update_office(request):
-		response, code = {"msg" : "Office Updated"}, 200
+	offices = office.update_office(request)
+	print(offices)
+	if offices:
+		response, code = {"offices": offices}, 200
 	else:
 		response, code = {"msg": "Bad Request "}, 400
 
