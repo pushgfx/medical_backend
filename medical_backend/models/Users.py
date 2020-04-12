@@ -5,14 +5,20 @@ db = Database()
 
 class User:
 
-	def check_user(self, email):
+	def check_reg_user(self, email):
+		sql = "SELECT * FROM `users` WHERE email=%s"
+		params = (email)
+		result = db.run_query(sql, params)
+		return result
+
+	def check_auth_user(self, email):
 		sql = "SELECT * FROM `users` WHERE email=%s"
 		params = (email)
 		result = db.run_query(sql, params)
 		return result[0]
 
 	def check_password(self, email, password):
-		sql = "SELECT * FROM `users` WHERE email=%s"
+		sql = "SELECT `password` FROM `users` WHERE email=%s"
 		params = (email)
 		result = db.run_query(sql, params)
 		password_hash = result[0]['password'].encode('utf-8')

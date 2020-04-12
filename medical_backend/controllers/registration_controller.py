@@ -5,7 +5,7 @@ def registration_route(request):
 	patient = Patient()
 	user = User()
 	req_email = request.json.get("email", None)
-	if user.check_user(req_email):
+	if user.check_reg_user(req_email):
 		response, code = {"msg": "Email already exists!"}, 401
 	else:
 		patient_id = patient.add_patient(request)
@@ -18,11 +18,10 @@ def registration_doctor_route(request):
 	doctor = Doctor()
 	user = User()
 	req_email = request.json.get("email", None)
-	if user.check_user(req_email):
+	if user.check_reg_user(req_email):
 		response, code = {"msg": "Email already exists!"}, 401
 	else:
 		doctor_id = doctor.add_doctor(request)
 		user_id = {"uid":doctor_id,"role":3}
-		token = create_access_token(user_id)
-		response, code = {"access_token": token, "role_id": 3, "doctor_id": doctor_id}, 201
+		response, code = {"doctorsList"}, 201
 	return response, code 

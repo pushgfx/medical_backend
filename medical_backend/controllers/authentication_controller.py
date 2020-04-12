@@ -6,7 +6,7 @@ def authenticate_route(request):
     req_email = request.json.get("email", None)
     req_password = request.json.get("password", None)
 
-    uuser = user.check_user(req_email)
+    uuser = user.check_auth_user(req_email)
 
     if not uuser:
         response, code = {"msg": "Bad email"}, 401

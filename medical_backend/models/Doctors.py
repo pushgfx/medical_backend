@@ -4,7 +4,7 @@ import re
 from ..models import User
 db = Database()
 
-class Doctor:
+class Doctor(User):
 
     def get_doctors(self):
         # Get a dictionary of all the doctors (names, id's)
@@ -289,11 +289,11 @@ class Doctor:
         req_race = request.json.get("race", None)
         req_email = request.json.get("email", None)
         req_image = request.json.get("image", None)
-        sql = "INSERT INTO `doctors` (`doctor_id`, `first_name`, `middle_initial`, `last_name`,`phone`, `specialist_id`,`gender`,`email`, `race`,`date_of_birth`, `street_1`, `city`, `state`, `zipcode`, 'image' ) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s) "
+        sql = "INSERT INTO `doctors` (`doctor_id`, `first_name`, `middle_initial`, `last_name`,`phone`, `specialist_id`,`gender`,`email`, `race`,`date_of_birth`, `street_1`, `city`, `state`, `zipcode`, `image` ) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s) "
         params = (
             str(req_first_name), str(req_middle_i), str(req_last_name),str(req_phone),str(req_specialistId),
             str(req_gender),str(req_email), str(req_race), str(req_dob), str(req_street_1), str(req_city),
-            str(req_state),str(req_zipcode),   str(req_image))
+            str(req_state),str(req_zipcode), str(req_image))
 
         db.run_query(sql, params)
         result = db.run_query("SELECT `doctor_id` FROM `doctors` ORDER BY `doctor_id` DESC LIMIT 1", ())
