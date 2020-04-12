@@ -262,16 +262,18 @@ class Doctor(User):
 
         return True
 
-    def add_patient_prescription(self, request,doctor_id):
+
+    def add_patient_prescription(self, request, doctor_id):
         appt_id = request.json.get("apptId", None)
         patient_id = request.json.get("patientId", None)
         medication_id = request.json.get("medicationId", None)
         dose_form_id = request.json.get("doseFormId", None)
         dosage = request.json.get("dosage", None)
+        indication = request.json.get("indication", None)
         date_prescribed = request.json.get("datePrescribed", None)
-        sql = "INSERT INTO `prescribed_medications` (appt_id,doctor_id,patient_id,medication_id,dose_form_id,dosage,date_prescribed) " \
-        	  "VALUES (%s,%s,%s,%s,%s,%s,%s);"
-        params = (str(appt_id), str(doctor_id), str(patient_id), str(medication_id), str(dose_form_id), str(dosage), str(date_prescribed))
+        sql = "INSERT INTO `prescribed_medications` (appt_id,doctor_id,patient_id,medication_id,dose_form_id,dosage,indication,date_prescribed) VALUES (%s,%s,%s,%s,%s,%s,%s,%s);"
+        params = (str(appt_id), str(doctor_id), str(patient_id), str(medication_id), str(dose_form_id), str(dosage), str(indication),
+                  str(date_prescribed))
         db.run_query(sql, params)
 
     def add_doctor(self, request):
@@ -299,9 +301,9 @@ class Doctor(User):
         result = db.run_query("SELECT `doctor_id` FROM `doctors` ORDER BY `doctor_id` DESC LIMIT 1", ())
         uid = result[0]['doctor_id']
         self.add_user(req_email, request.json.get("password", None), 3, uid)
-        
+
         return uid
-    
+
     def get_specializations(self):
         # Get a dictionary of all the doctors (names, id's)
         sql = "SELECT * FROM specializations"
@@ -309,3 +311,21 @@ class Doctor(User):
         specialization = db.run_query(sql, params)
 
         return specialization
+
+    def add_patient_record(self, request, doctor_id):
+        appt_id = request.json.get("apptId", None)
+        patient_id = request.json.get("patientId", None)
+        height = request.json.get("height", None)
+        weight = request.json.get("weight", None)
+        diagnoses = request.json.get("diagnoses", None)
+        lab_testing = request.json.get("labTesting", None)
+        treatment = request.json.get("treatment", None)
+        new_prescriptions = request.json.get("newPrescriptions", None),
+        actual_start_time= request.json.get("actualStartTime", None),
+        actual_end_time = request.json.get("actualEndTime", None),
+        sql = "INSERT INTO `medical_records` (appt_id,patient_id,doctor_id,height,weight,lab_testing,diagnoses,treatment,new_prescriptions,actual_start_time,actual_end_time) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+        params = (str(appt_id),str(patient_id),str(doctor_id),str(height),str(weight),str(lab_testing),str(diagnoses),str(treatment),str(new_prescriptions),str(actual_start_time),str(actual_end_time))
+        db.run_query(sql, params)
+
+        return True
+

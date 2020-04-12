@@ -12,6 +12,7 @@ from flask_jwt_extended import (
     get_jwt_claims,
 )
 
+
 """
     DO NOT IMPORT ANY USER DEFINED CODE HERE
     THAT RELIES ON THE APPLICATION STATE.
@@ -66,7 +67,8 @@ def create_app(test_config=None):
         insert_new_prescription_route,
         registration_doctor_route,
         get_all_specializations,
-        update_patientprofile_route
+        update_patientprofile_route,
+        insert_new_record_route
     )
 
     # Simple route for basic testing
@@ -177,7 +179,7 @@ def create_app(test_config=None):
         response, code = delete_appt_route(request)
         return jsonify(response), code
 
-    @app.route('/office/updateoffice' , methods = ['POST'])
+    @app.route('/office/updateoffice' , methods = ['PUT'])
     def update_office():
         response, code = update_offices_by_admin_route(request)
         return jsonify(response), code
@@ -198,7 +200,14 @@ def create_app(test_config=None):
     def get_specialization():
         response, code = get_all_specializations()
         return jsonify(response), code
-    
+
+    @app.route('/doctor/addrecord', methods=['POST'])
+    @jwt_required
+    def doctor_add_new_record():
+        print("add record")
+        response, code = insert_new_record_route(request)
+        return jsonify(response), code
+
     @app.route('/patient/updatepatient', methods = ['PUT'])
     @jwt_required
     def update_patient():
