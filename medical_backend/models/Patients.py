@@ -140,6 +140,14 @@ class Patient(User):
 
         return True
 
+    def get_patient_messages(self,patient_id):
+        sql="""SELECT * FROM notifications WHERE patient_id=%s"""
+        params=(patient_id)
+        messages=db.run_query(sql,params)
+        return messages
+
+
+
 
 
 
