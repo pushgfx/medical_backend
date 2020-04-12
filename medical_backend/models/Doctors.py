@@ -117,7 +117,7 @@ class Doctor(User):
         record = db.run_query(sql, params)
         result = record[0]
         profile = {
-        "doctorId":doctor_id,
+        "doctorId":result['doctor_id'],
         "firstName": result['first_name'],
         "middleInit": result['middle_initial'],
         "lastName": result['last_name'],
