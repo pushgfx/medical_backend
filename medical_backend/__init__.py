@@ -177,7 +177,7 @@ def create_app(test_config=None):
         response, code = delete_appt_route(request)
         return jsonify(response), code
 
-    @app.route('/office/updateoffice' , methods = ['PUT'])
+    @app.route('/office/updateoffice' , methods = ['POST'])
     def update_office():
         response, code = update_offices_by_admin_route(request)
         return jsonify(response), code

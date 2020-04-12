@@ -30,6 +30,15 @@ class Office:
         sql = """UPDATE offices SET office_name=%s, street_1=%s, city=%s, state=%s, zipcode=%s, phone=%s WHERE office_id=%s """
         params = (str(office_name), str(office_street), str(office_city), str(office_state),str(office_zipcode), str(office_phone),office_id)
         db.run_query(sql, params)
+
+        office = {
+            "office_id": office_id,
+            "office_name": office_name,
+            "office_street": office_street,
+            "office_city": office_city,
+            "office_zipcode": office_zipcode,
+            "office_phone": office_phone
+        }
         
-        return True
+        return office
     
