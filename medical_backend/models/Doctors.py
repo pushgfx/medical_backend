@@ -324,7 +324,7 @@ class Doctor(User):
         actual_start_time= request.json.get("actualStartTime", None),
         actual_end_time = request.json.get("actualEndTime", None),
         sql = "INSERT INTO `medical_records` (appt_id,patient_id,doctor_id,height,weight,lab_testing,diagnoses,treatment,new_prescriptions,actual_start_time,actual_end_time) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
-        params = (str(appt_id),str(patient_id),str(doctor_id),str(height),str(weight),str(lab_testing),str(diagnoses),str(treatment),str(new_prescriptions),str(actual_start_time),str(actual_end_time))
+        params = (str(appt_id),str(patient_id),str(doctor_id),str(height),str(weight),lab_testing,str(diagnoses),str(treatment),new_prescriptions,actual_start_time,actual_end_time)
         db.run_query(sql, params)
 
         return True
