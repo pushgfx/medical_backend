@@ -204,7 +204,6 @@ def create_app(test_config=None):
     @app.route('/doctor/addrecord', methods=['POST'])
     @jwt_required
     def doctor_add_new_record():
-        print("add record")
         response, code = insert_new_record_route(request)
         return jsonify(response), code
 
