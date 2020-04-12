@@ -65,7 +65,8 @@ def create_app(test_config=None):
         update_doctorprofile_route,
         insert_new_prescription_route,
         registration_doctor_route,
-        get_all_specializations
+        get_all_specializations,
+        update_patientprofile_route
     )
 
     # Simple route for basic testing
@@ -198,6 +199,11 @@ def create_app(test_config=None):
         response, code = get_all_specializations()
         return jsonify(response), code
     
+    @app.route('/patient/updatepatient', methods = ['PUT'])
+    @jwt_required
+    def update_patient():
+        response, code = update_patientprofile_route(request)
+        return jsonify(response), code
     return app
 
 
