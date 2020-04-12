@@ -261,7 +261,7 @@ class Doctor:
         db.run_query(sql, params)
 
         return True
-      
+
     def add_patient_prescription(self, request,doctor_id):
         appt_id = request.json.get("apptId", None)
         patient_id = request.json.get("patientId", None)
@@ -274,9 +274,7 @@ class Doctor:
         params = (str(appt_id), str(doctor_id), str(patient_id), str(medication_id), str(dose_form_id), str(dosage), str(date_prescribed))
         db.run_query(sql, params)
 
-
-
-    def add_doctor(self,request):
+    def add_doctor(self, request):
         req_first_name = request.json.get("firstName", None)
         req_middle_i = request.json.get("middleInit", None)
         req_last_name = request.json.get("lastName", None)
@@ -292,14 +290,18 @@ class Doctor:
         req_email = request.json.get("email", None)
         req_image = request.json.get("image", None)
         sql = "INSERT INTO `doctors` (`doctor_id`, `first_name`, `middle_initial`, `last_name`,`phone`, `specialist_id`,`gender`,`email`, `race`,`date_of_birth`, `street_1`, `city`, `state`, `zipcode`, 'image' ) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s) "
-        params = (str(req_first_name), str(req_middle_i), str(req_last_name),str(req_phone),str(req_specialistId),str(req_gender),str(req_email), str(req_race), str(req_dob), str(req_street_1), str(req_city),str(req_state),str(req_zipcode),   str(req_image))
+        params = (
+            str(req_first_name), str(req_middle_i), str(req_last_name),str(req_phone),str(req_specialistId),
+            str(req_gender),str(req_email), str(req_race), str(req_dob), str(req_street_1), str(req_city),
+            str(req_state),str(req_zipcode),   str(req_image))
+
         db.run_query(sql, params)
         result = db.run_query("SELECT `doctor_id` FROM `doctors` ORDER BY `doctor_id` DESC LIMIT 1", ())
         uid = result[0]['doctor_id']
         self.add_user(req_email, request.json.get("password", None), 3, uid)
-
+        
         return uid
-
+    
     def get_specializations(self):
         # Get a dictionary of all the doctors (names, id's)
         sql = "SELECT * FROM specializations"
