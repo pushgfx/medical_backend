@@ -25,4 +25,4 @@ def registration_doctor_route(request):
 		user_id = {"uid":doctor_id,"role":3}
 		token = create_access_token(user_id)
 		response, code = {"access_token": token, "role_id": 3, "doctor_id": doctor_id}, 201
-	return response, code
+	return response, code 
