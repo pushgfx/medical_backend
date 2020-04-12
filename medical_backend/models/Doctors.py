@@ -2,7 +2,6 @@ from ..database import Database
 from datetime import datetime, timedelta
 import re
 from ..models import User
-
 db = Database()
 
 class Doctor:
@@ -21,7 +20,7 @@ class Doctor:
         params = (office_id)
         doctors = db.run_query(sql, params)
 
-        return doctors          
+        return doctors
 
     def get_doctor_availability(self, office_id, doctor_id):
         # Get a dictionary of all availability for this doctor
@@ -88,7 +87,7 @@ class Doctor:
         return dates
 
     def get_doctor_patient(self,doctor_id):
-    
+
         sql = """SELECT patients.patient_id,patients.first_name, patients.middle_initial, patients.last_name, patients.phone,patients.date_of_birth,patients.gender,patients.race
         FROM patients, patient_doctor_affiliation
         WHERE patient_doctor_affiliation.doctor_id=%s
@@ -182,12 +181,12 @@ class Doctor:
             CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
             offices.office_name AS office,
             appointments.was_referred, appointments.referring_doctor_id, appointments.appt_start_time,
-        
+
             appointments.estimated_end_time,
             appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
             FROM `appointments`,`offices`,`patients`
             WHERE DATE(appointments.appt_start_time) = %s
-            AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id 
+            AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id
             AND appointments.patient_id=patients.patient_id
             ORDER BY appointments.appt_start_time DESC"""
         params=(current_date,doctor_id)
@@ -202,12 +201,12 @@ class Doctor:
             CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
             offices.office_name AS office,
             appointments.was_referred, appointments.referring_doctor_id, appointments.appt_start_time,
-        
+
             appointments.estimated_end_time,
             appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
             FROM `appointments`,`offices`,`patients`
-            WHERE DATE(appointments.appt_start_time) < %s 
-            AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id 
+            WHERE DATE(appointments.appt_start_time) < %s
+            AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id
             AND appointments.patient_id=patients.patient_id
             ORDER BY appointments.appt_start_time DESC
             LIMIT %s"""
@@ -221,12 +220,12 @@ class Doctor:
             CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
             offices.office_name AS office,
             appointments.was_referred, appointments.referring_doctor_id, appointments.appt_start_time,
-        
+
             appointments.estimated_end_time,
             appointments.appt_status, appointments.booking_date, appointments.reason_for_visit
             FROM `appointments`,`offices`,`patients`
             WHERE DATE(appointments.appt_start_time) > %s
-            AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id 
+            AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id
             AND appointments.patient_id=patients.patient_id
             ORDER BY appointments.appt_start_time ASC"""
         params=(current_date,doctor_id)
@@ -263,7 +262,7 @@ class Doctor:
 
         return True
 
-    def add_patient_prescription(self, request,doctor_id):
+    def add_patient_prescription(self, request, doctor_id):
         appt_id = request.json.get("apptId", None)
         patient_id = request.json.get("patientId", None)
         medication_id = request.json.get("medicationId", None)
@@ -277,50 +276,50 @@ class Doctor:
 
         return True
 
-	def add_patient_prescription(self, request,doctor_id):
-		appt_id = request.json.get("apptId", None)
-		patient_id = request.json.get("patientId", None)
-		medication_id = request.json.get("medicationId", None)
-		dose_form_id = request.json.get("doseFormId", None)
-		dosage = request.json.get("dosage", None)
-		date_prescribed = request.json.get("datePrescribed", None)
-		sql = "INSERT INTO `prescribed_medications` (appt_id,doctor_id,patient_id,medication_id,dose_form_id,dosage,date_prescribed) " \
-			  "VALUES (%s,%s,%s,%s,%s,%s,%s);"
-		params = (str(appt_id), str(doctor_id), str(patient_id), str(medication_id), str(dose_form_id), str(dosage), str(date_prescribed))
-		db.run_query(sql, params)
+    def add_patient_prescription(self, request,doctor_id):
+        appt_id = request.json.get("apptId", None)
+        patient_id = request.json.get("patientId", None)
+        medication_id = request.json.get("medicationId", None)
+        dose_form_id = request.json.get("doseFormId", None)
+        dosage = request.json.get("dosage", None)
+        date_prescribed = request.json.get("datePrescribed", None)
+        sql = "INSERT INTO `prescribed_medications` (appt_id,doctor_id,patient_id,medication_id,dose_form_id,dosage,date_prescribed) " \
+        	  "VALUES (%s,%s,%s,%s,%s,%s,%s);"
+        params = (str(appt_id), str(doctor_id), str(patient_id), str(medication_id), str(dose_form_id), str(dosage), str(date_prescribed))
+        db.run_query(sql, params)
 
-		return True
+        return True
 
-	def add_doctor(self, request):
-		req_first_name = request.json.get("firstName", None)
-		req_middle_i = request.json.get("middleInit", None)
-		req_last_name = request.json.get("lastName", None)
-		req_street_1 = request.json.get("street", None)
-		req_city = request.json.get("city", None)
-		req_state = request.json.get("state", None)
-		req_zipcode = request.json.get("zipcode", None)
-		req_phone = request.json.get("phone", None)
-		req_dob = request.json.get("dob", None)
-		req_gender = request.json.get("gender", None)
-		req_specialistId = request.json.get("specialistId", None)
-		req_race = request.json.get("race", None)
-		req_email = request.json.get("email", None)
-		req_image = request.json.get("image", None)
-		sql = "INSERT INTO `doctors` (`doctor_id`, `first_name`, `middle_initial`, `last_name`,`phone`, `specialist_id`,`gender`,`email`, `race`,`date_of_birth`, `street_1`, `city`, `state`, `zipcode`, 'image' ) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s) "
-		params = (
-			str(req_first_name), str(req_middle_i), str(req_last_name),str(req_phone),str(req_specialistId),
-			str(req_gender),str(req_email), str(req_race), str(req_dob), str(req_street_1), str(req_city),
-			str(req_state),str(req_zipcode),   str(req_image))
-		db.run_query(sql, params)
-		result = db.run_query("SELECT `doctor_id` FROM `doctors` ORDER BY `doctor_id` DESC LIMIT 1", ())
-		uid = result[0]['doctor_id']
-		self.add_user(req_email, request.json.get("password", None), 3, uid)
-		return uid
-	
-	def get_specializations(self):
-    	# Get a dictionary of all the doctors (names, id's)
-		sql = "SELECT * FROM specializations"
-		params = ()
-		specialization = db.run_query(sql, params)
+    def add_doctor(self, request):
+        req_first_name = request.json.get("firstName", None)
+        req_middle_i = request.json.get("middleInit", None)
+        req_last_name = request.json.get("lastName", None)
+        req_street_1 = request.json.get("street", None)
+        req_city = request.json.get("city", None)
+        req_state = request.json.get("state", None)
+        req_zipcode = request.json.get("zipcode", None)
+        req_phone = request.json.get("phone", None)
+        req_dob = request.json.get("dob", None)
+        req_gender = request.json.get("gender", None)
+        req_specialistId = request.json.get("specialistId", None)
+        req_race = request.json.get("race", None)
+        req_email = request.json.get("email", None)
+        req_image = request.json.get("image", None)
+        sql = "INSERT INTO `doctors` (`doctor_id`, `first_name`, `middle_initial`, `last_name`,`phone`, `specialist_id`,`gender`,`email`, `race`,`date_of_birth`, `street_1`, `city`, `state`, `zipcode`, 'image' ) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s) "
+        params = (
+        	str(req_first_name), str(req_middle_i), str(req_last_name),str(req_phone),str(req_specialistId),
+        	str(req_gender),str(req_email), str(req_race), str(req_dob), str(req_street_1), str(req_city),
+        	str(req_state),str(req_zipcode),   str(req_image))
+        db.run_query(sql, params)
+        result = db.run_query("SELECT `doctor_id` FROM `doctors` ORDER BY `doctor_id` DESC LIMIT 1", ())
+        uid = result[0]['doctor_id']
+        self.add_user(req_email, request.json.get("password", None), 3, uid)
+        return uid
 
-		return specialization
+    def get_specializations(self):
+        # Get a dictionary of all the doctors (names, id's)
+        sql = "SELECT * FROM specializations"
+        params = ()
+        specialization = db.run_query(sql, params)
+
+        return specialization
