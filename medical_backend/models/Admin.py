@@ -21,6 +21,7 @@ class Admin(User):
         doctors =[]
         for result in results:
             doctor = {
+                    "doctorId":result['doctor_id'],
                 	"firstName": result['first_name'],
                     "middleInit": result['middle_initial'],
                     "lastName": result['last_name'],

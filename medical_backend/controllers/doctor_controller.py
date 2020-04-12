@@ -55,7 +55,7 @@ def get_doctor_profile_route(request):
     doctor_id = request.args.get('did')
     profile = doctor.get_doctor_dict(doctor_id)
     if profile:
-        response, code = {"profile": profile}, 200
+        response, code = {"profile": profile} , 200
     else:
         response, code = {"msg": "Bad doctor id"}, 400
 
