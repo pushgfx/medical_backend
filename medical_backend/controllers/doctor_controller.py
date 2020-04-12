@@ -95,7 +95,6 @@ def insert_new_prescription_route(request):
     new_prescription = doctor.add_patient_prescription(request, doctor_id)
     if new_prescription:
         response, code ={"addedPrescription": new_prescription}, 200
-    print(response)
     return response, code
 
 def get_all_specializations():
@@ -110,10 +109,7 @@ def get_all_specializations():
 def insert_new_record_route(request):
     doctor = Doctor()
     doctor_id = get_jwt_identity()['uid']
-    print("insert record")
     new_record = doctor.add_patient_record(request, doctor_id)
-    print("after execute", new_record)
     if new_record:
         response, code ={"record": new_record}, 200
-    print(response)
     return response, code
