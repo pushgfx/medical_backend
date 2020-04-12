@@ -67,6 +67,7 @@ def create_app(test_config=None):
         insert_new_prescription_route,
         registration_doctor_route,
         get_all_specializations,
+        update_patientprofile_route,
         insert_new_record_route
     )
 
@@ -206,7 +207,12 @@ def create_app(test_config=None):
         print("add record")
         response, code = insert_new_record_route(request)
         return jsonify(response), code
-    
+
+    @app.route('/patient/updatepatient', methods = ['PUT'])
+    @jwt_required
+    def update_patient():
+        response, code = update_patientprofile_route(request)
+        return jsonify(response), code
     return app
 
 
