@@ -40,13 +40,6 @@ def get_doctor_data_route():
     doctor_patient = doctor.get_doctor_patient(doctor_id)
     today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
     future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
-    past_appointments=doctor.get_past_appts_by_doctor(doctor_id),
-    medication_names=doctor.get_all_medications(),
-    medication_forms=doctor.get_all_medication_forms(),
-    approve_appointments = doctor.get_referred_appts_by_doctor(doctor_id);
-
-    today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
-    future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
     past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
     medication_names=doctor.get_all_medications()
     medication_forms=doctor.get_all_medication_forms()
