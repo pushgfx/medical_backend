@@ -46,7 +46,7 @@ def get_doctor_data_route():
     medication_forms=doctor.get_all_medication_forms(),
     approve_appointments = doctor.get_referred_appts_by_doctor(doctor_id);
     if profile:
-        response, code = {"profile": profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments,"approve_appointments":approve_appointments},"medications":{"medicationNames":medication_names,"medicationForms":medication_forms}}, 200
+        response, code = {"profile": profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments,"approveAppointments":approve_appointments},"medications":{"medicationNames":medication_names,"medicationForms":medication_forms}}, 200
     else:
         response, code = {"msg": "Bad doctor id"}, 400
     return response, code
