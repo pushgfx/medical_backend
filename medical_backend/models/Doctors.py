@@ -107,6 +107,7 @@ class Doctor(User):
                 "race":result['race']
             }
             doctor_patient.append(patient)
+        print(doctor_patient)
         return doctor_patient
 
     def get_doctor_dict(self, doctor_id):

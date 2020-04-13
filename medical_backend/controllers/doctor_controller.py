@@ -38,7 +38,7 @@ def get_doctor_data_route():
     doctor_id = get_jwt_identity()['uid']
     profile = doctor.get_doctor_dict(doctor_id)
     doctor_patient = doctor.get_doctor_patient(doctor_id)
-    patient_appointments = doctor.get_doctor_all_appointment(doctor_id)
+    # patient_appointments = doctor.get_doctor_all_appointment(doctor_id)
     today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
     future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
     past_appointments=doctor.get_past_appts_by_doctor(doctor_id),
