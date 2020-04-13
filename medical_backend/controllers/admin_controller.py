@@ -1,4 +1,4 @@
-from ..models import Admin
+from ..models import Admin,Doctor
 
 def get_admin_route(request):
 	admin = Admin()
@@ -13,3 +13,20 @@ def get_admin_route(request):
 
 	return response, code
 
+def get_doctor_data(request):
+	doctor = Doctor ()
+	doctor_id = request.args.get('did')
+	doctor_profile = doctor.get_doctor_dict(doctor_id)
+	doctor_patient = doctor.get_doctor_patient(doctor_id)
+	patient_appointments = doctor.get_doctor_all_appointment(doctor_id)
+	today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
+	future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
+	past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
+	medication_names=doctor.get_all_medications()
+	medication_forms=doctor.get_all_medication_forms()
+	if doctor_profile:
+		response, code = {"profile": doctor_profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments},"medications":{"medicationNames":medication_names,"medicationForms":medication_forms}}, 200
+	else:
+		response, code = {"msg": "Bad doctor id"}, 400
+
+	return response, code
