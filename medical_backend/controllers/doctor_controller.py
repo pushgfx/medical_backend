@@ -69,7 +69,7 @@ def get_doctor_appointments_route():
     today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
     future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
     past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
-    approve_appointments=doctor.get_referred_appts_by_doctor(doctor_id);
+    approve_appointments=doctor.get_referred_appts_by_doctor(doctor_id)
 
     if patient_appointments or today_appointments or future_appointments or past_appointments:
         response, code = {"appointments":{"appointments": patient_appointments,
@@ -118,7 +118,7 @@ def insert_new_record_route(request):
     
 def get_doctors_appointment(request):
     doctor = Doctor()
-    patient_id = get_jwt_identity['uid']
+    patient_id = get_jwt_identity()['uid']
     doctors = doctor.get_appointment_doctor(patient_id)
     if doctors:
         response, code = {"doctors": doctors}, 200

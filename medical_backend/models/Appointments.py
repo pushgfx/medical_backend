@@ -54,7 +54,7 @@ class Appointments:
 
         sql = "INSERT into `appointments`(" + columns + ") VALUES (" + values + ")"
         db.run_query(sql, params)
-
+            
         if mydoctor == True:
             sql = "UPDATE patients SET primary_doctor = %s WHERE patient_id=%s"
             params  = (str(req_doctor_id),str(req_patient_id))

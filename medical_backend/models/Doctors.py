@@ -342,15 +342,18 @@ class Doctor(User):
         params = (str(appt_id),str(patient_id),str(doctor_id),str(height),str(weight),lab_testing,str(diagnoses),str(treatment),new_prescriptions,actual_start_time,actual_end_time)
         db.run_query(sql, params)
 
+        sql = "UPDATE appointments SET appt_status = 'finished' WHERE (appt_id = %s)"
+        params = (str(appt_id))
+        db.run_query(sql,params)
         return True
 
     def get_appointment_doctor(self, patient_id):        
-        sql = """SELECT COUNT(*) from appointments WHERE patient_id=%s"""
+        sql = """SELECT COUNT(*) as count from appointments WHERE patient_id=%s"""
         params = (str(patient_id))
         count = db.run_query(sql,params)
-
+        count = count[0]
         #first appointment
-        if count == 0:
+        if count['count'] == 0:
             specialist_id=1
             sql = "SELECT doctor_id, first_name, last_name FROM doctors WHERE specialist_id=%s"
             params = (str(specialist_id))
