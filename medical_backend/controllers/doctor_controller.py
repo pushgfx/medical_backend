@@ -40,11 +40,20 @@ def get_doctor_data_route():
     doctor_patient = doctor.get_doctor_patient(doctor_id)
     today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
     future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
+    past_appointments=doctor.get_past_appts_by_doctor(doctor_id),
+    medication_names=doctor.get_all_medications(),
+    medication_forms=doctor.get_all_medication_forms(),
+    approve_appointments = doctor.get_referred_appts_by_doctor(doctor_id);
+
+    today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
+    future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
     past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
     medication_names=doctor.get_all_medications()
     medication_forms=doctor.get_all_medication_forms()
+    approve_appointments = doctor.get_referred_appts_by_doctor(doctor_id);
+
     if profile:
-        response, code = {"profile": profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments},"medications":{"medicationNames":medication_names,"medicationForms":medication_forms}}, 200
+        response, code = {"profile": profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments,"approveAppointments":approve_appointments},"medications":{"medicationNames":medication_names,"medicationForms":medication_forms}}, 200
     else:
         response, code = {"msg": "Bad doctor id"}, 400
     return response, code
@@ -67,14 +76,15 @@ def get_doctor_appointments_route():
     today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
     future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
     past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
+    approve_appointments=doctor.get_referred_appts_by_doctor(doctor_id);
 
     if patient_appointments or today_appointments or future_appointments or past_appointments:
         response, code = {"appointments":{"appointments": patient_appointments,
                             "todayAppointments":today_appointments,"futureAppointments":future_appointments,
-                            "pastAppointments":past_appointments}}, 200
+                            "pastAppointments":past_appointments,"approveAppointments":approve_appointments}}, 200
     else:
         response, code = {"msg": "Error retrieving appointment by doctor"}, 400
-
+    # print(response)
     return response, code
 
 def update_doctorprofile_route(request):

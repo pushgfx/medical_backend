@@ -107,6 +107,7 @@ class Doctor(User):
                 "race":result['race']
             }
             doctor_patient.append(patient)
+        print(doctor_patient)
         return doctor_patient
 
     def get_doctor_dict(self, doctor_id):
@@ -228,6 +229,21 @@ class Doctor(User):
             AND appointments.patient_id=patients.patient_id
             ORDER BY appointments.appt_start_time ASC"""
         params=(current_date,doctor_id)
+        result = db.run_query(sql,params)
+        return result
+
+    def get_referred_appts_by_doctor(self,doctor_id):
+        sql="""SELECT appointments.appt_id,appointments.patient_id, CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
+                        CONCAT(doctors.first_name," ",doctors.middle_initial, " ", doctors.last_name) AS doctor,
+                        offices.office_name AS office, appointments.appt_status, appointments.reason_for_visit 
+                        FROM `appointments`,`offices`,`patients`, `doctors` 
+                        WHERE appointments.referring_doctor_id=%s 
+                        AND offices.office_id=appointments.office_id 
+                        AND appointments.patient_id=patients.patient_id 
+                        AND appointments.doctor_id=doctors.doctor_id 
+                        AND appointments.appt_status="pending" 
+                        ORDER BY appointments.appt_start_time ASC """
+        params=(doctor_id)
         result = db.run_query(sql,params)
         return result
 

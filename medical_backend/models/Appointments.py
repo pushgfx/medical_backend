@@ -65,4 +65,5 @@ class Appointments:
         sql = """SELECT appointments.appt_id, appointments.appt_status, appointments.appt_start_time, appointments.booking_date, doctors.doctor_id,doctors.first_name, doctors.last_name FROM appointments, doctors WHERE appointments.patient_id=%s AND doctors.doctor_id=appointments.doctor_id ORDER BY appointments.appt_start_time DESC"""
         params = (patient_id)
         appointments = db.run_query(sql, params)
+
         return appointments
