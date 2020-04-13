@@ -77,7 +77,7 @@ def get_doctor_appointments_route():
                             "pastAppointments":past_appointments,"approveAppointments":approve_appointments}}, 200
     else:
         response, code = {"msg": "Error retrieving appointment by doctor"}, 400
-
+    # print(response)
     return response, code
 
 def update_doctorprofile_route(request):
