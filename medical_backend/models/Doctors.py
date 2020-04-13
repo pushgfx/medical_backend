@@ -332,16 +332,16 @@ class Doctor(User):
         sql = """SELECT COUNT(*) from appointments WHERE patient_id=%s"""
         params = (str(patient_id))
         count = db.run_query(sql,params)
-        
+
         #first appointment
         if count == 0:
             specialist_id=1
-            sql = "SELECT doctors.doctor_id, first_name, last_name FROM doctors WHERE specialist_id=%s"
+            sql = "SELECT doctor_id, first_name, last_name FROM doctors WHERE specialist_id=%s"
             params = (str(specialist_id))
             doctors = db.run_query(sql, params)
 
         else:
-            sql = "SELECT doctors.doctor_id, first_name, last_name FROM doctors"
+            sql = "SELECT doctor_id, first_name, last_name FROM doctors"
             params = ()
             doctors = db.run_query(sql, params)
         
