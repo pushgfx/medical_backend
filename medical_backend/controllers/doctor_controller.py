@@ -113,6 +113,7 @@ def insert_new_record_route(request):
     if new_record:
         response, code ={"record": new_record}, 200
     return response, code
+    
 def get_doctors_appointment(request):
     doctor = Doctor()
     patient_id = get_jwt_identity['uid']
