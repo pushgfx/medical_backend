@@ -38,13 +38,20 @@ def get_doctor_data_route():
     doctor_id = get_jwt_identity()['uid']
     profile = doctor.get_doctor_dict(doctor_id)
     doctor_patient = doctor.get_doctor_patient(doctor_id)
-    # patient_appointments = doctor.get_doctor_all_appointment(doctor_id)
     today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
     future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
     past_appointments=doctor.get_past_appts_by_doctor(doctor_id),
     medication_names=doctor.get_all_medications(),
     medication_forms=doctor.get_all_medication_forms(),
     approve_appointments = doctor.get_referred_appts_by_doctor(doctor_id);
+
+    today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
+    future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
+    past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
+    medication_names=doctor.get_all_medications()
+    medication_forms=doctor.get_all_medication_forms()
+    approve_appointments = doctor.get_referred_appts_by_doctor(doctor_id);
+
     if profile:
         response, code = {"profile": profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments,"approveAppointments":approve_appointments},"medications":{"medicationNames":medication_names,"medicationForms":medication_forms}}, 200
     else:
@@ -114,4 +121,14 @@ def insert_new_record_route(request):
     new_record = doctor.add_patient_record(request, doctor_id)
     if new_record:
         response, code ={"record": new_record}, 200
+    return response, code
+    
+def get_doctors_appointment(request):
+    doctor = Doctor()
+    patient_id = get_jwt_identity['uid']
+    doctors = doctor.get_appointment_doctor(patient_id)
+    if doctors:
+        response, code = {"doctors": doctors}, 200
+    else:
+        response, code = {"msg": "Error retreiving doctors"}, 400
     return response, code
