@@ -365,3 +365,11 @@ class Doctor(User):
             doctors = db.run_query(sql, params)
         
         return doctors    
+
+    def get_primary_physician(self):
+        specialist_id=1
+        sql = "SELECT doctor_id, first_name, last_name FROM doctors WHERE specialist_id=%s"
+        params = (str(specialist_id))
+        doctors = db.run_query(sql, params)
+
+        return doctors
