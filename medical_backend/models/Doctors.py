@@ -291,6 +291,8 @@ class Doctor(User):
                   str(date_prescribed))
         db.run_query(sql, params)
 
+        return True
+
     def add_doctor(self, request):
         req_first_name = request.json.get("firstName", None)
         req_middle_i = request.json.get("middleInit", None)
