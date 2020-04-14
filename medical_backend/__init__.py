@@ -231,7 +231,7 @@ def create_app(test_config=None):
     @app.route('/doctor/physician/list', methods=['GET'])
     @jwt_required
     def get_doctor_physician():
-        response, code =  get_all_physician()
+        response, code =  get_all_physician(request)
         return jsonify(response), code
     
     return app
