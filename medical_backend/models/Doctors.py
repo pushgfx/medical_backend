@@ -366,4 +366,12 @@ class Doctor(User):
             params = ()
             doctors = db.run_query(sql, params)
         
-        return doctors    
+        return doctors
+
+    def approve_specialist_appt(self,request):
+        appt_id = request.json.get("apptId", None)
+        sql="""UPDATE `appointments` SET appt_status="pending" WHERE appt_id=%s"""
+        params = (appt_id)
+        result = db.run_query(sql,params)
+
+        return True

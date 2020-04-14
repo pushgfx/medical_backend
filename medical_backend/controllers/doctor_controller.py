@@ -125,3 +125,14 @@ def get_doctors_appointment(request):
     else:
         response, code = {"msg": "Error retreiving doctors"}, 400
     return response, code
+
+
+def approve_specialist_appt_route(request):
+    doctor = Doctor()
+    answer = doctor.approve_specialist_appt(request)
+    if answer:
+        response, code = {"msg": "Appointment is Approved"}, 200
+    else:
+        response, code = {"msg": "Bad Request "}, 400
+
+    return response, code
