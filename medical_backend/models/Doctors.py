@@ -233,6 +233,7 @@ class Doctor(User):
         return result
 
     def get_referred_appts_by_doctor(self,doctor_id):
+        status="need approval"
         sql="""SELECT appointments.appt_id,appointments.patient_id, CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
                         CONCAT(doctors.first_name," ",doctors.middle_initial, " ", doctors.last_name) AS doctor,
                         offices.office_name AS office, appointments.appt_status, appointments.reason_for_visit 
@@ -241,9 +242,9 @@ class Doctor(User):
                         AND offices.office_id=appointments.office_id 
                         AND appointments.patient_id=patients.patient_id 
                         AND appointments.doctor_id=doctors.doctor_id 
-                        AND appointments.appt_status="pending" 
+                        AND appointments.appt_status=%s 
                         ORDER BY appointments.appt_start_time ASC """
-        params=(doctor_id)
+        params=(doctor_id,status)
         result = db.run_query(sql,params)
         return result
 
@@ -369,10 +370,10 @@ class Doctor(User):
         return doctors
 
     def approve_specialist_appt(self,request):
-        appt_id = request.json.get("apptId", None)
+        appt_id = request.json.get("appt_id", None)
         sql="""UPDATE `appointments` SET appt_status="pending" WHERE appt_id=%s"""
         params = (appt_id)
-        result = db.run_query(sql,params)
+        db.run_query(sql,params)
 
         return True
  

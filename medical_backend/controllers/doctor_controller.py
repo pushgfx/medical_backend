@@ -134,6 +134,7 @@ def approve_specialist_appt_route(request):
         response, code = {"msg": "Appointment is Approved"}, 200
     else:
         response, code = {"msg": "Bad Request "}, 400
+    return response, code
 
 def get_all_physician(request):
     doctor = Doctor()
