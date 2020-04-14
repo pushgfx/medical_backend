@@ -70,7 +70,8 @@ def create_app(test_config=None):
         update_patientprofile_route,
         insert_new_record_route,
         get_doctor_data,
-        get_doctors_appointment
+        get_doctors_appointment,
+        get_all_physician
     )
 
     # Simple route for basic testing
@@ -225,6 +226,12 @@ def create_app(test_config=None):
     @jwt_required
     def appointment_doctor_data():
         response, code =  get_doctors_appointment(request)
+        return jsonify(response), code
+    
+    @app.route('/doctor/physician/list', methods=['GET'])
+    @jwt_required
+    def get_doctor_physician():
+        response, code =  get_all_physician(request)
         return jsonify(response), code
     
     return app

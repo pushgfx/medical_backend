@@ -125,3 +125,12 @@ def get_doctors_appointment(request):
     else:
         response, code = {"msg": "Error retreiving doctors"}, 400
     return response, code
+
+def get_all_physician(request):
+    doctor = Doctor()
+    physician = doctor.get_primary_physician()
+    if physician:
+        response, code = {"doctors": physician}, 200
+    else:
+        response, code = {"msg": "Error retreiving doctors"}, 400
+    return response, code
