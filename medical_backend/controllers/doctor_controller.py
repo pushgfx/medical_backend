@@ -135,4 +135,11 @@ def approve_specialist_appt_route(request):
     else:
         response, code = {"msg": "Bad Request "}, 400
 
+def get_all_physician(request):
+    doctor = Doctor()
+    physician = doctor.get_primary_physician()
+    if physician:
+        response, code = {"doctors": physician}, 200
+    else:
+        response, code = {"msg": "Error retreiving doctors"}, 400
     return response, code

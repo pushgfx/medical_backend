@@ -50,12 +50,13 @@ class Patient(User):
         params = (patient_id,)
         patient = db.run_query(sql, params)
         result = patient[0]
-        
-        doctor_id= result['primary_doctor']
-        sql = """SELECT CONCAT(doctors.first_name," ",doctors.middle_initial, " ", doctors.last_name) AS primary_doctor FROM `doctors` WHERE doctor_id=%s"""
-        params = (str(doctor_id))
-        my = db.run_query(sql, params)  
-        mydoctor = my[0]
+        mydoctor=""
+        if result['primary_doctor'] is not None:
+            doctor_id= result['primary_doctor']
+            sql = """SELECT doctor_id,CONCAT(doctors.first_name," ",doctors.middle_initial, " ", doctors.last_name) AS primary_doctor FROM `doctors` WHERE doctor_id=%s"""
+            params = (str(doctor_id))
+            my = db.run_query(sql, params)  
+            mydoctor = my[0]
         
         profile = {
             "patientId":patient_id,
@@ -142,8 +143,11 @@ class Patient(User):
         race = request.json.get('race')
         dob = request.json.get('dob')
         gender = request.json.get('gender')
-        sql = """UPDATE patients SET first_name=%s, middle_initial=%s, last_name=%s, phone=%s, email=%s, street_1=%s, city=%s, state=%s,zipcode=%s, race=%s, gender=%s WHERE patient_id=%s"""
-        params = (str(firstName), str(middleInit), str(lastName), str(phone), str(email),str(street),str(city),str(state),str(zipcode),str(race),str(gender), str(patient_id))
+        primary_doctor = request.json.get('primaryDoctor')
+        primary_doctor_id = primary_doctor['doctor_id']
+        
+        sql = """UPDATE patients SET first_name=%s, middle_initial=%s, last_name=%s, phone=%s, email=%s, street_1=%s, city=%s, state=%s,zipcode=%s, race=%s, gender=%s,primary_doctor=%s WHERE patient_id=%s"""
+        params = (str(firstName), str(middleInit), str(lastName), str(phone), str(email),str(street),str(city),str(state),str(zipcode),str(race),str(gender),str(primary_doctor_id), str(patient_id))
         db.run_query(sql, params)
 
         return True
