@@ -126,6 +126,15 @@ def get_doctors_appointment(request):
         response, code = {"msg": "Error retreiving doctors"}, 400
     return response, code
 
+
+def approve_specialist_appt_route(request):
+    doctor = Doctor()
+    answer = doctor.approve_specialist_appt(request)
+    if answer:
+        response, code = {"msg": "Appointment is Approved"}, 200
+    else:
+        response, code = {"msg": "Bad Request "}, 400
+
 def get_all_physician(request):
     doctor = Doctor()
     physician = doctor.get_primary_physician()

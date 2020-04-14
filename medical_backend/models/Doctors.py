@@ -291,6 +291,8 @@ class Doctor(User):
                   str(date_prescribed))
         db.run_query(sql, params)
 
+        return True
+
     def add_doctor(self, request):
         req_first_name = request.json.get("firstName", None)
         req_middle_i = request.json.get("middleInit", None)
@@ -364,7 +366,16 @@ class Doctor(User):
             params = ()
             doctors = db.run_query(sql, params)
         
-        return doctors    
+        return doctors
+
+    def approve_specialist_appt(self,request):
+        appt_id = request.json.get("apptId", None)
+        sql="""UPDATE `appointments` SET appt_status="pending" WHERE appt_id=%s"""
+        params = (appt_id)
+        result = db.run_query(sql,params)
+
+        return True
+ 
 
     def get_primary_physician(self):
         specialist_id=1
@@ -373,3 +384,4 @@ class Doctor(User):
         doctors = db.run_query(sql, params)
 
         return doctors
+

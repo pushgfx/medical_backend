@@ -71,6 +71,7 @@ def create_app(test_config=None):
         insert_new_record_route,
         get_doctor_data,
         get_doctors_appointment,
+        approve_specialist_appt_route,
         get_all_physician
     )
 
@@ -226,6 +227,12 @@ def create_app(test_config=None):
     @jwt_required
     def appointment_doctor_data():
         response, code =  get_doctors_appointment(request)
+        return jsonify(response), code
+
+    @app.route('doctor/approveappt', methods=['GET'])
+    @jwt_required
+    def appointment_doctor_data():
+        response, code = approve_specialist_appt_route(request)
         return jsonify(response), code
     
     @app.route('/doctor/physician/list', methods=['GET'])
