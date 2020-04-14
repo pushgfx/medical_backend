@@ -355,12 +355,12 @@ class Doctor(User):
         #first appointment
         if count['count'] == 0:
             specialist_id=1
-            sql = "SELECT doctor_id, first_name, last_name FROM doctors WHERE specialist_id=%s"
+            sql = "SELECT doctors.specialist_id,doctors.doctor_id,doctors.first_name,doctors.middle_initial,doctors.last_name,specializations.specialization_name FROM doctors, specializations WHERE specialist_id=%s"
             params = (str(specialist_id))
             doctors = db.run_query(sql, params)
 
         else:
-            sql = "SELECT doctor_id, first_name, last_name FROM doctors"
+            sql = "SELECT doctors.specialist_id,doctors.doctor_id,doctors.first_name,doctors.middle_initial,doctors.last_name,specializations.specialization_name FROM doctors, specializations WHERE specializations.specialist_id=doctors.specialist_id"
             params = ()
             doctors = db.run_query(sql, params)
         
@@ -368,7 +368,7 @@ class Doctor(User):
 
     def get_primary_physician(self):
         specialist_id=1
-        sql = "SELECT doctor_id, first_name, last_name FROM doctors WHERE specialist_id=%s"
+        sql = "SELECT doctor_id, first_name,middle_initial, last_name FROM doctors WHERE specialist_id=%s"
         params = (str(specialist_id))
         doctors = db.run_query(sql, params)
 
