@@ -229,9 +229,9 @@ def create_app(test_config=None):
         response, code =  get_doctors_appointment(request)
         return jsonify(response), code
 
-    @app.route('doctor/approveappt', methods=['GET'])
+    @app.route('/doctor/approveappt', methods=['PUT'])
     @jwt_required
-    def appointment_doctor_data():
+    def approve_specialist_appt():
         response, code = approve_specialist_appt_route(request)
         return jsonify(response), code
     
