@@ -50,12 +50,12 @@ class Patient(User):
         params = (patient_id,)
         patient = db.run_query(sql, params)
         result = patient[0]
-        
-        doctor_id= result['primary_doctor']
-        sql = """SELECT CONCAT(doctors.first_name," ",doctors.middle_initial, " ", doctors.last_name) AS primary_doctor FROM `doctors` WHERE doctor_id=%s"""
-        params = (str(doctor_id))
-        my = db.run_query(sql, params)  
-        mydoctor = my[0]
+        if result['primary_doctor'] is not None:
+            doctor_id= result['primary_doctor']
+            sql = """SELECT CONCAT(doctors.first_name," ",doctors.middle_initial, " ", doctors.last_name) AS primary_doctor FROM `doctors` WHERE doctor_id=%s"""
+            params = (str(doctor_id))
+            my = db.run_query(sql, params)  
+            mydoctor = my[0]
         
         profile = {
             "patientId":patient_id,
