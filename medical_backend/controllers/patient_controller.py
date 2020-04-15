@@ -41,17 +41,6 @@ def get_patient_records_route(request):
         reponse, code = {"msg": "Bad patient id"}, 400
     return response, code 
 
-def delete_appt_route(request):
-    patient = Patient()
-    appt_id = request.args.get("aid", None)
-    answer = patient.delete_appointment(appt_id)
-	
-    if answer:
-        response, code = {"msg": "Delete Successful"}, 200
-    else:
-        response, code = {"msg": "Bad Request"}, 400
-    return response, code
-
 def update_patientprofile_route(request):
     patient = Patient()   
     answer = patient.update_patient(request)

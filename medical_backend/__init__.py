@@ -61,6 +61,7 @@ def create_app(test_config=None):
         get_appointments_route,
         get_patient_rx_route,
         get_patient_records_route,
+        cancel_appt_route,
         delete_appt_route,
         update_offices_by_admin_route,
         update_doctorprofile_route,
@@ -178,17 +179,26 @@ def create_app(test_config=None):
         response, code = get_doctor_appointments_route()
         return jsonify(response), code
     
-    @app.route('/patient/deleteappointment', methods=['DELETE'])
-    def delete_patient_appointments():
+    @app.route('/patient/cancel/appointment', methods=['POST'])
+    @jwt_required
+    def cancel_patient_appointment():
+        response, code = cancel_appt_route(request)
+        return jsonify(response), code
+
+    @app.route('/admin/delete/appointment', methods=['POST'])
+    @jwt_required
+    def delete_patient_appointment():
         response, code = delete_appt_route(request)
         return jsonify(response), code
 
     @app.route('/office/updateoffice' , methods = ['PUT'])
+    @jwt_required
     def update_office():
         response, code = update_offices_by_admin_route(request)
         return jsonify(response), code
 
     @app.route('/doctor/updatedoctor', methods = ['PUT'])
+    @jwt_required
     def update_doctor():
         response, code = update_doctorprofile_route(request)
         return jsonify(response), code

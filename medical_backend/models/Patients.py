@@ -108,12 +108,8 @@ class Patient(User):
         params = (patient_id)
         medical_records = db.run_query(sql, params)
         return medical_records
-    
-    def delete_appointment(self,appointment_id):
-        sql = "DELETE FROM `appointments` WHERE (`appt_id` = %s) AND (appt_status = 'pending')"
-        params = (appointment_id)
-        db.run_query(sql, params)
-        return True
+
+
     def add_patient_prescription(self,request):
         appt_id=request.json.get("apptId", None)
         doctor_id = request.json.get("doctorId", None)

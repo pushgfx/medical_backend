@@ -82,3 +82,16 @@ class Appointments:
         appointments = db.run_query(sql, params)
 
         return appointments
+
+    def cancel_appointment(self,appointment_id):
+        print("canceling appointment id: %s" % appointment_id)
+        sql = "UPDATE appointments SET appt_status='canceled' WHERE appt_id=%s AND appt_status='pending'"
+        params = (str(appointment_id))
+        db.run_query(sql, params)
+        return True
+
+    def delete_appointment(self,appointment_id):
+        sql = "DELETE FROM appointments WHERE appt_id=%s AND appt_status='pending'"
+        params = (str(appointment_id))
+        db.run_query(sql, params)
+        return True

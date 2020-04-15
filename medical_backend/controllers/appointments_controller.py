@@ -21,3 +21,25 @@ def get_appointments_route(request):
 	else:
 		response, code = {"msg": "Bad Request"}, 400
 	return response, code
+
+def cancel_appt_route(request):
+    appointment = Appointments()
+    appt_id = request.json.get("appt_id", None)
+    answer = appointment.cancel_appointment(appt_id)
+	
+    if answer:
+        response, code = {"msg": "Cancel Successful"}, 200
+    else:
+        response, code = {"msg": "Bad Request"}, 400
+    return response, code
+
+def delete_appt_route(request):
+    appointment = Appointments()
+    appt_id = request.json.get("appt_id", None)
+    answer = appointment.delete_appointment(appt_id)
+	
+    if answer:
+        response, code = {"msg": "Delete Successful"}, 200
+    else:
+        response, code = {"msg": "Bad Request"}, 400
+    return response, code
