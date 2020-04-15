@@ -95,3 +95,12 @@ class Appointments:
         params = (str(appointment_id))
         db.run_query(sql, params)
         return True
+
+    def update_finished_appt(self,appt_id,appt_end_time):
+
+        print("APPT_ID",appt_id)
+        sql = """UPDATE appointments SET appt_status='finished', estimated_end_time=%s WHERE appt_id=%s"""
+        params = (str(appt_end_time),str(appt_id))
+        db.run_query(sql,params)
+
+        return True
