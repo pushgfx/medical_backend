@@ -65,15 +65,13 @@ def get_doctor_profile_route(request):
 def get_doctor_appointments_route():
     doctor = Doctor()
     doctor_id = get_jwt_identity()['uid']
-    patient_appointments = doctor.get_doctor_all_appointment(doctor_id)
     today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
     future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
     past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
     approve_appointments=doctor.get_referred_appts_by_doctor(doctor_id)
 
-    if patient_appointments or today_appointments or future_appointments or past_appointments:
-        response, code = {"appointments":{"appointments": patient_appointments,
-                            "todayAppointments":today_appointments,"futureAppointments":future_appointments,
+    if today_appointments or future_appointments or past_appointments:
+        response, code = {"appointments":{"todayAppointments":today_appointments,"futureAppointments":future_appointments,
                             "pastAppointments":past_appointments,"approveAppointments":approve_appointments}}, 200
     else:
         response, code = {"msg": "Error retrieving appointment by doctor"}, 400
