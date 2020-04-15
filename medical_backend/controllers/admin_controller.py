@@ -1,4 +1,4 @@
-from ..models import Admin,Doctor
+from ..models import Admin, Doctor, Appointments
 
 def get_admin_route(request):
 	admin = Admin()
@@ -29,4 +29,25 @@ def get_doctor_data(request):
 	else:
 		response, code = {"msg": "Bad doctor id"}, 400
 
+	return response, code
+
+def delete_appt_route(request):
+    appointment = Appointments()
+    appt_id = request.json.get("appt_id", None)
+    answer = appointment.delete_appointment(appt_id)
+	
+    if answer:
+        response, code = {"msg": "Delete Successful"}, 200
+    else:
+        response, code = {"msg": "Bad Request"}, 400
+    return response, code
+
+def get_admin_appointments_route():
+	admin = Admin()
+	appointments = admin.get_appointment_dict()
+
+	if appointments:
+		response, code = {"appointments": appointments}, 200
+	else:
+		response, code = {"msg": "Error"}, 400
 	return response, code

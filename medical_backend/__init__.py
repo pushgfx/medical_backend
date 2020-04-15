@@ -73,7 +73,8 @@ def create_app(test_config=None):
         get_doctor_data,
         get_doctors_appointment,
         approve_specialist_appt_route,
-        get_all_physician
+        get_all_physician,
+        get_admin_appointments_route
     )
 
     # Simple route for basic testing
@@ -105,6 +106,13 @@ def create_app(test_config=None):
     def admin_profile():
         response, code = get_admin_route(request)
         return jsonify(response), code
+
+    @app.route('/admin/appointments', methods=['GET'])
+    @jwt_required
+    def admin_appointments():
+        response, code = get_admin_appointments_route()
+        return jsonify(response), code
+
 
     @app.route('/patients/appointment', methods=['GET','POST'])
     @jwt_required
