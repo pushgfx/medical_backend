@@ -52,6 +52,7 @@ def create_app(test_config=None):
         get_doctors_by_office_route,
         get_doctor_dates,
         get_doctor_data_route,
+        get_doctor_admin_data_route,
         get_doctor_profile_route,
         get_doctor_appointments_route,
         get_offices_route,
@@ -70,7 +71,6 @@ def create_app(test_config=None):
         get_all_specializations,
         update_patientprofile_route,
         insert_new_record_route,
-        get_doctor_data,
         get_doctors_appointment,
         approve_specialist_appt_route,
         get_all_physician,
@@ -239,7 +239,7 @@ def create_app(test_config=None):
     @app.route('/admin/doctor/data', methods=['GET'])
     @jwt_required
     def admin_doctor_data():
-        response, code =  get_doctor_data(request)
+        response, code =  get_doctor_admin_data_route(request)
         return jsonify(response), code
 
     @app.route('/appointment/doctor/list', methods=['GET'])
