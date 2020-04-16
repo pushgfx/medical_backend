@@ -387,3 +387,21 @@ class Doctor(User):
 
         return doctors
 
+    def update_patient_prescription(self, request):
+        rx_id = request.json.get('id')
+        medication_name = request.json.get('medication_name')
+        dosage = request.json.get('dosage')
+        dose_form_name = request.json.get('dose_form_name')
+        indication = request.json.get('indication')
+        date_prescribed = request.json.get('date_prescribed')
+        sql = """ UPDATE prescribed_medications 
+        SET dose_form_id=(select m.dose_form_id from medication_dose_forms m where m.dose_form_name=%s LIMIT 1),
+        medication_id=(select m.medication_id from medications m where m.medication_name=%s LIMIT 1),
+        indication = %s, 
+        dosage=%s,
+        date_prescribed=%s
+        WHERE id=%s """
+        params = (str(dose_form_name),str(medication_name),str(indication),str(dosage),date_prescribed,rx_id)
+        db.run_query(sql, params)
+
+        return True
