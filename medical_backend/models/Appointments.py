@@ -19,6 +19,7 @@ class Appointments:
         req_office_id = request.json.get("office", None)
         req_doctor_id = request.json.get("doctor", None)
         req_was_referred_by = request.json.get("refDoctor", None)
+        req_was_referred_doctor = request.json.get("refDoctor", None)
         req_date = request.json.get("date", None)
         req_timeslot = request.json.get("timeslot", None)
         req_appt_booking_method = request.json.get("bookingMethod", None)
@@ -46,8 +47,9 @@ class Appointments:
 
         if specialist_id != 1:
             appt_status = "need approval"
-            req_was_referred_doctor = res['primary_doctor']
-            req_was_referred_by = 1
+            if req_was_referred_by == "0":
+                req_was_referred_doctor = res['primary_doctor']
+            req_was_referred_by = "1"
         else:
             appt_status = "pending"
 
