@@ -132,7 +132,7 @@ def create_app(test_config=None):
         return jsonify(response), code
 
     @app.route('/patients/updateprescription', methods=['PUT'])
-    # @jwt_required
+    @jwt_required
     def patient_prescription_update():
         response, code = approve_specialist_appt_route(request)
         return jsonify(response), code

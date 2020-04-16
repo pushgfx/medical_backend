@@ -146,6 +146,7 @@ def get_all_physician(request):
 
 def update_prescription(request):
     doctor = Doctor()
+    print(request)
     answer = doctor.update_patient_prescription(request)
     
     if answer:
