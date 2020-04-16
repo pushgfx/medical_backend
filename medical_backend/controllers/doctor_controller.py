@@ -7,7 +7,8 @@ def get_doctor_dates(request):
     #Get the uid from token
     doctor_id = request.args.get("did", None)
     office_id = request.args.get("oid", None)
-    dates = doctor.get_dates_dict(str(office_id), str(doctor_id))
+    patient_id = get_jwt_identity()['uid']
+    dates = doctor.get_dates_dict(str(office_id), str(doctor_id), str(patient_id))
     if dates:
         response, code = {"dates": dates}, 200
     else:

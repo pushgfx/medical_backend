@@ -29,7 +29,7 @@ class Doctor(User):
         schedule = db.run_query(sql, params)
         return schedule
 
-    def get_dates_dict(self, office_id, doctor_id):
+    def get_dates_dict(self, office_id, doctor_id, patient_id):
         # get curent datetime
         current_date = datetime.now()
         # Build up an array for the next 30 days excluding Sundays
@@ -51,7 +51,7 @@ class Doctor(User):
         # MARK BOOKED DATES/TIMESLOTS
 
         # Get a dictionary of all appointments for this doctor
-        sql = "SELECT appt_start_time, estimated_end_time FROM appointments WHERE `doctor_id`=%s AND `office_id`=%s"
+        sql = "SELECT appt_start_time, estimated_end_time, patient_id FROM appointments WHERE `doctor_id`=%s AND `office_id`=%s"
         params = (doctor_id, office_id)
         appointments = db.run_query(sql, params)
 
@@ -76,7 +76,17 @@ class Doctor(User):
                 if timeslot == "Y":
                     date_check = False
                     break
+            for appointment in appointments:
+                #print("\n")
+                #print("appt_start_time.day %s future_date.day %s" % (appointment['appt_start_time'].day, future_date.day))
+                #print("appointment[patient_id] = %s patient_id = %s" % (appointment['patient_id'], patient_id))
+                if str(appointment['appt_start_time'].day) == str(future_date.day) and str(appointment['patient_id']) == str(patient_id):
+                    print("\n")
+                    print("This should be a disabled date")
+                    date_check = True
+                    break;
             if date_check == True:
+                print("disabled date added %s %s %s" % (future_date.month, future_date.day, future_date.year))
                 disabled_dates.append({"month":future_date.month,"day":future_date.day,"year":future_date.year})
 
         dates = {

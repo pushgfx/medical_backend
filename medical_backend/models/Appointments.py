@@ -33,7 +33,7 @@ class Appointments:
         day = req_date[8:10]
         if day[0] == "0":
             day = day[1]
-        day = int(day)
+        day = int(day) - 1
         hour = req_timeslot + 8
         appt_start_time = datetime(year, month, day, hour, minute=0, second=0, microsecond=0, tzinfo=None)
         appt_end_time = datetime(year, month, day, hour + 1, minute=0, second=0, microsecond=0, tzinfo=None)
