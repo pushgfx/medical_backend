@@ -345,9 +345,6 @@ class Doctor(User):
         params = (str(appt_id),str(patient_id),str(doctor_id),str(height),str(weight),lab_testing,str(diagnoses),str(treatment),new_prescriptions,actual_start_time,actual_end_time)
         db.run_query(sql, params)
 
-        sql = "UPDATE appointments SET appt_status = 'finished' WHERE (appt_id = %s)"
-        params = (str(appt_id))
-        db.run_query(sql,params)
         return True
 
     def get_appointment_doctor(self, patient_id):        
