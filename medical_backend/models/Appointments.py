@@ -117,10 +117,6 @@ class Appointments:
         return True
 
     def update_appt_status(self, appt_id, datetime,status):
-
-        print("APPT_ID", appt_id)
-        print("STATUS :",status)
-        print(datetime)
         sql=''
         if status == 'started':
             sql = """UPDATE appointments SET appt_status=%s, actual_start_time=%s WHERE appt_id=%s"""
