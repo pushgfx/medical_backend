@@ -76,7 +76,8 @@ def create_app(test_config=None):
         get_all_physician,
         get_admin_appointments_route,
         update_finshed_appt_route,
-        update_appt_status_route
+        update_appt_status_route,
+        admin_reports_route
     )
 
     # Simple route for basic testing
@@ -272,6 +273,16 @@ def create_app(test_config=None):
     @jwt_required
     def doctor_update_appt_status():
         response, code = update_appt_status_route(request)
+        return jsonify(response), code
+
+    @app.route('/admin/reports', methods=['POST'])
+    @jwt_required
+    def admin_reports():
+        role = get_jwt_identity()['role']
+        if role == 1:
+            response, code = admin_reports_route(request)
+        else:
+            response, code = {"msg": "Must be admin"}, 401
         return jsonify(response), code
 
     return app
