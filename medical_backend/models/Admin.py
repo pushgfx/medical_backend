@@ -22,7 +22,7 @@ class Admin(User):
         for result in results:
             doctor = {
                     "doctorId":result['doctor_id'],
-                	"firstName": result['first_name'],
+                    "firstName": result['first_name'],
                     "middleInit": result['middle_initial'],
                     "lastName": result['last_name'],
                     "phone": result['phone'],
@@ -160,3 +160,32 @@ class Admin(User):
             str(r.form['first_name']), str(r.form['middle_initial']), str(r.form['last_name']), str(r.form['phone']),
              str(r.form['specialization_id']),str(r.form['email']), doctor_id)
         db.run_query(sql, params)
+        return True
+
+    def get_report(self, request):
+        reportType = request.json.get('reportType', None)
+        patient = request.json.get('patient', None)
+        doctor = request.json.get('doctor', None)
+        office = request.json.get('office', None)
+        if reportType == "Canceled Appointments":
+            condition = "WHERE appt_status='canceled' AND a.patient_id=p.patient_id AND a.doctor_id=d.doctor_id AND a.office_id=o.office_id"
+            if patient != "all":
+                condition += " AND a.patient_id=" + str(patient)
+            if doctor != "all":
+                condition += " AND a.doctor_id=" + str(doctor)
+            if office != "all":
+                condition += " AND a.office_id=" + str(office)
+
+            sql = "SELECT a.appt_id, a.doctor_id, a.office_id, a.patient_id, p.first_name, p.middle_initial, p.last_name, o.office_name, \
+            d.first_name as doc_first_name, d.middle_initial as doc_middle_initial, d.last_name as doc_last_name, a.appt_start_time, a.estimated_end_time, \
+            a.appt_status, a.booking_date, a.booking_method, a.reason_for_visit \
+            FROM appointments as a, patients as p, doctors as d, offices as o " + condition
+
+            params = ()
+            result = db.run_query(sql, params)
+            
+            labels = ["Appointment ID", "Patient", "Office", "Doctor", "Start Time", "End Time", "Status", "Booking Date", "Booking Method", "Reason for Visit"]
+            
+
+
+        return result

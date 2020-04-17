@@ -50,3 +50,12 @@ def get_admin_appointments_route():
 	else:
 		response, code = {"msg": "Error"}, 400
 	return response, code
+
+def admin_reports_route(request):
+	admin = Admin()
+	report = admin.get_report(request)
+	if report:
+		response, code = {"report": report}, 201
+	else:
+		response, code = {"msg": "No Report"}, 201
+	return response, code
