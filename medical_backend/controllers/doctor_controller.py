@@ -143,3 +143,16 @@ def get_all_physician(request):
     else:
         response, code = {"msg": "Error retreiving doctors"}, 400
     return response, code
+
+
+def update_prescription(request):
+    doctor = Doctor()
+    print(request)
+    answer = doctor.update_patient_prescription(request)
+    
+    if answer:
+        response, code = {"msg" : "Presc Updated"}, 200
+    else:
+        response, code = {"msg": "Bad Request "}, 400
+
+    return response, code

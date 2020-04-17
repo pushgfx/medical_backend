@@ -90,7 +90,7 @@ class Patient(User):
         return appointments
 
     def get_patient_prescriptions(self, patient_id):
-        sql = "SELECT PRESC.appt_id, D.first_name,D.last_name,MED.medication_name,PRESC.dosage,MED_FORM.dose_form_name, " \
+        sql = "SELECT PRESC.id, PRESC.appt_id, D.first_name,D.last_name,MED.medication_name,PRESC.dosage,MED_FORM.dose_form_name, " \
               "PRESC.dosage,PRESC.indication,PRESC.date_prescribed " \
               "FROM doctors as D, medications as MED, medication_dose_forms as MED_FORM, prescribed_medications as PRESC " \
               "WHERE PRESC.patient_id=%s " \

@@ -76,6 +76,7 @@ def create_app(test_config=None):
         get_all_physician,
         get_admin_appointments_route,
         update_finshed_appt_route,
+        update_prescription,
         update_appt_status_route,
         admin_reports_route
     )
@@ -130,6 +131,12 @@ def create_app(test_config=None):
     @jwt_required
     def patient_prescriptions():
         response, code = get_patient_rx_route(request)
+        return jsonify(response), code
+
+    @app.route('/patients/updateprescription', methods=['PUT'])
+    @jwt_required
+    def patient_prescription_update():
+        response, code = approve_specialist_appt_route(request)
         return jsonify(response), code
 
     @app.route('/patients/records', methods=['GET'])
@@ -284,6 +291,8 @@ def create_app(test_config=None):
         else:
             response, code = {"msg": "Must be admin"}, 401
         return jsonify(response), code
+
+
 
     return app
 
