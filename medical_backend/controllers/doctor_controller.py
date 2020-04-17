@@ -37,7 +37,7 @@ def get_doctors_by_office_route(request):
 def get_doctor_data_route():
     doctor = Doctor()
     doctor_id = get_jwt_identity()['uid']
-    doctor_profile = doctor.get_doctor_dict(doctor_id)
+    profile = doctor.get_doctor_dict(doctor_id)
     doctor_patient = doctor.get_doctor_patient(doctor_id)
     today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
     future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
@@ -47,7 +47,7 @@ def get_doctor_data_route():
     approve_appointments = doctor.get_referred_appts_by_doctor(doctor_id);
 
     if profile:
-        response, code = {"profile": doctor_profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments,"approveAppointments":approve_appointments},"medications":{"medicationNames":medication_names,"medicationForms":medication_forms}}, 200
+        response, code = {"profile": profile, "patients": doctor_patient, "appointments":{"todayAppointments":today_appointments, "futureAppointments":future_appointments, "pastAppointments":past_appointments,"approveAppointments":approve_appointments},"medications":{"medicationNames":medication_names,"medicationForms":medication_forms}}, 200
     else:
         response, code = {"msg": "Bad doctor id"}, 400
     return response, code
