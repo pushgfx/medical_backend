@@ -13,12 +13,11 @@ def get_admin_route(request):
 
 	return response, code
 
-def get_doctor_data(request):
+def get_doctor_admin_data_route(request):
 	doctor = Doctor ()
 	doctor_id = request.args.get('did')
 	doctor_profile = doctor.get_doctor_dict(doctor_id)
 	doctor_patient = doctor.get_doctor_patient(doctor_id)
-	patient_appointments = doctor.get_doctor_all_appointment(doctor_id)
 	today_appointments=doctor.get_today_appointments_by_doctor(doctor_id)
 	future_appointments=doctor.get_future_appts_by_doctor(doctor_id)
 	past_appointments=doctor.get_past_appts_by_doctor(doctor_id)
@@ -50,4 +49,13 @@ def get_admin_appointments_route():
 		response, code = {"appointments": appointments}, 200
 	else:
 		response, code = {"msg": "Error"}, 400
+	return response, code
+
+def admin_reports_route(request):
+	admin = Admin()
+	report = admin.get_report(request)
+	if report:
+		response, code = {"report": report}, 201
+	else:
+		response, code = {"msg": "No Report"}, 201
 	return response, code

@@ -19,6 +19,7 @@ class Appointments:
         req_office_id = request.json.get("office", None)
         req_doctor_id = request.json.get("doctor", None)
         req_was_referred_by = request.json.get("refDoctor", None)
+        req_was_referred_doctor = request.json.get("refDoctor", None)
         req_date = request.json.get("date", None)
         req_timeslot = request.json.get("timeslot", None)
         req_appt_booking_method = request.json.get("bookingMethod", None)
@@ -33,7 +34,7 @@ class Appointments:
         day = req_date[8:10]
         if day[0] == "0":
             day = day[1]
-        day = int(day)
+        day = int(day) - 1
         hour = req_timeslot + 8
         appt_start_time = datetime(year, month, day, hour, minute=0, second=0, microsecond=0, tzinfo=None)
         appt_end_time = datetime(year, month, day, hour + 1, minute=0, second=0, microsecond=0, tzinfo=None)
@@ -46,8 +47,9 @@ class Appointments:
 
         if specialist_id != 1:
             appt_status = "need approval"
-            req_was_referred_doctor = res['primary_doctor']
-            req_was_referred_by = 1
+            if req_was_referred_by == "0":
+                req_was_referred_doctor = res['primary_doctor']
+            req_was_referred_by = "1"
         else:
             appt_status = "pending"
 
@@ -99,8 +101,29 @@ class Appointments:
     def update_finished_appt(self,appt_id,appt_end_time):
 
         print("APPT_ID",appt_id)
-        sql = """UPDATE appointments SET appt_status='finished', estimated_end_time=%s WHERE appt_id=%s"""
+        sql = """UPDATE appointments SET appt_status='finished', actual_end_time=%s WHERE appt_id=%s"""
         params = (str(appt_end_time),str(appt_id))
         db.run_query(sql,params)
+
+        return True
+
+    def update_started_appt(self, appt_id, appt_start_time):
+
+        print("APPT_ID", appt_id)
+        sql = """UPDATE appointments SET appt_status='started', actual_start_time=%s WHERE appt_id=%s"""
+        params = (str(appt_start_time), str(appt_id))
+        db.run_query(sql, params)
+
+        return True
+
+    def update_appt_status(self, appt_id, datetime,status):
+        sql=''
+        if status == 'started':
+            sql = """UPDATE appointments SET appt_status=%s, actual_start_time=%s WHERE appt_id=%s"""
+        elif status=='finished':
+            sql = """UPDATE appointments SET appt_status=%s, actual_end_time=%s WHERE appt_id=%s"""
+
+        params = (status,str(datetime), str(appt_id))
+        db.run_query(sql, params)
 
         return True

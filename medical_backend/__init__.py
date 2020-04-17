@@ -52,6 +52,7 @@ def create_app(test_config=None):
         get_doctors_by_office_route,
         get_doctor_dates,
         get_doctor_data_route,
+        get_doctor_admin_data_route,
         get_doctor_profile_route,
         get_doctor_appointments_route,
         get_offices_route,
@@ -70,13 +71,14 @@ def create_app(test_config=None):
         get_all_specializations,
         update_patientprofile_route,
         insert_new_record_route,
-        get_doctor_data,
         get_doctors_appointment,
         approve_specialist_appt_route,
         get_all_physician,
         get_admin_appointments_route,
         update_finshed_appt_route,
-        update_prescription
+        update_prescription,
+        update_appt_status_route,
+        admin_reports_route
     )
 
     # Simple route for basic testing
@@ -246,7 +248,7 @@ def create_app(test_config=None):
     @app.route('/admin/doctor/data', methods=['GET'])
     @jwt_required
     def admin_doctor_data():
-        response, code =  get_doctor_data(request)
+        response, code =  get_doctor_admin_data_route(request)
         return jsonify(response), code
 
     @app.route('/appointment/doctor/list', methods=['GET'])
@@ -267,15 +269,32 @@ def create_app(test_config=None):
         response, code =  get_all_physician(request)
         return jsonify(response), code
 
+    # unused route
     @app.route('/doctor/finish/appointment', methods=['PUT'])
     @jwt_required
     def doctor_finished_appt():
         response, code = update_finshed_appt_route(request)
-        print("FINISH APPT", response)
+        return jsonify(response), code
+
+    @app.route('/doctor/update/apptstatus', methods=['PUT'])
+    @jwt_required
+    def doctor_update_appt_status():
+        response, code = update_appt_status_route(request)
+        return jsonify(response), code
+
+    @app.route('/admin/reports', methods=['POST'])
+    @jwt_required
+    def admin_reports():
+        role = get_jwt_identity()['role']
+        if role == 1:
+            response, code = admin_reports_route(request)
+        else:
+            response, code = {"msg": "Must be admin"}, 401
         return jsonify(response), code
 
 
 
     return app
+
 
 
