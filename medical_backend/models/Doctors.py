@@ -198,7 +198,7 @@ class Doctor(User):
             WHERE DATE(appointments.appt_start_time) = %s
             AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id
             AND appointments.patient_id=patients.patient_id
-            AND appointments.appt_status="pending"
+            AND (appointments.appt_status="pending" OR appointments.appt_status="started")
             ORDER BY appointments.appt_start_time DESC"""
         params=(current_date,doctor_id)
         result = db.run_query(sql,params)

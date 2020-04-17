@@ -75,7 +75,8 @@ def create_app(test_config=None):
         approve_specialist_appt_route,
         get_all_physician,
         get_admin_appointments_route,
-        update_finshed_appt_route
+        update_finshed_appt_route,
+        update_appt_status_route
     )
 
     # Simple route for basic testing
@@ -260,11 +261,17 @@ def create_app(test_config=None):
         response, code =  get_all_physician(request)
         return jsonify(response), code
 
+    # unused route
     @app.route('/doctor/finish/appointment', methods=['PUT'])
     @jwt_required
     def doctor_finished_appt():
         response, code = update_finshed_appt_route(request)
-        print("FINISH APPT", response)
+        return jsonify(response), code
+
+    @app.route('/doctor/update/apptstatus', methods=['PUT'])
+    @jwt_required
+    def doctor_update_appt_status():
+        response, code = update_appt_status_route(request)
         return jsonify(response), code
 
     return app

@@ -33,17 +33,27 @@ def cancel_appt_route(request):
         response, code = {"msg": "Bad Request"}, 400
     return response, code
 
+# unused function
 def update_finshed_appt_route(request):
     appointment= Appointments()
     appt_id = request.json.get("appt_id",None)
     appt_end_time = request.json.get("appt_end_time",None)
-    print("APPT_ID",appt_id)
-    print("APPT_END_TIme",appt_end_time)
-
     answer = appointment.update_finished_appt(appt_id,appt_end_time)
-    print("FINISHED 2",answer)
     if answer:
         response, code ={"msg": "Appointment is successfully finished"}, 200
+    else:
+        response, code = {"msg": "Bad Request"}, 400
+
+    return response, code
+
+def update_appt_status_route(request):
+    appointment= Appointments()
+    appt_id = request.json.get("appt_id",None)
+    status = request.json.get("appt_status", None)
+    appt_end_time = request.json.get("timestamp",None)
+    answer = appointment.update_appt_status(appt_id,appt_end_time,status)
+    if answer:
+        response, code ={"msg": "Appointment status is successfully updated"}, 200
     else:
         response, code = {"msg": "Bad Request"}, 400
 

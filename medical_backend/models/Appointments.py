@@ -101,8 +101,33 @@ class Appointments:
     def update_finished_appt(self,appt_id,appt_end_time):
 
         print("APPT_ID",appt_id)
-        sql = """UPDATE appointments SET appt_status='finished', estimated_end_time=%s WHERE appt_id=%s"""
+        sql = """UPDATE appointments SET appt_status='finished', actual_end_time=%s WHERE appt_id=%s"""
         params = (str(appt_end_time),str(appt_id))
         db.run_query(sql,params)
+
+        return True
+
+    def update_started_appt(self, appt_id, appt_start_time):
+
+        print("APPT_ID", appt_id)
+        sql = """UPDATE appointments SET appt_status='started', actual_start_time=%s WHERE appt_id=%s"""
+        params = (str(appt_start_time), str(appt_id))
+        db.run_query(sql, params)
+
+        return True
+
+    def update_appt_status(self, appt_id, datetime,status):
+
+        print("APPT_ID", appt_id)
+        print("STATUS :",status)
+        print(datetime)
+        sql=''
+        if status == 'started':
+            sql = """UPDATE appointments SET appt_status=%s, actual_start_time=%s WHERE appt_id=%s"""
+        elif status=='finished':
+            sql = """UPDATE appointments SET appt_status=%s, actual_end_time=%s WHERE appt_id=%s"""
+
+        params = (status,str(datetime), str(appt_id))
+        db.run_query(sql, params)
 
         return True
