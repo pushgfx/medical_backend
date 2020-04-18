@@ -247,13 +247,13 @@ class Doctor(User):
         status="need approval"
         sql="""SELECT appointments.appt_id,appointments.patient_id, CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
                         CONCAT(doctors.first_name," ",doctors.middle_initial, " ", doctors.last_name) AS doctor,
-                        offices.office_name AS office, appointments.appt_status, appointments.reason_for_visit 
-                        FROM `appointments`,`offices`,`patients`, `doctors` 
-                        WHERE appointments.referring_doctor_id=%s 
-                        AND offices.office_id=appointments.office_id 
-                        AND appointments.patient_id=patients.patient_id 
-                        AND appointments.doctor_id=doctors.doctor_id 
-                        AND appointments.appt_status=%s 
+                        offices.office_name AS office, appointments.appt_status, appointments.reason_for_visit
+                        FROM `appointments`,`offices`,`patients`, `doctors`
+                        WHERE appointments.referring_doctor_id=%s
+                        AND offices.office_id=appointments.office_id
+                        AND appointments.patient_id=patients.patient_id
+                        AND appointments.doctor_id=doctors.doctor_id
+                        AND appointments.appt_status=%s
                         ORDER BY appointments.appt_start_time ASC """
         params=(doctor_id,status)
         result = db.run_query(sql,params)
@@ -358,7 +358,7 @@ class Doctor(User):
 
         return True
 
-    def get_appointment_doctor(self, patient_id):        
+    def get_appointment_doctor(self, patient_id):
         sql = """SELECT COUNT(*) as count from appointments WHERE patient_id=%s"""
         params = (str(patient_id))
         count = db.run_query(sql,params)
@@ -374,7 +374,7 @@ class Doctor(User):
             sql = "SELECT doctors.specialist_id,doctors.doctor_id,doctors.first_name,doctors.middle_initial,doctors.last_name,specializations.specialization_name FROM doctors, specializations WHERE specializations.specialist_id=doctors.specialist_id"
             params = ()
             doctors = db.run_query(sql, params)
-        
+
         return doctors
 
     def approve_specialist_appt(self,request):
@@ -384,7 +384,7 @@ class Doctor(User):
         db.run_query(sql,params)
 
         return True
- 
+
 
     def get_primary_physician(self):
         specialist_id=1
@@ -401,17 +401,13 @@ class Doctor(User):
         dose_form_name = request.json.get('dose_form_name')
         indication = request.json.get('indication')
         date_prescribed = request.json.get('date_prescribed')
-
-        sql = """ UPDATE prescribed_medications 
+        print(rx_id,medication_name, dosage, dose_form_name, indication, date_prescribed)
+        sql = """UPDATE prescribed_medications
         SET dose_form_id=(select m.dose_form_id from medication_dose_forms m where m.dose_form_name=%s LIMIT 1),
         medication_id=(select m.medication_id from medications m where m.medication_name=%s LIMIT 1),
-        indication = %s, 
-        dosage=%s,
-        date_prescribed=%s
-        WHERE id=%s """
+        indication = %s,dosage=%s,date_prescribed=%s WHERE id=%s """
 
-        
-        params = (str(dose_form_name),str(medication_name),str(indication),str(dosage),date_prescribed,rx_id)
+        params = (str(dose_form_name),str(medication_name),str(indication),str(dosage),str(date_prescribed),str(rx_id))
         db.run_query(sql, params)
 
         return True
