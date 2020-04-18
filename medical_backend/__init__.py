@@ -98,7 +98,7 @@ def create_app(test_config=None):
     def register():
         response, code = registration_route(request)
         return jsonify(response), code
-    
+
     # Registration route for doctor
     @app.route('/doctors/register', methods=['POST'])
     def doctor_register():
@@ -136,7 +136,7 @@ def create_app(test_config=None):
     @app.route('/patients/updateprescription', methods=['PUT'])
     @jwt_required
     def patient_prescription_update():
-        response, code = approve_specialist_appt_route(request)
+        response, code = update_prescription(request)
         return jsonify(response), code
 
     @app.route('/patients/records', methods=['GET'])
@@ -196,7 +196,7 @@ def create_app(test_config=None):
     def doctor_appointments():
         response, code = get_doctor_appointments_route()
         return jsonify(response), code
-    
+
     @app.route('/patient/cancel/appointment', methods=['POST'])
     @jwt_required
     def cancel_patient_appointment():
@@ -220,13 +220,13 @@ def create_app(test_config=None):
     def update_doctor():
         response, code = update_doctorprofile_route(request)
         return jsonify(response), code
-        
+
     @app.route('/doctor/addprescription', methods=['POST'])
     @jwt_required
     def doctor_add_new_prescription():
         response, code = insert_new_prescription_route(request)
         return jsonify(response), code
-    
+
     @app.route('/doctor/specialization', methods=['GET'])
     @jwt_required
     def get_specialization():
@@ -244,7 +244,7 @@ def create_app(test_config=None):
     def update_patient():
         response, code = update_patientprofile_route(request)
         return jsonify(response), code
-    
+
     @app.route('/admin/doctor/data', methods=['GET'])
     @jwt_required
     def admin_doctor_data():
@@ -262,7 +262,7 @@ def create_app(test_config=None):
     def approve_specialist_appt():
         response, code = approve_specialist_appt_route(request)
         return jsonify(response), code
-    
+
     @app.route('/doctor/physician/list', methods=['GET'])
     @jwt_required
     def get_doctor_physician():
@@ -295,6 +295,3 @@ def create_app(test_config=None):
 
 
     return app
-
-
-

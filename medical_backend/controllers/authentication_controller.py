@@ -18,7 +18,7 @@ def authenticate_route(request):
         if user['role'] == 1:
             admin = Admin()
             admin_id = user['uid']
-            profile = admin.get_admin(admin_id) 
+            profile = admin.get_admin(admin_id)
             all_patients = admin.get_patient_dict()
             all_doctors = admin.get_doctor_dict()
             all_appointments = admin.get_appointment_dict()

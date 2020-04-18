@@ -20,7 +20,11 @@ def get_patient_route(request):
 def get_patient_rx_route(request):
     patient = Patient()
     # Get the uid from token
-    patient_id = get_jwt_identity()['uid']
+    role_id = get_jwt_identity()['role']
+    if role_id==2:
+        patient_id = get_jwt_identity()['uid']
+    else:
+        patient_id = request.args.get('patient_id', None)
     rx = patient.get_patient_prescriptions(patient_id)
 
     if rx:
@@ -28,7 +32,7 @@ def get_patient_rx_route(request):
     else:
         reponse, code = {"msg": "Bad patient id"}, 400
 
-    return response, code 
+    return response, code
 
 def get_patient_records_route(request):
     patient = Patient()
@@ -39,12 +43,12 @@ def get_patient_records_route(request):
         response, code = records, 200
     else:
         reponse, code = {"msg": "Bad patient id"}, 400
-    return response, code 
+    return response, code
 
 def update_patientprofile_route(request):
-    patient = Patient()   
+    patient = Patient()
     answer = patient.update_patient(request)
-    
+
     if answer:
         response, code = {"msg" : "Patient Updated"}, 200
     else:

@@ -55,9 +55,9 @@ class Patient(User):
             doctor_id= result['primary_doctor']
             sql = """SELECT doctor_id,CONCAT(doctors.first_name," ",doctors.middle_initial, " ", doctors.last_name) AS primary_doctor FROM `doctors` WHERE doctor_id=%s"""
             params = (str(doctor_id))
-            my = db.run_query(sql, params)  
+            my = db.run_query(sql, params)
             mydoctor = my[0]
-        
+
         profile = {
             "patientId":patient_id,
             "firstName": result['first_name'],
@@ -90,7 +90,7 @@ class Patient(User):
         return appointments
 
     def get_patient_prescriptions(self, patient_id):
-        sql = "SELECT PRESC.id, PRESC.appt_id, D.first_name,D.last_name,MED.medication_name,PRESC.dosage,MED_FORM.dose_form_name, " \
+        sql = "SELECT PRESC.patient_id, PRESC.id, PRESC.appt_id, D.first_name,D.last_name,MED.medication_name,PRESC.dosage,MED_FORM.dose_form_name, " \
               "PRESC.dosage,PRESC.indication,PRESC.date_prescribed " \
               "FROM doctors as D, medications as MED, medication_dose_forms as MED_FORM, prescribed_medications as PRESC " \
               "WHERE PRESC.patient_id=%s " \
@@ -141,7 +141,7 @@ class Patient(User):
         gender = request.json.get('gender')
         primary_doctor = request.json.get('primaryDoctor')
         primary_doctor_id = primary_doctor['doctor_id']
-        
+
         sql = """UPDATE patients SET first_name=%s, middle_initial=%s, last_name=%s, phone=%s, email=%s, street_1=%s, city=%s, state=%s,zipcode=%s, race=%s, gender=%s,primary_doctor=%s WHERE patient_id=%s"""
         params = (str(firstName), str(middleInit), str(lastName), str(phone), str(email),str(street),str(city),str(state),str(zipcode),str(race),str(gender),str(primary_doctor_id), str(patient_id))
         db.run_query(sql, params)
@@ -153,11 +153,3 @@ class Patient(User):
         params=(patient_id)
         messages=db.run_query(sql,params)
         return messages
-
-
-
-
-
-
-
-

@@ -167,6 +167,7 @@ class Admin(User):
         patient = request.json.get('patient', None)
         doctor = request.json.get('doctor', None)
         office = request.json.get('office', None)
+        result=[]
         if reportType == "Canceled Appointments":
             condition = "WHERE appt_status='canceled' AND a.patient_id=p.patient_id AND a.doctor_id=d.doctor_id AND a.office_id=o.office_id"
             if patient != "all":
@@ -183,9 +184,9 @@ class Admin(User):
 
             params = ()
             result = db.run_query(sql, params)
-            
+
             labels = ["Appointment ID", "Patient", "Office", "Doctor", "Start Time", "End Time", "Status", "Booking Date", "Booking Method", "Reason for Visit"]
-            
+
 
 
         return result
