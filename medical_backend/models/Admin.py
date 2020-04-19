@@ -1,6 +1,7 @@
 from bcrypt import checkpw, gensalt, hashpw
 from ..database import Database
 from ..models import User
+from datetime import date
 
 db = Database()
 
@@ -190,3 +191,33 @@ class Admin(User):
 
 
         return result
+
+    def get_user_report(self,request):
+        #2020-04-01T05:46:00.000Z
+        result = []
+        role_id = request.json.get('roleId', None)
+
+        req_firstDate = request.json.get("firstDate", None)
+        req_secondDate = request.json.get("secondDate", None)
+        selected_first_date = str(req_firstDate[0:10])
+        selected_last_date = str(req_secondDate[0:10])
+        
+        if role_id != "all":
+            sql = "SELECT COUNT(*) AS count FROM users WHERE role_id=%s AND date_account_created >='" +selected_first_date+ "' AND date_account_created <= '" + selected_last_date + "'"
+            params = (str(role_id))
+            result = db.run_query(sql, params)
+            result = result[0]
+
+            sql = "SELECT email,date_account_created,role_name FROM users,roles WHERE users.role_id=%s AND roles.role_id=users.role_id AND date_account_created >='" +selected_first_date+ "' AND date_account_created <= '" + selected_last_date + "'"
+            params = (str(role_id))
+            result_2 = db.run_query(sql, params)
+
+        else:
+            sql = "SELECT COUNT(*) AS count FROM users WHERE date_account_created >='" +selected_first_date+ "' AND date_account_created <= '" + selected_last_date + "'"
+            result = db.run_query(sql,())
+            result = result[0]
+            sql = "SELECT email,date_account_created,role_name FROM users,roles WHERE users.role_id=roles.role_id AND date_account_created >='" +selected_first_date+ "' AND date_account_created <= '" + selected_last_date + "'"
+            result_2 = db.run_query(sql, ())
+    
+        
+        return result,result_2
