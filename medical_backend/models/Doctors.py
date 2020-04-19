@@ -409,5 +409,9 @@ class Doctor(User):
 
         params = (str(dose_form_name),str(medication_name),str(indication),str(dosage),str(date_prescribed),str(rx_id))
         db.run_query(sql, params)
-
         return True
+
+    def get_all_medications(self):
+        sql ="SELECT * FROM medications"
+        params=()
+        return db.run_query(sql,params)

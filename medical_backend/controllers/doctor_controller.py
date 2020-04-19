@@ -80,9 +80,9 @@ def get_doctor_appointments_route():
     return response, code
 
 def update_doctorprofile_route(request):
-    doctor = Doctor()    
+    doctor = Doctor()
     answer = doctor.update_doctor(request)
-    
+
     if answer:
         response, code = {"msg" : "Doctor Updated"}, 200
     else:
@@ -114,7 +114,7 @@ def insert_new_record_route(request):
     if new_record:
         response, code ={"record": new_record}, 200
     return response, code
-    
+
 def get_doctors_appointment(request):
     doctor = Doctor()
     patient_id = get_jwt_identity()['uid']
@@ -147,11 +147,21 @@ def get_all_physician(request):
 
 def update_prescription(request):
     doctor = Doctor()
-    print(request)
     answer = doctor.update_patient_prescription(request)
-    
+
     if answer:
         response, code = {"msg" : "Presc Updated"}, 200
+    else:
+        response, code = {"msg": "Bad Request "}, 400
+
+    return response, code
+
+def get_medications():
+    doctor = Doctor()
+    answer = doctor.get_all_medications()
+
+    if answer:
+        response, code = answer, 200
     else:
         response, code = {"msg": "Bad Request "}, 400
 
