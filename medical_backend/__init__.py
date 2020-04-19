@@ -79,7 +79,8 @@ def create_app(test_config=None):
         update_prescription,
         update_appt_status_route,
         admin_reports_route,
-        get_medications
+        get_medications,
+        get_dose_forms
     )
 
     # Simple route for basic testing
@@ -144,6 +145,12 @@ def create_app(test_config=None):
     @jwt_required
     def get_all_medications():
         response, code = get_medications()
+        return jsonify(response), code
+
+    @app.route('/doseForms', methods=['GET'])
+    @jwt_required
+    def get_all_dose_forms():
+        response, code = get_dose_forms()
         return jsonify(response), code
 
     @app.route('/patients/records', methods=['GET'])
