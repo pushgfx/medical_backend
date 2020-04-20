@@ -416,3 +416,8 @@ class Doctor(User):
         sql ="SELECT * FROM medications"
         params=()
         return db.run_query(sql,params)
+
+    def get_all_dose_forms(self):
+        sql ="SELECT * FROM medication_dose_forms"
+        params=()
+        return db.run_query(sql,params)

@@ -21,14 +21,15 @@ def get_patient_rx_route(request):
     patient = Patient()
     # Get the uid from token
     role_id = get_jwt_identity()['role']
-    if role_id==2:
+    print(role_id)
+    if role_id is 2:
         patient_id = get_jwt_identity()['uid']
     else:
         patient_id = request.args.get('patient_id', None)
     rx = patient.get_patient_prescriptions(patient_id)
 
     if rx:
-        response, code = rx, 200
+        response, code = {"prescriptions": rx}, 200
     else:
         reponse, code = {"msg": "Bad patient id"}, 400
 
