@@ -1,5 +1,5 @@
 from ..database import Database
-from datetime import datetime, timedelta
+from datetime import datetime,date, timedelta
 import re
 from ..models import User
 db = Database()
@@ -329,8 +329,9 @@ class Doctor(User):
         db.run_query(sql, params)
         result = db.run_query("SELECT `doctor_id` FROM `doctors` ORDER BY `doctor_id` DESC LIMIT 1", ())
         uid = result[0]['doctor_id']
-        self.add_user(req_email, request.json.get("password", None), 3, uid)
-
+        today = date.today()
+        self.add_user(req_email, request.json.get("password", None), 3, uid,today)
+        
         return uid
 
     def get_specializations(self):
