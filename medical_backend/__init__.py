@@ -306,14 +306,4 @@ def create_app(test_config=None):
             response, code = {"msg": "Must be admin"}, 401
         return jsonify(response), code
 
-    @app.route('/admin/user/reports', methods=['POST'])
-    @jwt_required
-    def admin_user_reports():
-        role = get_jwt_identity()['role']
-        if role == 1:
-            response, code = admin_user_reports_route(request)
-        else:
-            response, code = {"msg": "Must be admin"}, 401
-        return jsonify(response), code
-
     return app

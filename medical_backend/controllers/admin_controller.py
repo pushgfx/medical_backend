@@ -53,18 +53,20 @@ def get_admin_appointments_route():
 
 def admin_reports_route(request):
 	admin = Admin()
-	report = admin.get_report(request)
-	if report:
-		response, code = {"report": report}, 201
-	else:
-		response, code = {"msg": "No Report"}, 201
+	
+	if request.json.get("firstDate", None):
+		report,info = admin.get_user_report(request)
+		if report:
+			response, code = {"report": report,"information": info}, 200
+		else:
+			response, code = {"msg": "No Report"}, 201
+	
+	else:		
+		report = admin.get_report(request)
+		if report:
+			response, code = {"report": report}, 201
+		else:
+			response, code = {"msg": "No Report"}, 201
+	
 	return response, code
 
-def admin_user_reports_route(request):
-	admin = Admin()
-	report,info = admin.get_user_report(request)
-	if report:
-		response, code = {"report": report,"information": info}, 200
-	else:
-		response, code = {"msg": "No Report"}, 201
-	return response, code
