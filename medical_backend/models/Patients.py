@@ -1,6 +1,7 @@
 from bcrypt import checkpw, gensalt, hashpw
 from ..database import Database
 from ..models import User
+from datetime import date
 
 db = Database()
 
@@ -32,7 +33,8 @@ class Patient(User):
         db.run_query(sql, params)
         result = db.run_query("SELECT `patient_id` FROM `patients` ORDER BY `patient_id` DESC LIMIT 1", ())
         uid = result[0]['patient_id']
-        self.add_user(req_email, request.json.get("password", None), 2, uid)
+        today = date.today()
+        self.add_user(req_email, request.json.get("password", None), 2, uid, today)
         return uid
 
     def update_patient(self, r, patient_id):
