@@ -191,16 +191,74 @@ class Admin(User):
 
 
         return result
-
+    
     def get_user_report(self,request):
-        #2020-04-01T05:46:00.000Z
         result = []
         role_id = request.json.get('roleId', None)
 
         req_firstDate = request.json.get("firstDate", None)
         req_secondDate = request.json.get("secondDate", None)
-        selected_first_date = str(req_firstDate[0:10])
-        selected_last_date = str(req_secondDate[0:10])
+        
+        month = req_firstDate[4:7]
+        day = req_firstDate[8:10]
+        year = req_firstDate[11:15]
+        
+        if(month == "Jan"):
+            month = "01"
+        elif(month == "Feb"):
+            month = "02"
+        elif(month == "Mar"):
+            month = "03"
+        elif(month == "Apr"):
+            month = "04"
+        elif(month == "May"):
+            month = "05"
+        elif(month == "Jun"):
+            month = "06"
+        elif(month == "Juy"):
+            month = "07"
+        elif(month == "Aug"):
+            month = "08"
+        elif(month == "Sep"):
+            month = "09"
+        elif(month == "Oct"):
+            month = "10"
+        elif(month == "Nov"):
+            month = "11"
+        elif(month == "Dec"):
+            month = "12"
+
+
+        selected_first_date = str(year) + "-" + str(month) + "-" + str(day)
+        month = req_secondDate[4:7]
+        day = req_secondDate[8:10]
+        year = req_secondDate[11:15]
+        if(month == "Jan"):
+            month = "01"
+        elif(month == "Feb"):
+            month = "02"
+        elif(month == "Mar"):
+            month = "03"
+        elif(month == "Apr"):
+            month = "04"
+        elif(month == "May"):
+            month = "05"
+        elif(month == "Jun"):
+            month = "06"
+        elif(month == "Juy"):
+            month = "07"
+        elif(month == "Aug"):
+            month = "08"
+        elif(month == "Sep"):
+            month = "09"
+        elif(month == "Oct"):
+            month = "10"
+        elif(month == "Nov"):
+            month = "11"
+        elif(month == "Dec"):
+            month = "12"
+        selected_last_date = str(year) + "-" + str(month) + "-" + str(day)
+
         
         if role_id != "all":
             sql = "SELECT COUNT(*) AS count FROM users WHERE role_id=%s AND date_account_created >='" +selected_first_date+ "' AND date_account_created <= '" + selected_last_date + "'"
