@@ -381,7 +381,11 @@ class Doctor(User):
 
     def approve_specialist_appt(self,request):
         appt_id = request.json.get("appt_id", None)
-        sql="""UPDATE `appointments` SET appt_status="pending" WHERE appt_id=%s"""
+        is_approve = request.json.get("is_approve", None)
+        if is_approve:
+            sql="""UPDATE `appointments` SET appt_status="pending" WHERE appt_id=%s"""
+        else:
+            sql = """UPDATE `appointments` SET appt_status="reject" WHERE appt_id=%s"""
         params = (appt_id)
         db.run_query(sql,params)
 
