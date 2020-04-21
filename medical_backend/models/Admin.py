@@ -182,13 +182,18 @@ class Admin(User):
             d.first_name as doc_first_name, d.middle_initial as doc_middle_initial, d.last_name as doc_last_name, a.appt_start_time, a.estimated_end_time, \
             a.appt_status, a.booking_date, a.booking_method, a.reason_for_visit \
             FROM appointments as a, patients as p, doctors as d, offices as o " + condition
-
             params = ()
             result = db.run_query(sql, params)
 
-            labels = ["Appointment ID", "Patient", "Office", "Doctor", "Start Time", "End Time", "Status", "Booking Date", "Booking Method", "Reason for Visit"]
-
-
+            labels = ["Appointment ID", "Patient", "Office", "Doctor", "Start Time", "End Time", "Status",
+                      "Booking Date", "Booking Method", "Reason for Visit"]
+        elif reportType == "Average Appointment Duration":
+            condition = "WHERE a.appt_status='finished' AND a.doctor_id=d.doctor_id"
+            if office !="all":
+                condition += "AND o.office_id=" + str(office)
+            sql = "SELECT a.doctor_id,d.first_name,d.last_name, COALESCE(AVG(TIME_TO_SEC(TIMEDIFF(actual_end_time,actual_start_time)))/60,0) AS avg_appt_duration FROM appointments as a, doctors as d " + condition +"GROUP BY d.doctor_id"
+            params = ()
+            result = db.run_query(sql, params)
 
         return result
     
