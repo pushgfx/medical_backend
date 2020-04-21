@@ -182,14 +182,36 @@ class Admin(User):
             d.first_name as doc_first_name, d.middle_initial as doc_middle_initial, d.last_name as doc_last_name, a.appt_start_time, a.estimated_end_time, \
             a.appt_status, a.booking_date, a.booking_method, a.reason_for_visit \
             FROM appointments as a, patients as p, doctors as d, offices as o " + condition
-
             params = ()
             result = db.run_query(sql, params)
 
-            labels = ["Appointment ID", "Patient", "Office", "Doctor", "Start Time", "End Time", "Status", "Booking Date", "Booking Method", "Reason for Visit"]
-
-
-
+            labels = ["Appointment ID", "Patient", "Office", "Doctor", "Start Time", "End Time", "Status",
+                      "Booking Date", "Booking Method", "Reason for Visit"]
+        elif reportType == "Average Appointment Duration":
+            condition = " WHERE a.appt_status='finished' AND a.doctor_id=d.doctor_id "
+            if office !="all":
+                condition += "AND a.office_id=" + str(office)
+            sql = "SELECT a.doctor_id,d.first_name,d.middle_initial,d.last_name, CAST(COALESCE(ROUND(AVG(TIME_TO_SEC(TIMEDIFF(actual_end_time,actual_start_time)))/60,2),0) AS CHAR(5)) AS avg_appt_duration FROM appointments as a, doctors as d" + condition + " GROUP BY d.doctor_id"
+            params = ()
+            result = db.run_query(sql, params)
+        elif reportType == "General Appointment Summary":
+            sql = """SELECT offices.office_id as office_id,offices.office_name as office_name, 
+                                COALESCE(FINISHED_APPTS_BY_OFFICE.finished_appts,0) AS finished_appts, 
+                                COALESCE(CANCELED_APPTS_BY_OFFICE.canceled_appts,0) AS canceled_appts,
+                                CAST(COALESCE(ROUND(finished_appts/(finished_appts+canceled_appts)*100,2),0) AS CHAR(5)) AS finished_over_past_appts 
+                        FROM offices 
+                        LEFT JOIN (SELECT office_id,COUNT(*) AS finished_appts 
+                                   FROM appointments 
+                                   WHERE appt_status="finished" 
+                                   GROUP BY office_id) AS FINISHED_APPTS_BY_OFFICE 
+                        ON offices.office_id=FINISHED_APPTS_BY_OFFICE.office_id 
+                        LEFT JOIN (SELECT office_id,COUNT(*) AS canceled_appts 
+                                   FROM appointments 
+                                   WHERE appt_status="canceled" 
+                                   GROUP BY office_id) AS CANCELED_APPTS_BY_OFFICE 
+                        ON offices.office_id=CANCELED_APPTS_BY_OFFICE.office_id"""
+            params=()
+            result = db.run_query(sql,params)
         return result
     
     def get_user_report(self,request):

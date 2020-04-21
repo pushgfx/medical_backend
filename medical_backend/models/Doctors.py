@@ -238,6 +238,7 @@ class Doctor(User):
             WHERE DATE(appointments.appt_start_time) > %s
             AND appointments.doctor_id=%s AND offices.office_id=appointments.office_id
             AND appointments.patient_id=patients.patient_id
+            AND (appointments.appt_status="pending")
             ORDER BY appointments.appt_start_time ASC"""
         params=(current_date,doctor_id)
         result = db.run_query(sql,params)
@@ -247,7 +248,7 @@ class Doctor(User):
         status="need approval"
         sql="""SELECT appointments.appt_id,appointments.patient_id, CONCAT(patients.first_name," ",patients.middle_initial, " ", patients.last_name) AS patient,
                         CONCAT(doctors.first_name," ",doctors.middle_initial, " ", doctors.last_name) AS doctor,
-                        offices.office_name AS office, appointments.appt_status, appointments.reason_for_visit
+                        offices.office_name AS office, appointments.appt_status, appointments.appt_start_time,appointments.reason_for_visit
                         FROM `appointments`,`offices`,`patients`, `doctors`
                         WHERE appointments.referring_doctor_id=%s
                         AND offices.office_id=appointments.office_id
@@ -380,7 +381,11 @@ class Doctor(User):
 
     def approve_specialist_appt(self,request):
         appt_id = request.json.get("appt_id", None)
-        sql="""UPDATE `appointments` SET appt_status="pending" WHERE appt_id=%s"""
+        is_approve = request.json.get("is_approve", None)
+        if is_approve:
+            sql="""UPDATE `appointments` SET appt_status="pending" WHERE appt_id=%s"""
+        else:
+            sql = """UPDATE `appointments` SET appt_status="reject" WHERE appt_id=%s"""
         params = (appt_id)
         db.run_query(sql,params)
 
