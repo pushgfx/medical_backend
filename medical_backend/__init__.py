@@ -80,7 +80,8 @@ def create_app(test_config=None):
         update_appt_status_route,
         admin_reports_route,
         get_medications,
-        get_dose_forms
+        get_dose_forms,
+        update_record_route
     )
 
     # Simple route for basic testing
@@ -251,6 +252,12 @@ def create_app(test_config=None):
     @jwt_required
     def doctor_add_new_record():
         response, code = insert_new_record_route(request)
+        return jsonify(response), code
+
+    @app.route('/doctor/updateRecord', methods=['PUT'])
+    @jwt_required
+    def doctor_update_record():
+        response, code = update_record_route(request)
         return jsonify(response), code
 
     @app.route('/patient/updatepatient', methods = ['PUT'])

@@ -147,7 +147,7 @@ def get_all_physician(request):
 
 def update_prescription(request):
     answer = Doctor().update_patient_prescription(request)
-    return ({"msg" : "Presc Updated"}, 200) if answer else ({"msg": "Bad Request "}, 400)
+    return ({"msg" : "Prescription Updated"}, 200) if answer else ({"msg": "Bad Request "}, 400)
 
 def get_medications():
     answer = Doctor().get_all_medications()
@@ -156,3 +156,7 @@ def get_medications():
 def get_dose_forms():
     answer = Doctor().get_all_dose_forms()
     return (answer, 200) if answer else ({"msg": "Bad Request "}, 400)
+
+def update_record_route(request):
+    answer = Doctor().update_record(request)
+    return ({"msg" : "Record Updated"}, 200) if answer else ({"msg": "Bad Request "}, 400)
