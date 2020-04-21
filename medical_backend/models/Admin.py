@@ -188,10 +188,10 @@ class Admin(User):
             labels = ["Appointment ID", "Patient", "Office", "Doctor", "Start Time", "End Time", "Status",
                       "Booking Date", "Booking Method", "Reason for Visit"]
         elif reportType == "Average Appointment Duration":
-            condition = "WHERE a.appt_status='finished' AND a.doctor_id=d.doctor_id"
+            condition = " WHERE a.appt_status='finished' AND a.doctor_id=d.doctor_id "
             if office !="all":
                 condition += "AND o.office_id=" + str(office)
-            sql = "SELECT a.doctor_id,d.first_name,d.last_name, COALESCE(AVG(TIME_TO_SEC(TIMEDIFF(actual_end_time,actual_start_time)))/60,0) AS avg_appt_duration FROM appointments as a, doctors as d " + condition +"GROUP BY d.doctor_id"
+            sql = "SELECT a.doctor_id,d.first_name,d.middle_initial,d.last_name, CAST(COALESCE(ROUND(AVG(TIME_TO_SEC(TIMEDIFF(actual_end_time,actual_start_time)))/60,2),0) AS CHAR(5)) AS avg_appt_duration FROM appointments as a, doctors as d, offices as o " + condition + " GROUP BY d.doctor_id"
             params = ()
             result = db.run_query(sql, params)
 
