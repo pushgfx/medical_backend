@@ -1,6 +1,6 @@
 # Stadard Library Imports
 import os
-
+import datetime
 # Flask and Flask Extension Imports
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -30,6 +30,7 @@ def create_app(test_config=None):
     if test_config is None:
         # Checks Environmnet Variable And Builds from Config Object
         app.config.from_object(os.environ["APP_SETTINGS"])
+        app.config['JWT_EXPIRATION_DELTA'] = datetime.timedelta(minutes=30)
 
         CORS(app)
     else:
