@@ -24,8 +24,8 @@ class User:
 		password_hash = result[0]['password'].encode('utf-8')
 		return checkpw(password.encode('utf-8'), password_hash)
 
-	def add_user(self, email, password, role_id, user_id):
+	def add_user(self, email, password, role_id, user_id,today):
 		hashed = hashpw(password.encode('utf-8'), gensalt(14))
-		sql = "INSERT INTO `users` (`id`, `email`, `password`, `role_id`, `user_role_id`) VALUES (NULL, %s, %s, %s, %s)"
-		params = (email,hashed,role_id,user_id)
+		sql = "INSERT INTO `users` (`id`, `email`, `password`, `role_id`, `user_role_id`,`date_account_created`) VALUES (NULL, %s, %s, %s, %s,%s)"
+		params = (email,hashed,role_id,user_id,today)
 		db.run_query(sql, params)
