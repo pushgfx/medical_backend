@@ -34,7 +34,8 @@ class Patient(User):
         result = db.run_query("SELECT `patient_id` FROM `patients` ORDER BY `patient_id` DESC LIMIT 1", ())
         uid = result[0]['patient_id']
         today = date.today()
-        self.add_user(req_email, request.json.get("password", None), 2, uid, today)
+        self.add_user(req_email, request.json.get("password", None), 2, uid,today)
+        
         return uid
 
     def update_patient(self, r, patient_id):

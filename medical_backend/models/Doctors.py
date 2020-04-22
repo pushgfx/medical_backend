@@ -364,11 +364,13 @@ class Doctor(User):
         sql = """SELECT COUNT(*) as count from appointments WHERE patient_id=%s"""
         params = (str(patient_id))
         count = db.run_query(sql,params)
-        count = count[0]
+        count = (count[0])
+        
         #first appointment
-        if count['count'] == 0:
+        if int(count['count']) == 0:
+            print(count['count'])
             specialist_id=1
-            sql = "SELECT doctors.specialist_id,doctors.doctor_id,doctors.first_name,doctors.middle_initial,doctors.last_name,specializations.specialization_name FROM doctors, specializations WHERE specialist_id=%s"
+            sql = "SELECT doctors.specialist_id,doctors.doctor_id,doctors.first_name,doctors.middle_initial,doctors.last_name,specializations.specialization_name FROM doctors, specializations WHERE doctors.specialist_id=%s AND specializations.specialist_id=doctors.specialist_id"
             params = (str(specialist_id))
             doctors = db.run_query(sql, params)
 
