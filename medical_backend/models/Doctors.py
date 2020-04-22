@@ -332,7 +332,7 @@ class Doctor(User):
         uid = result[0]['doctor_id']
         today = date.today()
         self.add_user(req_email, request.json.get("password", None), 3, uid,today)
-        
+
         return uid
 
     def get_specializations(self):
@@ -406,8 +406,11 @@ class Doctor(User):
         dosage = request.json.get('dosage')
         dose_form_name = request.json.get('dose_form_name')
         indication = request.json.get('indication')
-        date_prescribed = request.json.get('date_prescribed')
-        print(rx_id,medication_name, dosage, dose_form_name, indication, date_prescribed)
+        date_prescribed = datetime.strptime(request.json.get('date_prescribed'), '%b %d %Y %H:%M:%S')
+        
+
+        print(request.json)
+
         sql = """UPDATE prescribed_medications
         SET dose_form_id=(select m.dose_form_id from medication_dose_forms m where m.dose_form_name=%s LIMIT 1),
         medication_id=(select m.medication_id from medications m where m.medication_name=%s LIMIT 1),
@@ -418,11 +421,22 @@ class Doctor(User):
         return True
 
     def get_all_medications(self):
-        sql ="SELECT * FROM medications"
-        params=()
-        return db.run_query(sql,params)
+        result = db.run_query("SELECT * FROM medications",())
+        return result
 
     def get_all_dose_forms(self):
-        sql ="SELECT * FROM medication_dose_forms"
-        params=()
-        return db.run_query(sql,params)
+        result = db.run_query("SELECT * FROM medication_dose_forms",())
+        return result
+
+    def update_record(self, request):
+        rec_id = request.json.get('record_id')
+        diagnoses = request.json.get('diagnoses')
+        treatment = request.json.get('treatment')
+        lab = request.json.get('lab_testing')
+        print(request.json)
+
+        sql = "UPDATE medical_records SET diagnoses=%s,treatment=%s,lab_testing = %s,new_prescriptions=1 WHERE record_id=%s "
+
+        params = (str(diagnoses),str(treatment),str(lab),str(rec_id))
+        db.run_query(sql, params)
+        return True
