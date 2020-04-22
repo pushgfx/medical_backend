@@ -117,7 +117,7 @@ class Doctor(User):
                 "race":result['race']
             }
             doctor_patient.append(patient)
-        print(doctor_patient)
+        # print(doctor_patient)
         return doctor_patient
 
     def get_doctor_dict(self, doctor_id):
@@ -410,9 +410,6 @@ class Doctor(User):
         indication = request.json.get('indication')
         date_prescribed = datetime.strptime(request.json.get('date_prescribed'), '%b %d %Y %H:%M:%S')
         
-
-        print(request.json)
-
         sql = """UPDATE prescribed_medications
         SET dose_form_id=(select m.dose_form_id from medication_dose_forms m where m.dose_form_name=%s LIMIT 1),
         medication_id=(select m.medication_id from medications m where m.medication_name=%s LIMIT 1),
@@ -435,7 +432,6 @@ class Doctor(User):
         diagnoses = request.json.get('diagnoses')
         treatment = request.json.get('treatment')
         lab = request.json.get('lab_testing')
-        print(request.json)
 
         sql = "UPDATE medical_records SET diagnoses=%s,treatment=%s,lab_testing = %s,new_prescriptions=1 WHERE record_id=%s "
 
