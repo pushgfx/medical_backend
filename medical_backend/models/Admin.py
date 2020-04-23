@@ -168,7 +168,21 @@ class Admin(User):
         patient = request.json.get('patient', None)
         doctor = request.json.get('doctor', None)
         office = request.json.get('office', None)
+        start_date = request.json.get('start', None)
+        end_date = request.json.get('end', None)
         result=[]
+        timeRangeCondition = ""
+
+        if (not end_date) != (not start_date):
+            if start_date:
+                timeRangeCondition += ">= DATE('" + start_date + "')"
+            else:
+                timeRangeCondition += "<= DATE('" + end_date + "')"
+
+        elif start_date and end_date :
+            timeRangeCondition += " BETWEEN DATE('"+ start_date +"') AND DATE('"+ end_date + "')"
+
+        # CANCELED APPOINTMENT REPORT
         if reportType == "Canceled Appointments":
             condition = "WHERE appt_status='canceled' AND a.patient_id=p.patient_id AND a.doctor_id=d.doctor_id AND a.office_id=o.office_id"
             if patient != "all":
@@ -177,6 +191,8 @@ class Admin(User):
                 condition += " AND a.doctor_id=" + str(doctor)
             if office != "all":
                 condition += " AND a.office_id=" + str(office)
+            if timeRangeCondition:
+                condition += " AND DATE(a.appt_start_time) " + timeRangeCondition
 
             sql = "SELECT a.appt_id, a.doctor_id, a.office_id, a.patient_id, p.first_name, p.middle_initial, p.last_name, o.office_name, \
             d.first_name as doc_first_name, d.middle_initial as doc_middle_initial, d.last_name as doc_last_name, a.appt_start_time, a.estimated_end_time, \
@@ -187,14 +203,23 @@ class Admin(User):
 
             labels = ["Appointment ID", "Patient", "Office", "Doctor", "Start Time", "End Time", "Status",
                       "Booking Date", "Booking Method", "Reason for Visit"]
+
+        #     AVERAGE TIME REPORT
         elif reportType == "Average Appointment Duration":
             condition = " WHERE a.appt_status='finished' AND a.doctor_id=d.doctor_id "
             if office !="all":
                 condition += "AND a.office_id=" + str(office)
+            if timeRangeCondition:
+                condition += " AND DATE(a.appt_start_time) " + timeRangeCondition
             sql = "SELECT a.doctor_id,d.first_name,d.middle_initial,d.last_name, CAST(COALESCE(ROUND(AVG(TIME_TO_SEC(TIMEDIFF(actual_end_time,actual_start_time)))/60,2),0) AS CHAR(5)) AS avg_appt_duration FROM appointments as a, doctors as d" + condition + " GROUP BY d.doctor_id"
             params = ()
             result = db.run_query(sql, params)
+
+        #  GENERAL APPOINTMENT SUMMARY
         elif reportType == "General Appointment Summary":
+            condition=''
+            if timeRangeCondition:
+                condition += " AND DATE(appt_start_time) " + timeRangeCondition
             sql = """SELECT offices.office_id as office_id,offices.office_name as office_name, 
                                 COALESCE(FINISHED_APPTS_BY_OFFICE.finished_appts,0) AS finished_appts, 
                                 COALESCE(CANCELED_APPTS_BY_OFFICE.canceled_appts,0) AS canceled_appts,
@@ -202,12 +227,12 @@ class Admin(User):
                         FROM offices 
                         LEFT JOIN (SELECT office_id,COUNT(*) AS finished_appts 
                                    FROM appointments 
-                                   WHERE appt_status="finished" 
+                                   WHERE appt_status="finished" """ + condition + """ 
                                    GROUP BY office_id) AS FINISHED_APPTS_BY_OFFICE 
                         ON offices.office_id=FINISHED_APPTS_BY_OFFICE.office_id 
                         LEFT JOIN (SELECT office_id,COUNT(*) AS canceled_appts 
                                    FROM appointments 
-                                   WHERE appt_status="canceled" 
+                                   WHERE appt_status="canceled" """ + condition + """ 
                                    GROUP BY office_id) AS CANCELED_APPTS_BY_OFFICE 
                         ON offices.office_id=CANCELED_APPTS_BY_OFFICE.office_id"""
             params=()
