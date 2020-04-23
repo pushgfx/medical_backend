@@ -54,7 +54,7 @@ def get_admin_appointments_route():
 def admin_reports_route(request):
 	admin = Admin()
 	
-	if request.json.get("firstDate", None):
+	if request.json.get("firstDate", None) and request.json.get("reportType")=="Number of New Users":
 		report,info = admin.get_user_report(request)
 		if report:
 			response, code = {"report": report,"information": info}, 200
