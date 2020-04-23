@@ -141,7 +141,7 @@ class Patient(User):
         lastName = request.json.get('lastName')
         phone = request.json.get('phone')
         email = request.json.get('email')
-        street = request.json.get('address')
+        street = request.json.get('street')
         city = request.json.get('city')
         state = request.json.get('state')
         zipcode = request.json.get('zipcode')
