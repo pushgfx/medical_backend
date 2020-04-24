@@ -184,3 +184,4 @@ ALTER TABLE patient_doctor_affiliation ADD FOREIGN KEY (doctor_id) REFERENCES do
 ALTER TABLE lab_tests ADD FOREIGN KEY (lab_test_type_id) REFERENCES lab_test_types(lab_test_type_id);
 ALTER TABLE lab_tests ADD FOREIGN KEY (appt_id) REFERENCES appointments(appt_id);
 ALTER TABLE lab_tests ADD FOREIGN KEY (patient_id) REFERENCES patients(patient_id);
+

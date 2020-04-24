@@ -23,5 +23,5 @@ def registration_doctor_route(request):
 	else:
 		doctor_id = doctor.add_doctor(request)
 		user_id = {"uid":doctor_id,"role":3}
-		response, code = {"doctorsList"}, 201
+		response, code = {"Doctor Added"}, 201
 	return response, code 

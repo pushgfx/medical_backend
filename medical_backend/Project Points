@@ -1,0 +1,18 @@
+Edge TPU for Real-Time Inferences
+
+Benefits:
+
++ Faster inference times compared to GPU or bare CPU
++ low cost
+
+Cons:
+
+- lower throughput compared to GPU
+- poorer energy proportionality
+
+
+Project Goal:
+
++ To evaluate the cost effectiveness of low power TPU acceleration on edge devices such as the Raspberry Pi 3.
++ Compare the cost to making inferences with cloud resources where latency is less of an issue.
++ Understand the applications that benefit the most from TPU acceleration.
