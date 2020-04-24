@@ -445,37 +445,36 @@ class Doctor(User):
                 params =(str(doctor_id),str(off['office_id']))
                 db.run_query(sql,params)
                 if off['office_days']['mon'] == True:
-                    print("inside IF mon DoctorID", str(doctor_id), "OfficeID", str(off['office_id']))
-                    sql_offices = "INSERT INTO `doctor_office_availability` VALUES (NULL,'" + str(doctor_id)+ "', '" + str(off['office_id'])+ "', '1', 'Y','Y','Y','Y','Y','Y','Y','Y')"
-                    print(sql_offices)
-                    answer = db.run_query(sql,())
+                    sql = "INSERT INTO `doctor_office_availability` VALUES (NULL,%s,%s,%s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    params=(str(doctor_id),str(off['office_id']),str(1))
+                    db.run_query(sql,params)
                 
 
                 if off['office_days']['tue'] == True:
-                    print("inside IF tue DoctorID", str(doctor_id), "OfficeID", str(off['office_id']))
-                    sql_offices = "INSERT INTO doctor_office_availability VALUES (NULL, %s, %s, %s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
-                    db.run_query(sql,(str(doctor_id), off['office_id'], '2'))
+                    sql = "INSERT INTO `doctor_office_availability` VALUES (NULL,%s,%s,%s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    params=(str(doctor_id),str(off['office_id']),str(2))
+                    db.run_query(sql,params)
                 
                 if off['office_days']['wed'] == True:
-                    print("inside IF wed DoctorID", doctor_id, "OfficeID", off['office_id'])
-                    sql_offices = "INSERT INTO doctor_office_availability VALUES (NULL, %s, %s, %s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
-                    db.run_query(sql,(doctor_id, off['office_id'], '3'))
+                    sql = "INSERT INTO `doctor_office_availability` VALUES (NULL,%s,%s,%s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    params=(str(doctor_id),str(off['office_id']),str(3))
+                    db.run_query(sql,params)
             
                 if off['office_days']['thu'] == True:
-                    print("inside IF thu DoctorID", doctor_id, "OfficeID",off['office_id'])
-                    sql_offices = "INSERT INTO doctor_office_availability VALUES (NULL, %s, %s, %s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
-                    db.run_query(sql,(doctor_id, off['office_id'], '4'))
+                    sql = "INSERT INTO `doctor_office_availability` VALUES (NULL,%s,%s,%s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    params=(str(doctor_id),str(off['office_id']),str(4))
+                    db.run_query(sql,params)
                 
                 if off['office_days']['fri'] == True:
-                    print("inside IF fri DoctorID", (doctor_id), "OfficeID", (off['office_id']))
-                    sql_offices = "INSERT INTO doctor_office_availability VALUES (NULL, %s, %s, %s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
-                    db.run_query(sql,(doctor_id, off['office_id'], '5'))
+                    sql = "INSERT INTO `doctor_office_availability` VALUES (NULL,%s,%s,%s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    params=(str(doctor_id),str(off['office_id']),str(5))
+                    db.run_query(sql,params)
                 
                     
                 if off['office_days']['sat'] == True:
-                    print("inside IF sat DoctorID", (doctor_id), "OfficeID", (off['office_id']))
-                    sql_offices = "INSERT INTO doctor_office_availability VALUES (NULL, %s, %s, %s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
-                    db.run_query(sql,(doctor_id, off['office_id'], '6'))
+                    sql = "INSERT INTO `doctor_office_availability` VALUES (NULL,%s,%s,%s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    params=(str(doctor_id),str(off['office_id']),str(6))
+                    db.run_query(sql,params)
                 
                 
 
