@@ -427,9 +427,9 @@ class Doctor(User):
         req_image = request.json.get("image", None)
         sql = "INSERT INTO `doctors` (`doctor_id`, `first_name`, `middle_initial`, `last_name`,`phone`, `specialist_id`,`gender`,`email`, `race`,`date_of_birth`, `street_1`, `city`, `state`, `zipcode`, `image` ) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s) "
         params = (
-            str(req_first_name), str(req_middle_i), str(req_last_name),str(req_phone),str(req_specialistId),
-            str(req_gender),str(req_email), str(req_race), str(req_dob), str(req_street_1), str(req_city),
-            str(req_state),str(req_zipcode), str(req_image))
+             str(req_first_name), str(req_middle_i), str(req_last_name),str(req_phone),str(req_specialistId),
+             str(req_gender),str(req_email), str(req_race), str(req_dob), str(req_street_1), str(req_city),
+             str(req_state),str(req_zipcode), str(req_image))
         db.run_query(sql, params)
 
         result = db.run_query("SELECT `doctor_id` FROM `doctors` ORDER BY `doctor_id` DESC LIMIT 1", ())
@@ -437,34 +437,46 @@ class Doctor(User):
         today = date.today()
         self.add_user(req_email, request.json.get("password", None), 3, doctor_id, today)
 
-        offices_avail_insert = []
-        offices_affil = []
         offices = request.json.get("offices")
         doctor_id = str(doctor_id)
-        #build list of param tuples
         for off in offices:
-            offices_affil.append((doctor_id, str(off['office_id'])))
-            if off['office_selected']:
-                if off['office_days']['mon']:
-                    offices_avail_insert.append((doctor_id, str(off['office_id']), "1", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"))
-                if off['office_days']['tue']:
-                    offices_avail_insert.append((doctor_id, str(off['office_id']), "2", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"))
-                if off['office_days']['wed']:
-                    offices_avail_insert.append((doctor_id, str(off['office_id']), "3", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"))
-                if off['office_days']['thu']:
-                    offices_avail_insert.append((doctor_id, str(off['office_id']), "4", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"))
-                if off['office_days']['fri']:
-                    offices_avail_insert.append((doctor_id, str(off['office_id']), "5", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"))
-                if off['office_days']['sat']:
-                    offices_avail_insert.append((doctor_id, str(off['office_id']), "6", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"))
-
+            if off['office_selected'] == True:
+                sql = "INSERT into doctor_office_affiliations VALUES (NULL,%s,%s)"
+                params =(str(doctor_id),str(off['office_id']))
+                db.run_query(sql,params)
+                if off['office_days']['mon'] == True:
+                    print("inside IF mon DoctorID", str(doctor_id), "OfficeID", str(off['office_id']))
+                    sql_offices = "INSERT INTO `doctor_office_availability` VALUES (NULL,'" + str(doctor_id)+ "', '" + str(off['office_id'])+ "', '1', 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    print(sql_offices)
+                    answer = db.run_query(sql,())
                 
-        sql_offices = "INSERT INTO doctor_office_availability (id, doctor_id, office_id, day_of_week, timeslot_1, timeslot_2, timeslot_3, timeslot_4, timeslot_5, timeslot_6, timeslot_7, timeslot_8) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-        db.run_query(sql_offices, offices_avail_insert)
-
-        sql_affil = "INSERT INTO doctor_office_affiliations (id, doctor_id, office_id) VALUES (NULL, %s, %s)"
-
-        db.run_query(sql_affil, offices_affil)
+                if off['office_days']['tue'] == True:
+                    print("inside IF tue DoctorID", str(doctor_id), "OfficeID", str(off['office_id']))
+                    sql_offices = "INSERT INTO doctor_office_availability VALUES (NULL, %s, %s, %s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    db.run_query(sql,(str(doctor_id), off['office_id'], '2'))
+                
+                if off['office_days']['wed'] == True:
+                    print("inside IF wed DoctorID", doctor_id, "OfficeID", off['office_id'])
+                    sql_offices = "INSERT INTO doctor_office_availability VALUES (NULL, %s, %s, %s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    db.run_query(sql,(doctor_id, off['office_id'], '3'))
+            
+                if off['office_days']['thu'] == True:
+                    print("inside IF thu DoctorID", doctor_id, "OfficeID",off['office_id'])
+                    sql_offices = "INSERT INTO doctor_office_availability VALUES (NULL, %s, %s, %s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    db.run_query(sql,(doctor_id, off['office_id'], '4'))
+                
+                if off['office_days']['fri'] == True:
+                    print("inside IF fri DoctorID", (doctor_id), "OfficeID", (off['office_id']))
+                    sql_offices = "INSERT INTO doctor_office_availability VALUES (NULL, %s, %s, %s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    db.run_query(sql,(doctor_id, off['office_id'], '5'))
+                
+                    
+                if off['office_days']['sat'] == True:
+                    print("inside IF sat DoctorID", (doctor_id), "OfficeID", (off['office_id']))
+                    sql_offices = "INSERT INTO doctor_office_availability VALUES (NULL, %s, %s, %s, 'Y','Y','Y','Y','Y','Y','Y','Y')"
+                    db.run_query(sql,(doctor_id, off['office_id'], '6'))
+                
+                
 
         return doctor_id

@@ -11,6 +11,12 @@ class User:
 		result = db.run_query(sql, params)
 		return result
 
+	def check_reg_doctor(self, email):
+		sql = "SELECT * FROM `doctors` WHERE email=%s"
+		params = (email)
+		result = db.run_query(sql, params)
+		return result
+
 	def check_auth_user(self, email):
 		sql = "SELECT * FROM `users` WHERE email=%s"
 		params = (email)

@@ -18,10 +18,9 @@ def registration_doctor_route(request):
 	doctor = Doctor()
 	user = User()
 	req_email = request.json.get("email", None)
-	if user.check_reg_user(req_email):
+	if user.check_reg_doctor(req_email):
 		response, code = {"msg": "Email already exists!"}, 401
 	else:
 		doctor_id = doctor.add_doctor(request)
-		user_id = {"uid":doctor_id,"role":3}
-		response, code = {"Doctor Added"}, 201
+		response, code = {"msg":"Doctor Added"}, 201
 	return response, code 
