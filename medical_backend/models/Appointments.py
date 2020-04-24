@@ -26,15 +26,38 @@ class Appointments:
         req_reason_for_visit = request.json.get("reason", None)
         current_dt = datetime.now()
         booking_date = current_dt
-        year = int(req_date[0:4])
-        month = req_date[5:7]
-        if month[0] == "0":
-            month = month[1]
+        #Sat Apr 25 2020 13:37:00 GMT-0500 (Central Daylight Time)
+       
+        month = req_date[4:7]
+        if(month == "Jan"):
+            month = "01"
+        elif(month == "Feb"):
+            month = "02"
+        elif(month == "Mar"):
+            month = "03"
+        elif(month == "Apr"):
+            month = "04"
+        elif(month == "May"):
+            month = "05"
+        elif(month == "Jun"):
+            month = "06"
+        elif(month == "Juy"):
+            month = "07"
+        elif(month == "Aug"):
+            month = "08"
+        elif(month == "Sep"):
+            month = "09"
+        elif(month == "Oct"):
+            month = "10"
+        elif(month == "Nov"):
+            month = "11"
+        elif(month == "Dec"):
+            month = "12"
+
         month = int(month)
-        day = req_date[8:10]
-        if day[0] == "0":
-            day = day[1]
-        day = int(day) - 1
+        day = int(req_date[8:10])
+        year = int(req_date[11:15])
+        
         hour = req_timeslot + 8
         appt_start_time = datetime(year, month, day, hour, minute=0, second=0, microsecond=0, tzinfo=None)
         appt_end_time = datetime(year, month, day, hour + 1, minute=0, second=0, microsecond=0, tzinfo=None)
